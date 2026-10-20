@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "no": 14,
+  "title": "餐桌与辅食",
+  "partNo": 3,
+  "age": "生活场景",
+  "kind": "games",
+  "intro": [
+    {
+      "type": "p",
+      "text": "**场景说明**：吃饭是0-3岁最高频的冲突现场。本章的游戏都服务于一个目标：让孩子重新掌握“吃”的主动权。"
+    }
+  ],
+  "games": [
+    {
+      "id": "107",
+      "name": "手指食物寻宝",
+      "age": "8-18月",
+      "ageRange": {
+        "min": 8,
+        "max": 18
+      },
+      "ability": "生活自理",
+      "duration": "10分钟",
+      "place": "餐椅",
+      "materials": "手指食物",
+      "people": "1对1",
+      "play": "把食物藏在餐盘的不同位置，让他自己找着吃。",
+      "steps": [
+        "餐盘里放3-4种手指食物，分散摆开。",
+        "说“胡萝卜躲在哪里”。",
+        "让他自己抓，抓到就一起吃。",
+        "吃完了再补一小份。"
+      ],
+      "observe": [
+        "会主动抓取",
+        "愿意尝试新质地",
+        "抓不到会换手。"
+      ],
+      "up": "把食物藏在杯子后面。",
+      "down": "只放一种食物。",
+      "safety": "食物切成小于1厘米的条或块，坐直进食，全程看护。",
+      "question": "只吃白米饭怎么办？新食物先“上桌不要求吃”，重复出现8-15次再鼓励尝试。",
+      "art": {
+        "main": "assets/ill/107.svg",
+        "panels": [
+          "assets/ill/panel/107-1.svg",
+          "assets/ill/panel/107-2.svg",
+          "assets/ill/panel/107-3.svg",
+          "assets/ill/panel/107-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "108",
+      "name": "勺子舀豆",
+      "age": "18-30月",
+      "ageRange": {
+        "min": 18,
+        "max": 30
+      },
+      "ability": "精细动作",
+      "duration": "10分钟",
+      "place": "餐椅",
+      "materials": "勺、碗、大颗粒",
+      "people": "1对1",
+      "play": "把豆子从一个大碗舀到另一个碗，练手腕控制。",
+      "steps": [
+        "两个碗，一个装大颗粒芸豆。",
+        "示范舀起、平移、倒入。",
+        "让他自己舀，洒了不纠正。",
+        "舀完一起把豆子捡回去。"
+      ],
+      "observe": [
+        "能平稳移动勺子",
+        "洒落减少",
+        "会调整手腕角度。"
+      ],
+      "up": "换成小勺和小颗粒。",
+      "down": "用手抓。",
+      "safety": "全程看护，颗粒必须大于3厘米，玩后彻底收净。",
+      "question": "直接上手抓怎么办？手也是工具，先允许，再把勺子递到他手里说“用这个试试”。",
+      "art": {
+        "main": "assets/ill/108.svg",
+        "panels": [
+          "assets/ill/panel/108-1.svg",
+          "assets/ill/panel/108-2.svg",
+          "assets/ill/panel/108-3.svg",
+          "assets/ill/panel/108-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "109",
+      "name": "干杯",
+      "age": "12-24月",
+      "ageRange": {
+        "min": 12,
+        "max": 24
+      },
+      "ability": "社会情绪",
+      "duration": "2分钟",
+      "place": "餐椅",
+      "materials": "水杯",
+      "people": "1对1",
+      "play": "吃饭时举起杯子碰一下，说“干杯”。",
+      "steps": [
+        "你先举杯说“干杯”。",
+        "等他也举起来，轻轻碰一下。",
+        "碰完各喝一口。",
+        "轮流发起“干杯”。"
+      ],
+      "observe": [
+        "会主动举杯",
+        "会等碰完再喝",
+        "会说“杯”。"
+      ],
+      "up": "加入“谢谢”“好吃”。",
+      "down": "只碰杯不喝。",
+      "safety": "用不易碎杯，水不装太满，不边跑边喝。",
+      "question": "玩杯子不吃饭？干杯玩3次就收，把杯子拿走，餐桌上只保留“吃饭”这一件事。",
+      "art": {
+        "main": "assets/ill/109.svg",
+        "panels": [
+          "assets/ill/panel/109-1.svg",
+          "assets/ill/panel/109-2.svg",
+          "assets/ill/panel/109-3.svg",
+          "assets/ill/panel/109-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "110",
+      "name": "颜色点名",
+      "age": "18-30月",
+      "ageRange": {
+        "min": 18,
+        "max": 30
+      },
+      "ability": "语言沟通",
+      "duration": "3分钟",
+      "place": "餐椅",
+      "materials": "彩色食物",
+      "people": "1对1",
+      "play": "吃饭时给食物点名，把颜色和味道说出来。",
+      "steps": [
+        "餐盘里放3种颜色的食物。",
+        "指番茄说“红色的番茄”。",
+        "问“哪个是绿色的”。",
+        "吃之前先说出颜色再吃。"
+      ],
+      "observe": [
+        "能指认2-3种颜色",
+        "会模仿“红色的”",
+        "愿意尝试对应食物。"
+      ],
+      "up": "加入“脆脆的、软软的”。",
+      "down": "只说一种颜色。",
+      "safety": "食物大小合适，不边说话边大笑进食。",
+      "question": "说了也不吃？命名不是为了让他吃，是为了熟悉，熟悉感积累到一定程度才会尝试。",
+      "art": {
+        "main": "assets/ill/110.svg",
+        "panels": [
+          "assets/ill/panel/110-1.svg",
+          "assets/ill/panel/110-2.svg",
+          "assets/ill/panel/110-3.svg",
+          "assets/ill/panel/110-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "111",
+      "name": "咀嚼模仿",
+      "age": "6-12月",
+      "ageRange": {
+        "min": 6,
+        "max": 12
+      },
+      "ability": "生活自理",
+      "duration": "3分钟",
+      "place": "餐椅",
+      "materials": "辅食",
+      "people": "1对1",
+      "play": "面对面夸张地嚼，让他看着学。",
+      "steps": [
+        "喂辅食时坐到他正对面。",
+        "夸张地做咀嚼动作，让他看到嘴在动。",
+        "喂一勺后自己也吃一口，一起嚼。",
+        "说“嚼嚼嚼”，配合节奏。"
+      ],
+      "observe": [
+        "会模仿咀嚼",
+        "吞咽更协调",
+        "对勺子张嘴。"
+      ],
+      "up": "给需要咀嚼的软块。",
+      "down": "只做抿嘴练习。",
+      "safety": "坐直进食，食物软烂，不强迫进食，出现呛咳立即停止。",
+      "question": "总把食物吐出来？可能是质地不接受，退回上一阶质地，隔几天再试，不追喂。",
+      "art": {
+        "main": "assets/ill/111.svg",
+        "panels": [
+          "assets/ill/panel/111-1.svg",
+          "assets/ill/panel/111-2.svg",
+          "assets/ill/panel/111-3.svg",
+          "assets/ill/panel/111-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "112",
+      "name": "餐桌小帮手",
+      "age": "24-36月",
+      "ageRange": {
+        "min": 24,
+        "max": 36
+      },
+      "ability": "生活自理",
+      "duration": "5分钟",
+      "place": "餐桌",
+      "materials": "餐具、抹布",
+      "people": "亲子",
+      "play": "饭前摆碗筷，饭后擦桌子，让他成为餐桌的一员。",
+      "steps": [
+        "饭前请他发勺子，一人一把。",
+        "问他“还差谁的”。",
+        "饭后给一块湿巾擦自己那一块。",
+        "把碗端到水池边（不洗）。"
+      ],
+      "observe": [
+        "能完成分发任务",
+        "会检查是否遗漏",
+        "主动参与收尾。"
+      ],
+      "up": "摆筷子并配对。",
+      "down": "只发自己的勺子。",
+      "safety": "不端热汤、不碰刀具，用不易碎餐具。",
+      "question": "帮倒忙还要让他做吗？要，把任务限定在他能胜任的一小块，完成感比结果重要。",
+      "art": {
+        "main": "assets/ill/112.svg",
+        "panels": [
+          "assets/ill/panel/112-1.svg",
+          "assets/ill/panel/112-2.svg",
+          "assets/ill/panel/112-3.svg",
+          "assets/ill/panel/112-4.svg"
+        ]
+      }
+    }
+  ]
+}

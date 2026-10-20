@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "no": 11,
+  "title": "25-30个月｜假装游戏与规则萌芽",
+  "partNo": 2,
+  "age": "25-30月",
+  "kind": "games",
+  "intro": [
+    {
+      "type": "p",
+      "text": "**发展地图**"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "认知：能按颜色、大小分类，理解“1、2、3”的数量，喜欢重复和秩序。",
+        "精细：会模仿画横线，能用安全剪刀剪一下，能搓、压橡皮泥。",
+        "社会情绪：假装游戏变复杂，开始有“轮流”的概念，但耐心仍很短。"
+      ]
+    }
+  ],
+  "games": [
+    {
+      "id": "77",
+      "name": "角色扮演",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "社会情绪",
+      "duration": "20分钟",
+      "place": "客厅",
+      "materials": "医生玩具/超市道具",
+      "people": "亲子",
+      "play": "开一家小诊所或小超市，你来当顾客。",
+      "steps": [
+        "摆好道具：听诊器、药瓶、收银台。",
+        "你说“医生，我肚子疼”，等他回应。",
+        "配合他的指令“张嘴”“打针”。",
+        "轮换角色，让他当病人。"
+      ],
+      "observe": [
+        "能维持角色5分钟以上",
+        "会使用相关词汇",
+        "会把动作连成情节。"
+      ],
+      "up": "加入第三个角色。",
+      "down": "只做打针一个情节。",
+      "safety": "道具无尖锐物，不用真药瓶，玩后洗手。",
+      "question": "演得不符合现实要纠正吗？不用，假装游戏的逻辑由孩子定，你配合就好。",
+      "art": {
+        "main": "assets/ill/077.svg",
+        "panels": [
+          "assets/ill/panel/077-1.svg",
+          "assets/ill/panel/077-2.svg",
+          "assets/ill/panel/077-3.svg",
+          "assets/ill/panel/077-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "78",
+      "name": "积木造桥",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "认知探索",
+      "duration": "10分钟",
+      "place": "地垫",
+      "materials": "积木、小球",
+      "people": "1对1",
+      "play": "搭一座桥，让小球从下面滚过去。",
+      "steps": [
+        "用两块积木做桥墩，上面横一块长积木。",
+        "示范小球从桥下滚过。",
+        "让他自己搭，塌了就重来。",
+        "成功后加宽桥面，试试能不能过两辆车。"
+      ],
+      "observe": [
+        "会留出桥洞",
+        "能调整桥墩距离",
+        "塌了会重建。"
+      ],
+      "up": "搭两层桥。",
+      "down": "只用两块积木搭门。",
+      "safety": "积木无尖角，不在高处搭，避免砸脚。",
+      "question": "总搭不高就急？先练“搭门”这个单一结构，成功感比高度重要。",
+      "art": {
+        "main": "assets/ill/078.svg",
+        "panels": [
+          "assets/ill/panel/078-1.svg",
+          "assets/ill/panel/078-2.svg",
+          "assets/ill/panel/078-3.svg",
+          "assets/ill/panel/078-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "79",
+      "name": "剪刀初体验",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "精细动作",
+      "duration": "5分钟",
+      "place": "餐椅",
+      "materials": "安全剪刀、纸条",
+      "people": "1对1",
+      "play": "用安全剪刀把纸条剪断。",
+      "steps": [
+        "选圆头、弹簧助力安全剪刀。",
+        "你先剪一下，让他看刀口。",
+        "把纸条递到他另一只手，教“张开—合上”。",
+        "剪断一条就欢呼，一次不超过5分钟。"
+      ],
+      "observe": [
+        "会双手配合",
+        "能剪断纸条",
+        "会主动张开剪刀。"
+      ],
+      "up": "沿着粗线剪。",
+      "down": "只做开合练习。",
+      "safety": "全程贴身看护，坐姿使用，刀口朝外，用完立即收进高处。",
+      "question": "多大可以用剪刀？2岁半左右在成人全程看护下可以用安全剪刀，早于这个月龄不建议。",
+      "art": {
+        "main": "assets/ill/079.svg",
+        "panels": [
+          "assets/ill/panel/079-1.svg",
+          "assets/ill/panel/079-2.svg",
+          "assets/ill/panel/079-3.svg",
+          "assets/ill/panel/079-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "80",
+      "name": "橡皮泥",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "精细动作",
+      "duration": "15分钟",
+      "place": "餐椅",
+      "materials": "橡皮泥、模具",
+      "people": "1对1",
+      "play": "搓长条、压扁、切块，做一顿“饭”。",
+      "steps": [
+        "先揉软，示范搓长条。",
+        "让他用手掌压扁，做成“饼”。",
+        "用塑料刀切段，摆进盘子。",
+        "做完一起“吃”，再收进密封盒。"
+      ],
+      "observe": [
+        "会搓、压、切",
+        "能做出简单造型",
+        "专注时间变长。"
+      ],
+      "up": "做动物造型。",
+      "down": "只做按压。",
+      "safety": "选无毒可食用配方，全程看护不入口，玩后洗手，过敏体质先小面积试。",
+      "question": "混色了怎么办？混色也是探索，给他两块深色专门混，其余分开放。",
+      "art": {
+        "main": "assets/ill/080.svg",
+        "panels": [
+          "assets/ill/panel/080-1.svg",
+          "assets/ill/panel/080-2.svg",
+          "assets/ill/panel/080-3.svg",
+          "assets/ill/panel/080-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "81",
+      "name": "数到5",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "认知探索",
+      "duration": "5分钟",
+      "place": "任意",
+      "materials": "手指、积木",
+      "people": "1对1",
+      "play": "一边点一边数，把数字和数量对上。",
+      "steps": [
+        "上楼梯时数台阶“1、2、3”。",
+        "摆3块积木，手点一块数一个。",
+        "问“有几块”，不要求答对。",
+        "每天固定场景数数，如吃饭前数碗。"
+      ],
+      "observe": [
+        "会跟着数",
+        "手口一致点物",
+        "能区分“1个”和“很多”。"
+      ],
+      "up": "数到10。",
+      "down": "只数到3。",
+      "safety": "无需特别防护，数楼梯时牵手。",
+      "question": "会背到10但不识数？背诵和数数是两回事，重点是“手点一个、嘴里数一个”的一一对应。",
+      "art": {
+        "main": "assets/ill/081.svg",
+        "panels": [
+          "assets/ill/panel/081-1.svg",
+          "assets/ill/panel/081-2.svg",
+          "assets/ill/panel/081-3.svg",
+          "assets/ill/panel/081-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "82",
+      "name": "影子游戏",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "认知探索",
+      "duration": "10分钟",
+      "place": "客厅/户外",
+      "materials": "手电筒/阳光",
+      "people": "1对1",
+      "play": "用手或身体做影子，追着影子跑。",
+      "steps": [
+        "关灯用手电筒照墙，做小狗、小鸟手影。",
+        "让他用手挡光，看影子变大变小。",
+        "户外时找自己的影子，踩一踩。",
+        "问“影子为什么跟着我”。"
+      ],
+      "observe": [
+        "会追影子、踩影子",
+        "会伸手做形状",
+        "对光影变化好奇。"
+      ],
+      "up": "用手影讲故事。",
+      "down": "只做踩影子。",
+      "safety": "手电筒不直射眼睛，不在黑暗处奔跑。",
+      "question": "怕黑怕影子怎么办？先开小夜灯玩，把影子变成“朋友”，不强行关灯。",
+      "art": {
+        "main": "assets/ill/082.svg",
+        "panels": [
+          "assets/ill/panel/082-1.svg",
+          "assets/ill/panel/082-2.svg",
+          "assets/ill/panel/082-3.svg",
+          "assets/ill/panel/082-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "83",
+      "name": "袜子配对",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "认知探索",
+      "duration": "5分钟",
+      "place": "床/地垫",
+      "materials": "袜子5双",
+      "people": "1对1",
+      "play": "把洗好的袜子配成一对。",
+      "steps": [
+        "把5双袜子摊开。",
+        "拿起一只问“它的好朋友在哪”。",
+        "让他找出相同的一只，卷成一团。",
+        "配完一起放进抽屉。"
+      ],
+      "observe": [
+        "能按颜色或花纹配对",
+        "会主动找",
+        "配对速度变快。"
+      ],
+      "up": "加入条纹、波点等细微差异。",
+      "down": "只用3双差异明显的。",
+      "safety": "袜子无松紧勒痕，不套在手上奔跑。",
+      "question": "配错要不要纠正？先让他说理由，再一起看花纹，比直接说“错了”更能保留兴趣。",
+      "art": {
+        "main": "assets/ill/083.svg",
+        "panels": [
+          "assets/ill/panel/083-1.svg",
+          "assets/ill/panel/083-2.svg",
+          "assets/ill/panel/083-3.svg",
+          "assets/ill/panel/083-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "84",
+      "name": "大小排序",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "认知探索",
+      "duration": "5分钟",
+      "place": "餐椅",
+      "materials": "套杯5个",
+      "people": "1对1",
+      "play": "把5个杯子从大到小排成一排。",
+      "steps": [
+        "先给3个，示范最大的放左边。",
+        "让他排出“大—中—小”。",
+        "成功后加到5个。",
+        "排完把小的套进大的。"
+      ],
+      "observe": [
+        "能排出3个的顺序",
+        "会用比较的方法",
+        "会自我纠正。"
+      ],
+      "up": "按高矮排序。",
+      "down": "只用2个。",
+      "safety": "杯口光滑，不叠高过头顶。",
+      "question": "总是乱排？先玩两两比较“哪个大”，排序是更高级的能力，需要先有比较经验。",
+      "art": {
+        "main": "assets/ill/084.svg",
+        "panels": [
+          "assets/ill/panel/084-1.svg",
+          "assets/ill/panel/084-2.svg",
+          "assets/ill/panel/084-3.svg",
+          "assets/ill/panel/084-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "85",
+      "name": "合作搬运",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "社会情绪",
+      "duration": "10分钟",
+      "place": "客厅",
+      "materials": "大纸箱/长条物",
+      "people": "2人以上",
+      "play": "两个人一起抬一个大纸箱，走到指定位置。",
+      "steps": [
+        "选一个他一个人搬不动的纸箱。",
+        "说“我们一起抬”，数“1、2、3”再起。",
+        "喊口令“走、停、转弯”。",
+        "放下后击掌。"
+      ],
+      "observe": [
+        "会配合口令",
+        "会调整步伐",
+        "会主动说“一起”。"
+      ],
+      "up": "三人合作搬长条物。",
+      "down": "两人各抬一边的轻物。",
+      "safety": "纸箱不遮挡视线，重量不超过孩子能承受的范围，路线清空。",
+      "question": "总想自己搬？让他先试一次搬不动，再自然引入“合作”。",
+      "art": {
+        "main": "assets/ill/085.svg",
+        "panels": [
+          "assets/ill/panel/085-1.svg",
+          "assets/ill/panel/085-2.svg",
+          "assets/ill/panel/085-3.svg",
+          "assets/ill/panel/085-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "86",
+      "name": "轮流桌游",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "社会情绪",
+      "duration": "10分钟",
+      "place": "地垫",
+      "materials": "简单桌游",
+      "people": "2-3人",
+      "play": "掷骰子、走格子，学会“轮到你了”。",
+      "steps": [
+        "选规则最简单的桌游（掷骰子走步）。",
+        "你先示范一轮，说“轮到妈妈了”。",
+        "他抢着玩时，握住他的手说“等一等，轮到你了”。",
+        "每次轮换都明确说出名字。"
+      ],
+      "observe": [
+        "能等一轮",
+        "会说“轮到我”",
+        "输赢后情绪可控。"
+      ],
+      "up": "加入“暂停一轮”。",
+      "down": "只玩轮流放积木。",
+      "safety": "棋子大于3厘米，不用玻璃材质。",
+      "question": "等不了就哭？先从两人、每轮3秒开始，把等待时间控制在能忍受的范围内。",
+      "art": {
+        "main": "assets/ill/086.svg",
+        "panels": [
+          "assets/ill/panel/086-1.svg",
+          "assets/ill/panel/086-2.svg",
+          "assets/ill/panel/086-3.svg",
+          "assets/ill/panel/086-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "87",
+      "name": "沙水工程",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "认知探索",
+      "duration": "20分钟",
+      "place": "户外/浴室",
+      "materials": "沙、水、铲子、漏斗",
+      "people": "1对1",
+      "play": "挖渠、筑坝、倒水，看水怎么流。",
+      "steps": [
+        "准备一盆沙和一壶水。",
+        "挖一条沟，把水倒进去看流向。",
+        "用湿沙堆山，插一根树枝当“树”。",
+        "给他漏斗和杯子，自由倒。"
+      ],
+      "observe": [
+        "会挖、堆、倒",
+        "会观察水流",
+        "会自己发明玩法。"
+      ],
+      "up": "加管道和斜坡。",
+      "down": "只玩干沙。",
+      "safety": "玩沙后洗手，沙池加盖防猫狗，水不倒满，全程看护。",
+      "question": "吃沙怎么办？1岁前口欲强不建议玩沙，2岁后仍吃沙可改用米或豆类替代。",
+      "art": {
+        "main": "assets/ill/087.svg",
+        "panels": [
+          "assets/ill/panel/087-1.svg",
+          "assets/ill/panel/087-2.svg",
+          "assets/ill/panel/087-3.svg",
+          "assets/ill/panel/087-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "88",
+      "name": "故事续编",
+      "age": "25-30月",
+      "ageRange": {
+        "min": 25,
+        "max": 30
+      },
+      "ability": "语言沟通",
+      "duration": "10分钟",
+      "place": "床/沙发",
+      "materials": "绘本或无书",
+      "people": "1对1",
+      "play": "讲到一半停下，让他说说接下来会怎样。",
+      "steps": [
+        "选他熟悉的故事。",
+        "讲到关键处停住，问“然后呢”。",
+        "他说的任何答案都接住并演下去。",
+        "把新故事讲给爸爸或玩偶听。"
+      ],
+      "observe": [
+        "会给出1-2个情节",
+        "会使用“然后”“后来”",
+        "愿意重复讲。"
+      ],
+      "up": "换主角重编。",
+      "down": "只补充一个词。",
+      "safety": "无需特别防护，睡前故事控制兴奋度。",
+      "question": "编得离题要不要拉回？不用，离题正是想象力在工作，你负责把故事接圆。",
+      "art": {
+        "main": "assets/ill/088.svg",
+        "panels": [
+          "assets/ill/panel/088-1.svg",
+          "assets/ill/panel/088-2.svg",
+          "assets/ill/panel/088-3.svg",
+          "assets/ill/panel/088-4.svg"
+        ]
+      }
+    }
+  ]
+}

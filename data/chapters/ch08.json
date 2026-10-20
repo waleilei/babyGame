@@ -1,0 +1,570 @@
+{
+  "schemaVersion": 1,
+  "no": 8,
+  "title": "10-12个月｜爬、站、走",
+  "partNo": 2,
+  "age": "10-12月",
+  "kind": "games",
+  "intro": [
+    {
+      "type": "p",
+      "text": "**发展地图**"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "大运动：能扶站、扶走，部分宝宝独立走2-3步，会蹲下再站起。",
+        "精细：能用拇食指捏起小物，会主动放手、投入，开始用勺子。",
+        "认知与语言：理解“不”和简单指令，会出现第一个有意义的词。"
+      ]
+    }
+  ],
+  "games": [
+    {
+      "id": "35",
+      "name": "推车学步",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "大运动",
+      "duration": "5-10分钟",
+      "place": "地垫/户外",
+      "materials": "重纸箱、推车",
+      "people": "1对1",
+      "play": "推着装重物的纸箱走，借力练平衡。",
+      "steps": [
+        "找一个大纸箱，里面放几本书增加重量。",
+        "让宝宝双手扶住纸箱后沿。",
+        "你在前面慢慢拉，或让他自己推。",
+        "推到墙边就帮他掉头。"
+      ],
+      "observe": [
+        "会扶着推着走",
+        "脚步越来越连续",
+        "能自己调整方向。"
+      ],
+      "up": "推更轻的纸箱。",
+      "down": "只扶站推不动。",
+      "safety": "不用学步车；地面不滑、前方无障碍；纸箱不能高过胸口。",
+      "question": "用学步车不是更快吗？学步车有翻倒和碰撞风险，且不利于髋部发力，不推荐使用。",
+      "art": {
+        "main": "assets/ill/035.svg",
+        "panels": [
+          "assets/ill/panel/035-1.svg",
+          "assets/ill/panel/035-2.svg",
+          "assets/ill/panel/035-3.svg",
+          "assets/ill/panel/035-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "36",
+      "name": "障碍爬",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "大运动",
+      "duration": "5分钟",
+      "place": "地垫",
+      "materials": "枕头、被子",
+      "people": "1对1",
+      "play": "翻过枕头山，钻过被子洞。",
+      "steps": [
+        "用枕头摆成2-3个小坡。",
+        "把玩具放在坡顶。",
+        "让宝宝自己爬上去、翻过去。",
+        "下坡时你在旁边护住。"
+      ],
+      "observe": [
+        "会调整手膝爬姿势",
+        "能抬腿跨过障碍",
+        "下坡会先试探。"
+      ],
+      "up": "加一个矮纸箱。",
+      "down": "只爬一个枕头。",
+      "safety": "不用塑料袋、不堆太高；周围清空硬物，全程在旁。",
+      "question": "宝宝直接绕过去怎么办？绕路也是解决问题的能力，把玩具放到必须翻越的位置即可。",
+      "art": {
+        "main": "assets/ill/036.svg",
+        "panels": [
+          "assets/ill/panel/036-1.svg",
+          "assets/ill/panel/036-2.svg",
+          "assets/ill/panel/036-3.svg",
+          "assets/ill/panel/036-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "37",
+      "name": "套杯套圈",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "认知探索",
+      "duration": "5分钟",
+      "place": "地垫/餐椅",
+      "materials": "套杯1组",
+      "people": "1对1",
+      "play": "把杯子一个个套进去，再倒出来。",
+      "steps": [
+        "给宝宝3-4个大小不同的套杯。",
+        "示范把小的放进大的。",
+        "让他自己试，套不进时转一下杯子。",
+        "全部套好后一起倒出来。"
+      ],
+      "observe": [
+        "会尝试套叠",
+        "能发现大小顺序",
+        "失败后会换方法。"
+      ],
+      "up": "按大小排成一排。",
+      "down": "只用两个杯子。",
+      "safety": "杯口无毛刺，不套在头上，玩后收好。",
+      "question": "只会拆不会套？拆也是理解空间，先让他拆，再慢慢示范套。",
+      "art": {
+        "main": "assets/ill/037.svg",
+        "panels": [
+          "assets/ill/panel/037-1.svg",
+          "assets/ill/panel/037-2.svg",
+          "assets/ill/panel/037-3.svg",
+          "assets/ill/panel/037-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "38",
+      "name": "打开包装",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "精细动作",
+      "duration": "5分钟",
+      "place": "地垫",
+      "materials": "包装纸、玩具",
+      "people": "1对1",
+      "play": "把玩具层层包起来，让宝宝拆。",
+      "steps": [
+        "用纸把玩具包一层，露出一角。",
+        "让宝宝看到你包的过程。",
+        "示范撕开一角，剩下的让他自己拆。",
+        "拆出来后一起玩这个玩具。"
+      ],
+      "observe": [
+        "会撕、拉、扯",
+        "能找到开口",
+        "拆开后表现兴奋。"
+      ],
+      "up": "包两层不同的纸。",
+      "down": "只盖一张纸。",
+      "safety": "不用订书钉、胶带外露；纸袋不套头。",
+      "question": "宝宝吃包装纸怎么办？换成大张牛皮纸，玩前去掉胶带，全程看护。",
+      "art": {
+        "main": "assets/ill/038.svg",
+        "panels": [
+          "assets/ill/panel/038-1.svg",
+          "assets/ill/panel/038-2.svg",
+          "assets/ill/panel/038-3.svg",
+          "assets/ill/panel/038-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "39",
+      "name": "投球入筐",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "大运动",
+      "duration": "5分钟",
+      "place": "地垫",
+      "materials": "软球、篮子",
+      "people": "1对1",
+      "play": "站着或坐着把球投进筐里。",
+      "steps": [
+        "把洗衣篮放在50厘米外。",
+        "给宝宝一个软球，示范投进去。",
+        "让他自己投，投不进也鼓掌。",
+        "投进去后一起去捡回来。"
+      ],
+      "observe": [
+        "会主动放手投",
+        "会调整力度",
+        "投中后重复。"
+      ],
+      "up": "把筐放远一点。",
+      "down": "直接放进筐里。",
+      "safety": "篮子无锐边，球不能太小，周围无易碎品。",
+      "question": "总往地上扔怎么办？扔是手臂练习，先允许扔，再用“投进筐”的游戏把扔变成目标。",
+      "art": {
+        "main": "assets/ill/039.svg",
+        "panels": [
+          "assets/ill/panel/039-1.svg",
+          "assets/ill/panel/039-2.svg",
+          "assets/ill/panel/039-3.svg",
+          "assets/ill/panel/039-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "40",
+      "name": "模仿动作",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "社会情绪",
+      "duration": "3分钟",
+      "place": "地垫",
+      "materials": "无",
+      "people": "1对1",
+      "play": "拍手、再见、飞吻，一个一个教。",
+      "steps": [
+        "面对面坐着，拍手3下，停住等宝宝学。",
+        "学会后加“再见”挥手。",
+        "再加“飞吻”，把手放嘴边再送出去。",
+        "每天固定玩一次“跟妈妈做”。"
+      ],
+      "observe": [
+        "会模仿1-2个动作",
+        "延迟几秒后也能模仿",
+        "听到指令会做动作。"
+      ],
+      "up": "连做两个动作。",
+      "down": "只教拍手。",
+      "safety": "动作幅度小，不在床上站立做。",
+      "question": "宝宝只学喜欢的动作？正常，先从他感兴趣的入手，模仿能力建立后再扩展。",
+      "art": {
+        "main": "assets/ill/040.svg",
+        "panels": [
+          "assets/ill/panel/040-1.svg",
+          "assets/ill/panel/040-2.svg",
+          "assets/ill/panel/040-3.svg",
+          "assets/ill/panel/040-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "41",
+      "name": "指认身体部位",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "语言沟通",
+      "duration": "3分钟",
+      "place": "任意",
+      "materials": "无",
+      "people": "1对1",
+      "play": "一边摸一边说，让宝宝把词和身体对上。",
+      "steps": [
+        "抱着宝宝，摸他的鼻子说“鼻子”。",
+        "摸你的鼻子说“妈妈的鼻子”。",
+        "问“宝宝的鼻子在哪”，引导他摸。",
+        "一次只教一个部位，学会再加。"
+      ],
+      "observe": [
+        "听到名称会摸自己",
+        "会指你的五官",
+        "对某个部位发笑。"
+      ],
+      "up": "一次问两个部位。",
+      "down": "只教鼻子和嘴。",
+      "safety": "不戳眼睛和耳朵，动作轻。",
+      "question": "总指错怎么办？指错也是参与，笑着说“这是嘴巴，鼻子在这里”，不纠正过头。",
+      "art": {
+        "main": "assets/ill/041.svg",
+        "panels": [
+          "assets/ill/panel/041-1.svg",
+          "assets/ill/panel/041-2.svg",
+          "assets/ill/panel/041-3.svg",
+          "assets/ill/panel/041-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "42",
+      "name": "一步指令",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "语言沟通",
+      "duration": "2-3分钟",
+      "place": "任意",
+      "materials": "日常物品",
+      "people": "1对1",
+      "play": "给一个简单指令，让他用动作完成。",
+      "steps": [
+        "说“把球给妈妈”，同时伸手。",
+        "他做到就接过来并道谢。",
+        "换成“把杯子放下”“过来”。",
+        "一次只说一个动作，说完等5秒。"
+      ],
+      "observe": [
+        "能听懂并完成1个动作",
+        "听到指令会看你",
+        "完成后会等待反馈。"
+      ],
+      "up": "加入“给我”和“给他”的区分。",
+      "down": "边说边用手指。",
+      "safety": "不用指令引导宝宝接近危险物；不在哭闹时训练。",
+      "question": "不听指令是不乖吗？10-12个月理解有限，先确保指令短、有动作示范，不配合就换个时间。",
+      "art": {
+        "main": "assets/ill/042.svg",
+        "panels": [
+          "assets/ill/panel/042-1.svg",
+          "assets/ill/panel/042-2.svg",
+          "assets/ill/panel/042-3.svg",
+          "assets/ill/panel/042-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "43",
+      "name": "手指涂鸦",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "精细动作",
+      "duration": "5-10分钟",
+      "place": "餐椅/地垫",
+      "materials": "可水洗颜料、大纸",
+      "people": "1对1",
+      "play": "用手指蘸颜料，在纸上按出印子。",
+      "steps": [
+        "铺好报纸，把大纸固定住。",
+        "挤一点可水洗颜料在纸上。",
+        "示范用手指按、抹。",
+        "让他自己乱涂，最后一起洗手。"
+      ],
+      "observe": [
+        "会主动按压、涂抹",
+        "对不同颜色有反应",
+        "愿意用手掌。"
+      ],
+      "up": "换成酸奶或果泥。",
+      "down": "只用清水在纸上画。",
+      "safety": "颜料必须可水洗、无毒，全程看护不入口，铺好防污布。",
+      "question": "宝宝吃颜料怎么办？用酸奶加食用色素替代，或改在洗澡时用清水画。",
+      "art": {
+        "main": "assets/ill/043.svg",
+        "panels": [
+          "assets/ill/panel/043-1.svg",
+          "assets/ill/panel/043-2.svg",
+          "assets/ill/panel/043-3.svg",
+          "assets/ill/panel/043-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "44",
+      "name": "积木搭高",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "精细动作",
+      "duration": "3-5分钟",
+      "place": "地垫/餐椅",
+      "materials": "软积木4块",
+      "people": "1对1",
+      "play": "一块一块往上叠，搭到2-3层。",
+      "steps": [
+        "示范搭两块，慢动作放手。",
+        "把第三块递到宝宝手里，指向塔顶。",
+        "他放上去后立刻扶稳并欢呼。",
+        "倒了就重来，不追求高度。"
+      ],
+      "observe": [
+        "会主动往上放",
+        "放的时候会看塔顶",
+        "倒了会重新尝试。"
+      ],
+      "up": "搭到3层。",
+      "down": "只搭1块。",
+      "safety": "积木轻软、无尖角，不在玻璃桌边玩。",
+      "question": "总是推倒怎么办？推倒也是实验，先陪他推，再示范搭，两个游戏交替玩。",
+      "art": {
+        "main": "assets/ill/044.svg",
+        "panels": [
+          "assets/ill/panel/044-1.svg",
+          "assets/ill/panel/044-2.svg",
+          "assets/ill/panel/044-3.svg",
+          "assets/ill/panel/044-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "45",
+      "name": "音乐停走",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "大运动",
+      "duration": "5分钟",
+      "place": "地垫",
+      "materials": "音乐播放器",
+      "people": "1对1",
+      "play": "音乐响就走，音乐停就定住。",
+      "steps": [
+        "放一首节奏清楚的歌，抱着宝宝随音乐走。",
+        "音乐突然暂停，你也停住说“停”。",
+        "再放音乐，继续走。",
+        "熟练后让他自己扶走或爬。"
+      ],
+      "observe": [
+        "音乐停时会停住或看你",
+        "能预期“停”",
+        "听到前奏会兴奋。"
+      ],
+      "up": "加入“蹲下”指令。",
+      "down": "只做抱着摇摆。",
+      "safety": "地面清空，音量适中，不突然吓到宝宝。",
+      "question": "宝宝听不懂“停”？先用手势和身体停住示范，节奏游戏本身就是听指令的练习。",
+      "art": {
+        "main": "assets/ill/045.svg",
+        "panels": [
+          "assets/ill/panel/045-1.svg",
+          "assets/ill/panel/045-2.svg",
+          "assets/ill/panel/045-3.svg",
+          "assets/ill/panel/045-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "46",
+      "name": "自己拿勺",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "生活自理",
+      "duration": "10分钟",
+      "place": "餐椅",
+      "materials": "短柄勺、稠粥",
+      "people": "1对1",
+      "play": "给他一把勺子，让他自己往嘴里送。",
+      "steps": [
+        "准备一把短柄、粗握把的勺子。",
+        "碗里放稠粥或酸奶，不容易洒。",
+        "你先示范舀起送到嘴。",
+        "让他自己舀，洒了不纠正，另一把勺子你来喂。"
+      ],
+      "observe": [
+        "会握住勺子",
+        "能把勺子送到嘴边",
+        "会模仿舀的动作。"
+      ],
+      "up": "换成更稀的食物。",
+      "down": "让他握勺，你扶着他的手。",
+      "safety": "坐直系安全带，不边走边吃，勺子不插入口中太深。",
+      "question": "弄得太脏要不要喂？10-12个月弄脏是学习成本，铺好报纸，允许他探索10分钟再收尾。",
+      "art": {
+        "main": "assets/ill/046.svg",
+        "panels": [
+          "assets/ill/panel/046-1.svg",
+          "assets/ill/panel/046-2.svg",
+          "assets/ill/panel/046-3.svg",
+          "assets/ill/panel/046-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "47",
+      "name": "脱袜子",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "生活自理",
+      "duration": "2分钟",
+      "place": "床/地垫",
+      "materials": "袜子",
+      "people": "1对1",
+      "play": "睡前让他自己把袜子拽下来。",
+      "steps": [
+        "坐到床上，把袜子拉到脚跟。",
+        "说“脱袜子啦”，示范抓住袜尖往下拉。",
+        "把他的手放在袜尖上，让他自己拽。",
+        "脱下来后一起拍手。"
+      ],
+      "observe": [
+        "会抓住袜子往下拉",
+        "成功后重复",
+        "会主动抬脚。"
+      ],
+      "up": "让他试着自己脱鞋。",
+      "down": "你把袜子拉松，只留最后一步。",
+      "safety": "袜子不能过紧，不在站立时单脚脱袜。",
+      "question": "脱了就往嘴里放？正常探索，脱完立刻收走，换成可以咬的牙胶。",
+      "art": {
+        "main": "assets/ill/047.svg",
+        "panels": [
+          "assets/ill/panel/047-1.svg",
+          "assets/ill/panel/047-2.svg",
+          "assets/ill/panel/047-3.svg",
+          "assets/ill/panel/047-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "48",
+      "name": "亲子翻滚",
+      "age": "10-12月",
+      "ageRange": {
+        "min": 10,
+        "max": 12
+      },
+      "ability": "社会情绪",
+      "duration": "3-5分钟",
+      "place": "地垫",
+      "materials": "被子",
+      "people": "1对1",
+      "play": "裹在薄被里轻轻滚，感受身体旋转。",
+      "steps": [
+        "铺好厚地垫，用薄毯松松裹住宝宝。",
+        "一手护头颈，一手轻推，让宝宝滚半圈。",
+        "滚出来时说“哇，出来啦”。",
+        "换方向再滚一次。"
+      ],
+      "observe": [
+        "会笑、会主动蹬腿",
+        "滚完会找你",
+        "对旋转不恐慌。"
+      ],
+      "up": "让宝宝自己从毯子里爬出来。",
+      "down": "只做左右轻晃。",
+      "safety": "不裹紧、不盖脸，速度慢，刚吃完奶不做。",
+      "question": "会晕吗？幅度小、次数少不会，观察表情，出现不适立即停。",
+      "art": {
+        "main": "assets/ill/048.svg",
+        "panels": [
+          "assets/ill/panel/048-1.svg",
+          "assets/ill/panel/048-2.svg",
+          "assets/ill/panel/048-3.svg",
+          "assets/ill/panel/048-4.svg"
+        ]
+      }
+    }
+  ]
+}

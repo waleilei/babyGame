@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "no": 15,
+  "title": "睡前与安抚",
+  "partNo": 3,
+  "age": "生活场景",
+  "kind": "games",
+  "intro": [
+    {
+      "type": "p",
+      "text": "**场景说明**：睡前的游戏任务是“降速”，不是“放电”。所有动作都要慢、轻、可预期。"
+    }
+  ],
+  "games": [
+    {
+      "id": "113",
+      "name": "睡前程序图卡",
+      "age": "18-36月",
+      "ageRange": {
+        "min": 18,
+        "max": 36
+      },
+      "ability": "生活自理",
+      "duration": "10分钟",
+      "place": "卧室",
+      "materials": "四格图卡",
+      "people": "1对1",
+      "play": "把睡前四件事画成图，做完一件打一个勾。",
+      "steps": [
+        "拍四张照片：洗澡、刷牙、读绘本、关灯。",
+        "贴在床头，睡前一起看一遍。",
+        "每完成一件，让他自己贴一个贴纸。",
+        "关灯时说“四件事都做完了”。"
+      ],
+      "observe": [
+        "能预期下一步",
+        "会主动去刷牙",
+        "入睡时间变短。"
+      ],
+      "up": "让他自己安排顺序。",
+      "down": "只用两张图。",
+      "safety": "图卡不用图钉，贴纸不入口。",
+      "question": "每天还是拖？程序固定比内容重要，时间点、顺序、结尾的话都保持一致。",
+      "art": {
+        "main": "assets/ill/113.svg",
+        "panels": [
+          "assets/ill/panel/113-1.svg",
+          "assets/ill/panel/113-2.svg",
+          "assets/ill/panel/113-3.svg",
+          "assets/ill/panel/113-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "114",
+      "name": "手电筒影子",
+      "age": "12-36月",
+      "ageRange": {
+        "min": 12,
+        "max": 36
+      },
+      "ability": "认知探索",
+      "duration": "5分钟",
+      "place": "卧室",
+      "materials": "手电筒",
+      "people": "1对1",
+      "play": "关大灯开手电，在墙上做手影，讲一个短故事。",
+      "steps": [
+        "调暗灯光，手电照墙。",
+        "用手做出小狗、小鸟。",
+        "配一个两句话的短故事。",
+        "故事结束就说“小狗睡觉了”，关手电。"
+      ],
+      "observe": [
+        "会盯着影子看",
+        "会伸手去抓",
+        "能安静下来。"
+      ],
+      "up": "让他自己拿手电。",
+      "down": "只做光斑移动。",
+      "safety": "手电不直射眼睛，亮度调低，不在黑暗中走动。",
+      "question": "越玩越兴奋？把故事固定成“结尾即关灯”，用同一个结尾建立睡眠信号。",
+      "art": {
+        "main": "assets/ill/114.svg",
+        "panels": [
+          "assets/ill/panel/114-1.svg",
+          "assets/ill/panel/114-2.svg",
+          "assets/ill/panel/114-3.svg",
+          "assets/ill/panel/114-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "115",
+      "name": "晚安亲吻接力",
+      "age": "12-36月",
+      "ageRange": {
+        "min": 12,
+        "max": 36
+      },
+      "ability": "社会情绪",
+      "duration": "2分钟",
+      "place": "卧室",
+      "materials": "无",
+      "people": "亲子",
+      "play": "依次和家里的每个人、每个玩偶说晚安。",
+      "steps": [
+        "抱着他走到每个房间门口说“晚安”。",
+        "和玩偶一个个说晚安，盖好被子。",
+        "最后回到床上，说“妈妈爱你，晚安”。",
+        "每天说同一句话收尾。"
+      ],
+      "observe": [
+        "会主动挥手说晚安",
+        "会寻找玩偶",
+        "听到固定句子会躺下。"
+      ],
+      "up": "让他给玩偶盖被子。",
+      "down": "只和妈妈道晚安。",
+      "safety": "不走太多房间导致兴奋，路线固定为2-3处。",
+      "question": "每天要亲十几次才肯睡？设置上限“亲三次”，用数数把结束变得可预期。",
+      "art": {
+        "main": "assets/ill/115.svg",
+        "panels": [
+          "assets/ill/panel/115-1.svg",
+          "assets/ill/panel/115-2.svg",
+          "assets/ill/panel/115-3.svg",
+          "assets/ill/panel/115-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "116",
+      "name": "呼吸小熊",
+      "age": "24-36月",
+      "ageRange": {
+        "min": 24,
+        "max": 36
+      },
+      "ability": "社会情绪",
+      "duration": "3分钟",
+      "place": "床",
+      "materials": "玩偶1只",
+      "people": "1对1",
+      "play": "把玩偶放在肚子上，吸气让它升高，呼气让它落下。",
+      "steps": [
+        "躺好，把小熊放在肚子上。",
+        "说“吸气，小熊坐电梯上去”。",
+        "“呼气，小熊下来了”。",
+        "做5次，最后一次慢慢呼气。"
+      ],
+      "observe": [
+        "能跟着放慢呼吸",
+        "会自己要求“玩小熊”",
+        "情绪更快平复。"
+      ],
+      "up": "白天生气时也用。",
+      "down": "只做3次。",
+      "safety": "玩偶不放脸上，不强迫深呼吸，出现头晕立即停止。",
+      "question": "孩子说“不想呼吸”？改成“吹蜡烛”“吹泡泡”，用游戏化的说法替代指令。",
+      "art": {
+        "main": "assets/ill/116.svg",
+        "panels": [
+          "assets/ill/panel/116-1.svg",
+          "assets/ill/panel/116-2.svg",
+          "assets/ill/panel/116-3.svg",
+          "assets/ill/panel/116-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "117",
+      "name": "摇篮曲变速",
+      "age": "0-12月",
+      "ageRange": {
+        "min": 0,
+        "max": 12
+      },
+      "ability": "社会情绪",
+      "duration": "5分钟",
+      "place": "卧室",
+      "materials": "无",
+      "people": "1对1",
+      "play": "同一首摇篮曲，越唱越慢、越唱越轻。",
+      "steps": [
+        "抱着宝宝，用正常速度唱第一遍。",
+        "第二遍放慢一半，声音降低。",
+        "第三遍只哼旋律，几乎听不见。",
+        "最后一句唱完，静默30秒再放下。"
+      ],
+      "observe": [
+        "呼吸变慢",
+        "身体变沉",
+        "听到前奏就闭眼。"
+      ],
+      "up": "换成你自己编的调子。",
+      "down": "只做哼鸣。",
+      "safety": "不在走动中睡着抱娃，放下时先放屁股再放头。",
+      "question": "必须抱睡怎么办？先固定“歌—静默—放下”的顺序，再逐步缩短抱的时间。",
+      "art": {
+        "main": "assets/ill/117.svg",
+        "panels": [
+          "assets/ill/panel/117-1.svg",
+          "assets/ill/panel/117-2.svg",
+          "assets/ill/panel/117-3.svg",
+          "assets/ill/panel/117-4.svg"
+        ]
+      }
+    }
+  ]
+}

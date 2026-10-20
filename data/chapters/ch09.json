@@ -1,0 +1,570 @@
+{
+  "schemaVersion": 1,
+  "no": 9,
+  "title": "13-18个月｜行走与探索",
+  "partNo": 2,
+  "age": "13-18月",
+  "kind": "games",
+  "intro": [
+    {
+      "type": "p",
+      "text": "**发展地图**"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "大运动：能独立行走、蹲下捡物，开始扶栏上楼梯。",
+        "精细：会叠两块积木、用勺子、把东西放进小口容器。",
+        "语言与认知：能说3-10个词，听懂“给我”“放下”，喜欢把东西搬来搬去。"
+      ]
+    }
+  ],
+  "games": [
+    {
+      "id": "49",
+      "name": "追球跑",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "大运动",
+      "duration": "10分钟",
+      "place": "户外/客厅",
+      "materials": "皮球1个",
+      "people": "1对1",
+      "play": "把球滚出去，让宝宝追着跑回来。",
+      "steps": [
+        "你先把球慢慢滚出去3-5米。",
+        "说“去追球”，让他跑过去。",
+        "他拿到后招手说“拿回来”。",
+        "回来击掌，再滚一次。"
+      ],
+      "observe": [
+        "走跑时能停住",
+        "会弯腰捡球不摔倒",
+        "愿意往返多次。"
+      ],
+      "up": "换成会弹的球。",
+      "down": "只滚1米。",
+      "safety": "地面平整无台阶，避开马路和停车场，不追滚向车道的球。",
+      "question": "走路总摔正常吗？刚会走步态宽、易摔正常，清空硬物即可；18个月仍走不稳可在体检时提出。",
+      "art": {
+        "main": "assets/ill/049.svg",
+        "panels": [
+          "assets/ill/panel/049-1.svg",
+          "assets/ill/panel/049-2.svg",
+          "assets/ill/panel/049-3.svg",
+          "assets/ill/panel/049-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "50",
+      "name": "上下楼梯",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "大运动",
+      "duration": "5分钟",
+      "place": "楼梯",
+      "materials": "扶手",
+      "people": "1对1",
+      "play": "扶着栏杆一阶一阶上下，练腿部力量和距离判断。",
+      "steps": [
+        "选择有扶手、台阶矮的楼梯。",
+        "你在下方半步位置，一手扶他一手扶栏。",
+        "先说“上”，让他自己抬脚。",
+        "下来时教他坐着往下挪或扶栏侧身下。"
+      ],
+      "observe": [
+        "会双脚交替或并脚上台阶",
+        "下楼梯会先看再迈",
+        "愿意重复。"
+      ],
+      "up": "自己扶栏走。",
+      "down": "只上不下。",
+      "safety": "全程贴身保护，不在楼梯口放玩具，不穿滑底袜。",
+      "question": "可以先学下楼梯吗？下比上难，先练上，下楼梯建议先教“坐着往下挪”。",
+      "art": {
+        "main": "assets/ill/050.svg",
+        "panels": [
+          "assets/ill/panel/050-1.svg",
+          "assets/ill/panel/050-2.svg",
+          "assets/ill/panel/050-3.svg",
+          "assets/ill/panel/050-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "51",
+      "name": "纸箱房子",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "社会情绪",
+      "duration": "15分钟",
+      "place": "客厅",
+      "materials": "大纸箱",
+      "people": "亲子",
+      "play": "把大纸箱变成小屋，一起进出、敲门。",
+      "steps": [
+        "把大纸箱两侧开口，做成有门有窗的房子。",
+        "你先钻进去说“妈妈在家”。",
+        "让他敲门，你回应“请进”。",
+        "一起在里面放抱枕、看绘本。"
+      ],
+      "observe": [
+        "会主动进出",
+        "会模仿敲门",
+        "在里面待的时间变长。"
+      ],
+      "up": "加一个“窗户”递东西。",
+      "down": "只玩钻纸箱。",
+      "safety": "纸箱无钉、无胶带锋利边，不盖顶，全程通风可见。",
+      "question": "纸箱玩两天就坏了？这正常，纸箱本就是消耗品，坏了正好换成“撕纸”游戏。",
+      "art": {
+        "main": "assets/ill/051.svg",
+        "panels": [
+          "assets/ill/panel/051-1.svg",
+          "assets/ill/panel/051-2.svg",
+          "assets/ill/panel/051-3.svg",
+          "assets/ill/panel/051-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "52",
+      "name": "搬运工",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "大运动",
+      "duration": "5分钟",
+      "place": "家中",
+      "materials": "篮子、重物",
+      "people": "1对1",
+      "play": "把东西从一处搬到另一处，来回跑。",
+      "steps": [
+        "准备两个篮子，一个装几本书或玩偶。",
+        "示范把书搬到另一个篮子。",
+        "说“帮妈妈搬过去”，让他一次拿一样。",
+        "搬完一起数一数。"
+      ],
+      "observe": [
+        "会双手抱物行走",
+        "知道往返",
+        "愿意完成整个任务。"
+      ],
+      "up": "增加重量或数量。",
+      "down": "只搬一个玩偶。",
+      "safety": "物品不超过体重1/10，不搬玻璃、热水、尖锐物。",
+      "question": "搬一半就玩起来了？正常，把任务拆成“搬3次”，完成就结束，不追求全部搬完。",
+      "art": {
+        "main": "assets/ill/052.svg",
+        "panels": [
+          "assets/ill/panel/052-1.svg",
+          "assets/ill/panel/052-2.svg",
+          "assets/ill/panel/052-3.svg",
+          "assets/ill/panel/052-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "53",
+      "name": "形状配对",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "认知探索",
+      "duration": "5分钟",
+      "place": "地垫/餐椅",
+      "materials": "形状盒",
+      "people": "1对1",
+      "play": "把圆形、方形塞进对应的洞。",
+      "steps": [
+        "先只给圆形，示范转一转塞进去。",
+        "熟练后加入方形。",
+        "每次只放一个形状，减少干扰。",
+        "塞进去后说“进去了”。"
+      ],
+      "observe": [
+        "会转动积木找角度",
+        "能区分圆和方",
+        "失败后会换方向。"
+      ],
+      "up": "加入三角形。",
+      "down": "只用圆形。",
+      "safety": "形状块大于3厘米，盒子无毛刺，不硬塞。",
+      "question": "只会在外面敲？敲是探索，先让他感受形状，再握着他的手完成一次成功体验。",
+      "art": {
+        "main": "assets/ill/053.svg",
+        "panels": [
+          "assets/ill/panel/053-1.svg",
+          "assets/ill/panel/053-2.svg",
+          "assets/ill/panel/053-3.svg",
+          "assets/ill/panel/053-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "54",
+      "name": "叠叠乐",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "精细动作",
+      "duration": "5分钟",
+      "place": "地垫",
+      "materials": "叠叠杯/套圈",
+      "people": "1对1",
+      "play": "把圈一个个套上柱子，或把杯子叠高。",
+      "steps": [
+        "先给3个圈，示范套进去。",
+        "让他自己套，套歪了不纠正。",
+        "套完一起数“1、2、3”。",
+        "再一个一个取下来。"
+      ],
+      "observe": [
+        "会主动套入",
+        "能套到2-3个",
+        "取的时候会一个个拿。"
+      ],
+      "up": "按大小顺序套。",
+      "down": "只套1个。",
+      "safety": "柱子顶端圆钝，底座稳固，不拿着跑。",
+      "question": "总把圈扔地上？扔也是游戏，先陪他扔两下，再把圈放回柱子说“套上去”。",
+      "art": {
+        "main": "assets/ill/054.svg",
+        "panels": [
+          "assets/ill/panel/054-1.svg",
+          "assets/ill/panel/054-2.svg",
+          "assets/ill/panel/054-3.svg",
+          "assets/ill/panel/054-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "55",
+      "name": "舀豆子",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "精细动作",
+      "duration": "5分钟",
+      "place": "餐椅",
+      "materials": "大勺、大碗、大颗粒",
+      "people": "1对1",
+      "play": "用勺子把豆子从一碗舀到另一碗。",
+      "steps": [
+        "碗里放大颗粒意面或大芸豆。",
+        "示范舀起、移动、倒进空碗。",
+        "让他自己舀，洒了不批评。",
+        "舀完一起把豆子捡回去。"
+      ],
+      "observe": [
+        "会握勺舀物",
+        "能移动一段距离不倒",
+        "洒了会再试。"
+      ],
+      "up": "换成小一点的豆。",
+      "down": "用手抓。",
+      "safety": "全程看护，豆子必须大于3厘米，玩后立即收净，防止误吞。",
+      "question": "宝宝把豆子往嘴里放？立即换成大块海绵或纸团，口欲期强的宝宝先不玩颗粒类。",
+      "art": {
+        "main": "assets/ill/055.svg",
+        "panels": [
+          "assets/ill/panel/055-1.svg",
+          "assets/ill/panel/055-2.svg",
+          "assets/ill/panel/055-3.svg",
+          "assets/ill/panel/055-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "56",
+      "name": "倒水",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "精细动作",
+      "duration": "10分钟",
+      "place": "浴室",
+      "materials": "两个杯子、水",
+      "people": "1对1",
+      "play": "把水从一个杯子倒进另一个杯子。",
+      "steps": [
+        "澡盆里放少量水，给两个塑料杯。",
+        "示范倒水，让他看水流。",
+        "让他自己倒，倒在外面也没关系。",
+        "加入“满”“空”的说法。"
+      ],
+      "observe": [
+        "会双手配合倒",
+        "会观察水流",
+        "尝试控制速度。"
+      ],
+      "up": "换成小口水壶。",
+      "down": "只做舀水。",
+      "safety": "水深不超过5厘米，全程不离人，倒完立即清空澡盆。",
+      "question": "弄得到处都是水？浴室就是为此准备的，铺防滑垫，玩完一起擦地也是游戏。",
+      "art": {
+        "main": "assets/ill/056.svg",
+        "panels": [
+          "assets/ill/panel/056-1.svg",
+          "assets/ill/panel/056-2.svg",
+          "assets/ill/panel/056-3.svg",
+          "assets/ill/panel/056-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "57",
+      "name": "贴纸",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "精细动作",
+      "duration": "5分钟",
+      "place": "餐椅/地垫",
+      "materials": "大贴纸、纸",
+      "people": "1对1",
+      "play": "把大贴纸撕下来，贴到纸上。",
+      "steps": [
+        "选大张、易撕的贴纸。",
+        "示范撕下一角，贴到纸上。",
+        "让他自己撕、贴，贴歪也算成功。",
+        "贴满后一起看“作品”。"
+      ],
+      "observe": [
+        "会用指尖抠贴纸边缘",
+        "能贴到指定区域",
+        "撕坏了会再要。"
+      ],
+      "up": "贴在线上或圈里。",
+      "down": "你先撕开一角。",
+      "safety": "贴纸不入口、不贴脸，玩后洗手，选可移胶贴纸。",
+      "question": "贴纸上瘾怎么办？这其实是很好的专注练习，一次给3-5张，用完即止。",
+      "art": {
+        "main": "assets/ill/057.svg",
+        "panels": [
+          "assets/ill/panel/057-1.svg",
+          "assets/ill/panel/057-2.svg",
+          "assets/ill/panel/057-3.svg",
+          "assets/ill/panel/057-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "58",
+      "name": "动物叫声配对",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "语言沟通",
+      "duration": "5分钟",
+      "place": "地垫",
+      "materials": "动物卡片/玩偶",
+      "people": "1对1",
+      "play": "学动物叫，让他把声音和动物对上。",
+      "steps": [
+        "拿出3个动物玩偶，逐个示范叫声。",
+        "说“汪汪”，问“是谁”。",
+        "让他指或拿给你。",
+        "熟练后换成让他学叫。"
+      ],
+      "observe": [
+        "听到叫声会找对应动物",
+        "会模仿1-2种叫声",
+        "听到熟悉的叫声会笑。"
+      ],
+      "up": "增加到5种动物。",
+      "down": "只用2种。",
+      "safety": "玩偶无小零件、无长毛脱落。",
+      "question": "只说“汪汪”不说“狗”？先有声音再有词，这是正常路径，你说“汪汪，小狗”把两个连起来即可。",
+      "art": {
+        "main": "assets/ill/058.svg",
+        "panels": [
+          "assets/ill/panel/058-1.svg",
+          "assets/ill/panel/058-2.svg",
+          "assets/ill/panel/058-3.svg",
+          "assets/ill/panel/058-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "59",
+      "name": "指令接力",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "语言沟通",
+      "duration": "5分钟",
+      "place": "家中",
+      "materials": "日常物品",
+      "people": "1对1",
+      "play": "连续做两个简单指令，像闯关一样。",
+      "steps": [
+        "说“把球拿给爸爸”，完成后再给第二个。",
+        "第二个指令换成“放到桌上”。",
+        "两个都完成就击掌。",
+        "一次最多两个动作。"
+      ],
+      "observe": [
+        "能完成两步指令",
+        "会记住第一个动作",
+        "听指令时会看人。"
+      ],
+      "up": "加入方位词“上面”“里面”。",
+      "down": "只说一个动作。",
+      "safety": "不设计跑向厨房、浴室等有风险的路线。",
+      "question": "第二个总忘？这是工作记忆在发育，把两个动作绑定成“拿球—给爸爸”，并用手势提示。",
+      "art": {
+        "main": "assets/ill/059.svg",
+        "panels": [
+          "assets/ill/panel/059-1.svg",
+          "assets/ill/panel/059-2.svg",
+          "assets/ill/panel/059-3.svg",
+          "assets/ill/panel/059-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "60",
+      "name": "三处寻宝",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "认知探索",
+      "duration": "10分钟",
+      "place": "家中",
+      "materials": "小玩具3个",
+      "people": "1对1",
+      "play": "把玩具藏在三个固定位置，让他一个个找。",
+      "steps": [
+        "当着他的面把玩具藏到枕头下、盒子里、椅子后。",
+        "说“去找找”，先带他找到一个。",
+        "剩下的让他自己找，找到就欢呼。",
+        "下次换位置但保持三个。"
+      ],
+      "observe": [
+        "会掀开遮盖物",
+        "找到后会继续找下一个",
+        "记住上次的位置。"
+      ],
+      "up": "藏到第四个位置。",
+      "down": "只藏一个。",
+      "safety": "不藏在柜子高处、不藏进洗衣机、冰箱等危险处。",
+      "question": "找不到就放弃？把玩具露出一角，或给“热和冷”的声音提示，保持成功率在七成左右。",
+      "art": {
+        "main": "assets/ill/060.svg",
+        "panels": [
+          "assets/ill/panel/060-1.svg",
+          "assets/ill/panel/060-2.svg",
+          "assets/ill/panel/060-3.svg",
+          "assets/ill/panel/060-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "61",
+      "name": "涂鸦墙",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "精细动作",
+      "duration": "10分钟",
+      "place": "家中",
+      "materials": "大白纸、蜡笔",
+      "people": "1对1",
+      "play": "把纸贴墙上，站着画大线条。",
+      "steps": [
+        "把大纸用胶带贴在墙面齐腰高度。",
+        "给粗杆蜡笔，示范画竖线。",
+        "让他站着自由画，不纠正握笔。",
+        "画完一起签名、贴到门上。"
+      ],
+      "observe": [
+        "会画出自发的线条",
+        "会用整条手臂",
+        "会换颜色。"
+      ],
+      "up": "画圈圈。",
+      "down": "坐着在纸上画。",
+      "safety": "用无毒可水洗蜡笔，胶带贴牢，不在插座附近画。",
+      "question": "画到墙上怎么办？提前贴好纸并说明“画在纸上”，越界就抱回纸前，不斥责。",
+      "art": {
+        "main": "assets/ill/061.svg",
+        "panels": [
+          "assets/ill/panel/061-1.svg",
+          "assets/ill/panel/061-2.svg",
+          "assets/ill/panel/061-3.svg",
+          "assets/ill/panel/061-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "62",
+      "name": "擦桌子",
+      "age": "13-18月",
+      "ageRange": {
+        "min": 13,
+        "max": 18
+      },
+      "ability": "生活自理",
+      "duration": "5分钟",
+      "place": "餐椅/餐桌",
+      "materials": "湿巾",
+      "people": "1对1",
+      "play": "吃完饭递给他一块湿巾，一起擦桌子。",
+      "steps": [
+        "饭后给一块拧干的湿巾。",
+        "示范从左到右擦。",
+        "说“帮妈妈擦擦”，让他模仿。",
+        "擦完把湿巾丢进垃圾桶。"
+      ],
+      "observe": [
+        "会模仿擦的动作",
+        "知道把垃圾丢进桶",
+        "愿意参与收尾。"
+      ],
+      "up": "擦完自己的餐盘。",
+      "down": "只擦一小块。",
+      "safety": "湿巾不滴水，不擦电器和插座，不用含酒精湿巾擦嘴。",
+      "question": "越擦越脏？参与比干净重要，最后你再补一遍，别当着他的面重擦。",
+      "art": {
+        "main": "assets/ill/062.svg",
+        "panels": [
+          "assets/ill/panel/062-1.svg",
+          "assets/ill/panel/062-2.svg",
+          "assets/ill/panel/062-3.svg",
+          "assets/ill/panel/062-4.svg"
+        ]
+      }
+    }
+  ]
+}

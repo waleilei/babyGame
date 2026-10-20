@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "no": 16,
+  "title": "出门与通勤",
+  "partNo": 3,
+  "age": "生活场景",
+  "kind": "games",
+  "intro": [
+    {
+      "type": "p",
+      "text": "**场景说明**：推车、地铁、餐厅是“必须待着”的时间，游戏的目标是给孩子一个可做的事，而不是让他“别闹”。"
+    }
+  ],
+  "games": [
+    {
+      "id": "118",
+      "name": "推车寻宝",
+      "age": "12-24月",
+      "ageRange": {
+        "min": 12,
+        "max": 24
+      },
+      "ability": "认知探索",
+      "duration": "10分钟",
+      "place": "户外",
+      "materials": "无",
+      "people": "1对1",
+      "play": "推车路上找三样东西：红色的车、小狗、大树。",
+      "steps": [
+        "出门前说好今天找“红色的车”。",
+        "路上看到就指给他看。",
+        "让他自己发现并指出来。",
+        "找到三样就击掌，换下一个目标。"
+      ],
+      "observe": [
+        "会主动扫视环境",
+        "找到会指",
+        "能记住目标。"
+      ],
+      "up": "同时找两样。",
+      "down": "只找“车”。",
+      "safety": "推车系好安全带，停车观察时踩刹车，不让他站起来。",
+      "question": "坐不住怎么办？把寻宝目标换成他当下感兴趣的（挖掘机、快递车），成功率更高。",
+      "art": {
+        "main": "assets/ill/118.svg",
+        "panels": [
+          "assets/ill/panel/118-1.svg",
+          "assets/ill/panel/118-2.svg",
+          "assets/ill/panel/118-3.svg",
+          "assets/ill/panel/118-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "119",
+      "name": "站名接龙",
+      "age": "24-36月",
+      "ageRange": {
+        "min": 24,
+        "max": 36
+      },
+      "ability": "语言沟通",
+      "duration": "10分钟",
+      "place": "地铁/公交",
+      "materials": "无",
+      "people": "1对1",
+      "play": "每到一个站，一起念站名，再猜下一站。",
+      "steps": [
+        "报站时跟读一遍站名。",
+        "问“下一站是什么”。",
+        "让他听广播找答案。",
+        "到站后说“我们到了，下车”。"
+      ],
+      "observe": [
+        "能记住2-3个站名",
+        "会听广播",
+        "能预期下车。"
+      ],
+      "up": "认站名里的一个字。",
+      "down": "只数还有几站。",
+      "safety": "全程牵手或抱稳，不靠车门，不在车厢走动。",
+      "question": "太吵听不清？改成看窗外数“红色的车”，同样能稳定情绪。",
+      "art": {
+        "main": "assets/ill/119.svg",
+        "panels": [
+          "assets/ill/panel/119-1.svg",
+          "assets/ill/panel/119-2.svg",
+          "assets/ill/panel/119-3.svg",
+          "assets/ill/panel/119-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "120",
+      "name": "餐厅等待包",
+      "age": "12-36月",
+      "ageRange": {
+        "min": 12,
+        "max": 36
+      },
+      "ability": "生活自理",
+      "duration": "20分钟",
+      "place": "餐厅",
+      "materials": "小包：贴纸、蜡笔、小书",
+      "people": "1对1",
+      "play": "出门前准备一个“等待包”，只在餐厅拿出来。",
+      "steps": [
+        "包里放3样东西：贴纸、蜡笔和纸、一本小书。",
+        "点完菜先拿出一件。",
+        "每10分钟换一件，不一次全给。",
+        "上菜后收包，专心吃饭。"
+      ],
+      "observe": [
+        "能安静玩5-10分钟",
+        "会主动要求换一样",
+        "等待时不哭闹。"
+      ],
+      "up": "加入“点菜”任务。",
+      "down": "只带贴纸。",
+      "safety": "不玩餐具、不喝热饮，座位远离上菜口。",
+      "question": "还是要看手机？等待包的效果取决于“只在这个时候出现”，平时收好，保持新鲜感。",
+      "art": {
+        "main": "assets/ill/120.svg",
+        "panels": [
+          "assets/ill/panel/120-1.svg",
+          "assets/ill/panel/120-2.svg",
+          "assets/ill/panel/120-3.svg",
+          "assets/ill/panel/120-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "121",
+      "name": "红绿灯木头人",
+      "age": "24-36月",
+      "ageRange": {
+        "min": 24,
+        "max": 36
+      },
+      "ability": "大运动",
+      "duration": "10分钟",
+      "place": "户外",
+      "materials": "无",
+      "people": "2人以上",
+      "play": "你说“绿灯”就走，“红灯”就定住不动。",
+      "steps": [
+        "先原地练习“走—停”。",
+        "你喊“绿灯”，一起走。",
+        "喊“红灯”，定住3秒。",
+        "加入“黄灯”慢慢走。"
+      ],
+      "observe": [
+        "能听到指令停住",
+        "能保持3-5秒",
+        "会自己喊口令。"
+      ],
+      "up": "加入“单脚站”。",
+      "down": "只用“停”。",
+      "safety": "在封闭场地玩，远离马路，地面平整。",
+      "question": "停不住总往前冲？把“停”练成游戏而不是命令，从1秒开始，成功就夸张表扬。",
+      "art": {
+        "main": "assets/ill/121.svg",
+        "panels": [
+          "assets/ill/panel/121-1.svg",
+          "assets/ill/panel/121-2.svg",
+          "assets/ill/panel/121-3.svg",
+          "assets/ill/panel/121-4.svg"
+        ]
+      }
+    },
+    {
+      "id": "122",
+      "name": "踩影子",
+      "age": "24-36月",
+      "ageRange": {
+        "min": 24,
+        "max": 36
+      },
+      "ability": "大运动",
+      "duration": "10分钟",
+      "place": "户外",
+      "materials": "阳光",
+      "people": "2人以上",
+      "play": "追着踩对方的影子，也要保护自己的影子。",
+      "steps": [
+        "找一块有阳光的空地。",
+        "说“我要踩你的影子啦”。",
+        "他跑你追，踩到就换他追。",
+        "累了就坐下来看影子变长变短。"
+      ],
+      "observe": [
+        "会躲、会追",
+        "能理解“影子跟着人”",
+        "跑动中能停。"
+      ],
+      "up": "玩“影子变大变小”。",
+      "down": "只踩静止的影子。",
+      "safety": "避开正午暴晒，场地无台阶和车辆，穿防滑鞋。",
+      "question": "阴天玩不了？改成“踩地砖线”或“踩落叶”，规则一样。",
+      "art": {
+        "main": "assets/ill/122.svg",
+        "panels": [
+          "assets/ill/panel/122-1.svg",
+          "assets/ill/panel/122-2.svg",
+          "assets/ill/panel/122-3.svg",
+          "assets/ill/panel/122-4.svg"
+        ]
+      }
+    }
+  ]
+}

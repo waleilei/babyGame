@@ -1,0 +1,33 @@
+:root {
+  --paper: #fbf8f2;
+  --paper-deep: #f2ebdf;
+  --surface: #fffdf9;
+  --white: #fff;
+  --art-1: #ede4d6;
+  --art-2: #f8f3ea;
+  --header-glass: rgba(251, 248, 242, 0.88);
+  --focus-ring: rgba(62, 95, 79, 0.13);
+  --backdrop: rgba(46, 42, 38, 0.55);
+  --ink: #2e2a26;
+  --muted: #6f675d;
+  --wood: #b99a72;
+  --line: #e3dacb;
+  --blue: #a8c0cc;
+  --blue-ink: #294651;
+  --red: #a8483a;
+  --red-soft: #f7e6e1;
+  --green: #3e5f4f;
+  --green-dark: #33503f;
+  --green-soft: #e7efe9;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 10px 30px rgba(46, 42, 38, 0.07);
+  --shadow-hover: 0 18px 40px rgba(46, 42, 38, 0.13);
+
+  --max-toc: 880px;
+  --max-chapter: 1120px;
+
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+  --font-sans: system-ui, -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
