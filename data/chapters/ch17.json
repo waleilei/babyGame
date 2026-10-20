@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch17",
   "no": 17,
-  "title": "看医生、打针、吃药",
-  "partNo": 3,
-  "age": "生活场景",
   "kind": "games",
+  "title": "看医生、打针、吃药",
+  "partId": "part-3",
+  "meta": "生活场景",
   "intro": [
     {
       "type": "p",

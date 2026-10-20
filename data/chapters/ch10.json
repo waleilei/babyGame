@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch10",
   "no": 10,
-  "title": "19-24个月｜语言爆发与“我自己来”",
-  "partNo": 2,
-  "age": "19-24月",
   "kind": "games",
+  "title": "19-24个月｜语言爆发与“我自己来”",
+  "partId": "part-2",
+  "meta": "19-24月",
   "intro": [
     {
       "type": "p",

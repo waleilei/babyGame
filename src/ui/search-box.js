@@ -5,10 +5,10 @@ export function createSearchBox({ onInput, onClear }) {
   const input = el('input', {
     type: 'search',
     class: 'search__input',
-    id: 'game-search',
-    name: 'game-search',
-    placeholder: '搜索游戏名，例如“躲猫猫”',
-    'aria-label': '按游戏名搜索',
+    id: 'catalog-search',
+    name: 'catalog-search',
+    placeholder: '搜索游戏、章节或附录，例如“躲猫猫”“里程碑”',
+    'aria-label': '搜索游戏、章节与附录',
     autocomplete: 'off',
     spellcheck: 'false',
     oninput: (event) => onInput(event.target.value),
@@ -40,6 +40,10 @@ export function createSearchBox({ onInput, onClear }) {
     ]),
     input,
     update,
+    setDisabled(disabled) {
+      input.disabled = disabled;
+      clearButton.disabled = disabled;
+    },
     clear() {
       input.value = '';
       update({ resultCount: 0 });

@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch07",
   "no": 7,
-  "title": "7-9个月｜坐起来，够世界",
-  "partNo": 2,
-  "age": "7-9月",
   "kind": "games",
+  "title": "7-9个月｜坐起来，够世界",
+  "partId": "part-2",
+  "meta": "7-9月",
   "intro": [
     {
       "type": "p",

@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch09",
   "no": 9,
-  "title": "13-18个月｜行走与探索",
-  "partNo": 2,
-  "age": "13-18月",
   "kind": "games",
+  "title": "13-18个月｜行走与探索",
+  "partId": "part-2",
+  "meta": "13-18月",
   "intro": [
     {
       "type": "p",

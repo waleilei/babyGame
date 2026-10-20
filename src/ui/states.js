@@ -9,15 +9,25 @@ export function createSkeleton(kind = 'toc') {
     role: 'status',
     'aria-live': 'polite',
     'aria-busy': 'true',
-  }, [el('span', { class: 'visually-hidden', text: kind === 'toc' ? '正在加载目录' : '正在加载章节' })]);
+  }, [el('span', {
+    class: 'visually-hidden',
+    text: kind === 'toc' ? '正在加载目录' : kind === 'prose' ? '正在加载文档' : '正在加载章节',
+  })]);
 
   if (kind === 'toc') {
+    // 目录页的 hero 与搜索框已由页面先行渲染，骨架只补列表区，避免替换时整体位移。
     root.append(
-      block('hero'),
       block('label'),
       ...Array.from({ length: 4 }, () => block('row')),
       block('label'),
       ...Array.from({ length: 3 }, () => block('row')),
+    );
+  } else if (kind === 'prose') {
+    root.append(
+      block('title'),
+      block('text'),
+      block('label'),
+      ...Array.from({ length: 5 }, () => block('para')),
     );
   } else {
     root.append(

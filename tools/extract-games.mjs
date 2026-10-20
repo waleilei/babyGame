@@ -1,28 +1,59 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const ABILITIES = ['大运动', '精细动作', '语言沟通', '认知探索', '社会情绪', '生活自理'];
 
+/** 全书稿件：前置、四篇正文、附录；顺序即阅读顺序。 */
 export const SOURCE_FILES = [
-  { file: 'manuscript/ch05-08.md', fallbackPartNo: 2 },
-  { file: 'manuscript/ch09-12.md', fallbackPartNo: 2 },
-  { file: 'manuscript/ch13-18.md', fallbackPartNo: 3 },
+  { file: 'manuscript/front-matter.md', mode: 'front' },
+  { file: 'manuscript/part1-ch01-02.md', mode: 'prose', partNo: 1 },
+  { file: 'manuscript/part1-ch03-04.md', mode: 'prose', partNo: 1 },
+  { file: 'manuscript/ch05-08.md', mode: 'games', partNo: 2 },
+  { file: 'manuscript/ch09-12.md', mode: 'games', partNo: 2 },
+  { file: 'manuscript/ch13-18.md', mode: 'games', partNo: 3 },
+  { file: 'manuscript/part4-ch19-21.md', mode: 'prose', partNo: 4 },
+  { file: 'manuscript/appendix.md', mode: 'appendix' },
 ];
+
+/** 目录分组，顺序即全书顺序；分组标题是唯一来源。 */
+export const GROUPS = [
+  { id: 'front', title: '前置' },
+  { id: 'part-1', no: 1, title: '会玩的孩子' },
+  { id: 'part-2', no: 2, title: '分月龄游戏图鉴' },
+  { id: 'part-3', no: 3, title: '把游戏放进生活' },
+  { id: 'part-4', no: 4, title: '不同家庭的玩法' },
+  { id: 'appendix', title: '附录' },
+];
+
+export const FRONT_ID = 'front';
+export const FRONT_TITLE = '前置｜序、使用说明、发展地图';
+export const FRONT_SHORT_TITLE = '序、使用说明、发展地图';
+export const DOC_COUNT = 28;
+export const CHAPTER_COUNT = 21;
+export const GAME_COUNT = 130;
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_SOURCE_DIR = resolve(REPO_ROOT, '../books/0-3-game-book');
-const CN_NUMBERS = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6 };
+const CN_NUMBERS = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 };
+const MAX_PSEUDO_HEADING = 40;
 
 /**
- * @typedef {{ id: string, name: string, age: string, ageRange: { min: number, max: number },
- *   ability: string, duration: string, place: string, materials: string, people: string,
- *   play: string, steps: string[], observe: string[], up: string, down: string,
- *   safety: string, question: string, art: { main: string, panels: string[] } }} Game
- * @typedef {{ type: 'p'|'ul'|'ol'|'h3'|'h4', text?: string, items?: string[] }} IntroBlock
- * @typedef {{ schemaVersion: number, no: number, title: string, partNo: number, age: string,
- *   kind: 'games', intro: IntroBlock[], games: Game[] }} Chapter
+ * @typedef {{ type: 'p' | 'h2' | 'h3' | 'h4' | 'ul' | 'ol' | 'table' | 'quote' | 'checklist' | 'hr',
+ *   text?: string, items?: any[], start?: number, head?: string[], rows?: string[][] }} Block
+ * @typedef {{ id: string, no: number | null, kind: 'games' | 'prose', title: string, partId: string,
+ *   meta: string, intro?: Block[], games?: any[], blocks?: Block[],
+ *   sections?: { id: string, level: number, title: string }[] }} Doc
  */
 
 function padId(value) {
@@ -31,6 +62,22 @@ function padId(value) {
 
 function trim(value) {
   return String(value ?? '').trim();
+}
+
+export function chapterDocId(no) {
+  return `ch${String(no).padStart(2, '0')}`;
+}
+
+export function appendixDocId(letter) {
+  return `apx-${String(letter).toLowerCase()}`;
+}
+
+function chapterFile(no) {
+  return `chapters/${chapterDocId(no)}.json`;
+}
+
+function unnumberedFile(id) {
+  return `docs/${id}.json`;
 }
 
 function splitInfoLine(line) {
@@ -58,7 +105,7 @@ function parseAgeRange(age) {
   return { min: Number(match[1]), max: Number(match[2]) };
 }
 
-function parseBlocks(lines) {
+function parseIntroBlocks(lines) {
   const blocks = [];
   let list = null;
 
@@ -82,8 +129,8 @@ function parseBlocks(lines) {
   return blocks.filter((block) => block.type !== 'ul' || block.items.length > 0);
 }
 
-function parseGame(lines, index) {
-  const heading = /^###\s+(\d{2,3})\s+(.+?)\s*$/.exec(lines[index]);
+function parseGame(lines, index, docId, errors) {
+  const heading = /^###\s+(\d{2,3})\s+(.+?)\s*$/.exec(lines[index].text.trim());
   if (!heading) return null;
 
   const id = heading[1];
@@ -92,7 +139,7 @@ function parseGame(lines, index) {
   const fields = {};
 
   for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
-    const line = lines[cursor].trim();
+    const line = lines[cursor].text.trim();
     if (!line) continue;
     if (line.startsWith('### ') || line.startsWith('## ') || line === '---') break;
 
@@ -115,7 +162,8 @@ function parseGame(lines, index) {
   }
 
   if (!info || info.length !== 6) {
-    return { game: null, error: `${id} ${name} 信息条不足 6 段` };
+    errors.push(`${docId} 第${lines[index].no}行：${id} ${name} 信息条不足 6 段`);
+    return null;
   }
 
   const [age, ability, duration, place, materials, people] = info;
@@ -147,16 +195,29 @@ function parseGame(lines, index) {
   };
 
   if (!ageRange) {
-    return { game, error: `${id} ${name} 月龄无法解析：${age}` };
+    errors.push(`${docId} 第${lines[index].no}行：${id} ${name} 月龄无法解析：${age}`);
   }
 
-  return { game, error: null };
+  return game;
 }
 
-function parseChapterHeading(line) {
-  const match = /^##\s*第(\d+)章\s+(.+?)\s*$/.exec(line);
+function parseChapterHeading(text) {
+  const match = /^##\s*第(\d+)章\s+(.+?)\s*$/.exec(text);
   if (!match) return null;
   return { no: Number(match[1]), title: match[2].trim() };
+}
+
+function parseAppendixHeading(text) {
+  const match = /^##\s*附录\s*([A-Fa-f])\s*(.*?)\s*$/.exec(text);
+  if (!match) return null;
+  return { letter: match[1].toUpperCase(), title: match[2].trim() };
+}
+
+function parsePartHeading(text) {
+  const match = /^#\s*第([一二三四五六七八九十]+)篇\s*(.*?)\s*$/.exec(text);
+  if (!match) return null;
+  const title = match[2].split(/[｜|]/)[0].trim();
+  return { no: CN_NUMBERS[match[1]] ?? null, title };
 }
 
 function chapterAge(title, partNo) {
@@ -170,69 +231,384 @@ function chapterShortTitle(title) {
   return parts.length > 1 ? parts[parts.length - 1] : title;
 }
 
-export function loadSource({ sourceDir = DEFAULT_SOURCE_DIR, file, fallbackPartNo = 2 } = {}) {
-  const fullPath = join(sourceDir, file);
-  if (!existsSync(fullPath)) {
-    const error = new Error(`源稿件不存在：${fullPath}`);
-    error.code = 'ENOENT_SOURCE';
-    throw error;
+function stripBold(text) {
+  return String(text ?? '').replace(/\*\*/g, '').trim();
+}
+
+/**
+ * 独占一段且整段加粗的伪标题升级为 h4。
+ * 条件：整行只有一个 `**…**`、内部不含 `*`、不以句末标点结尾、不超过 40 字。
+ */
+function pseudoHeading(text) {
+  const match = /^\*\*([^*]+)\*\*$/.exec(String(text ?? '').trim());
+  if (!match) return null;
+  const inner = match[1].trim();
+  if (!inner) return null;
+  if (/[。！？；]$/.test(inner)) return null;
+  if ([...inner].length > MAX_PSEUDO_HEADING) return null;
+  return inner;
+}
+
+/** 行内标记只允许 `**粗体**`；其余 Markdown 一律报错。 */
+function checkInline(text, docId, lineNo, errors, label = '文本') {
+  const value = String(text ?? '');
+  const fail = (reason) => errors.push(`${docId} 第${lineNo}行：${label}${reason}`);
+
+  if (value.includes('`')) fail('包含代码标记（反引号）');
+  if (/!\[[^\]]*\]\([^)]*\)/.test(value)) fail('包含图片标记');
+  if (/\[[^\]]*\]\([^)]*\)/.test(value)) fail('包含链接标记');
+  if (/<\/?[a-zA-Z][^>]*>/.test(value)) fail('包含原始 HTML');
+  if (/_[^_\s][^_]*_/.test(value)) fail('包含斜体标记（下划线）');
+  if (/\[[ xX]?\]/.test(value)) fail('残留字面清单标记 [ ]');
+
+  for (const line of value.split('\n')) {
+    const stars = (line.match(/\*/g) ?? []).length;
+    if (stars === 0) continue;
+    if (stars % 2 !== 0) {
+      fail('粗体标记未闭合');
+      continue;
+    }
+    if (line.replace(/\*\*/g, '').includes('*')) fail('包含不支持的单个星号');
+  }
+}
+
+function splitTableRow(line) {
+  let value = String(line).trim();
+  if (value.startsWith('|')) value = value.slice(1);
+  if (value.endsWith('|')) value = value.slice(0, -1);
+  return value.split('|').map((cell) => cell.trim());
+}
+
+function isSeparatorRow(cells) {
+  return cells.length > 0 && cells.every((cell) => /^:?-{2,}:?$/.test(cell));
+}
+
+function parseProseBlocks(lines, { docId, errors }) {
+  const blocks = [];
+  /** @type {{ type: string, no: number, lines?: string[], items?: string[], start?: number, rows?: string[][] }} */
+  let active = null;
+
+  function flush() {
+    if (!active) return;
+    const current = active;
+    active = null;
+
+    if (current.type === 'p') {
+      const text = current.lines.join('\n');
+      checkInline(text, docId, current.no, errors, '段落');
+      const heading = pseudoHeading(text);
+      if (heading) {
+        blocks.push({ type: 'h4', text: heading });
+      } else {
+        blocks.push({ type: 'p', text });
+      }
+      return;
+    }
+
+    if (current.type === 'quote') {
+      for (const line of current.lines) checkInline(line, docId, current.no, errors, '引用');
+      blocks.push({ type: 'quote', text: current.lines.join('\n') });
+      return;
+    }
+
+    if (current.type === 'ul' || current.type === 'ol') {
+      for (const item of current.items) checkInline(item, docId, current.no, errors, '列表项');
+      if (current.type === 'ul') {
+        blocks.push({ type: 'ul', items: [...current.items] });
+      } else {
+        blocks.push({ type: 'ol', start: current.start, items: [...current.items] });
+      }
+      return;
+    }
+
+    if (current.type === 'checklist') {
+      const items = current.items.map(({ text, checked }) => {
+        if (!text) errors.push(`${docId} 第${current.no}行：清单项为空`);
+        checkInline(text, docId, current.no, errors, '清单项');
+        return { text, checked };
+      });
+      blocks.push({ type: 'checklist', items });
+      return;
+    }
+
+    if (current.type === 'table') {
+      const [headRow, ...rest] = current.rows;
+      if (!headRow || headRow.length === 0) {
+        errors.push(`${docId} 第${current.no}行：表头为空`);
+        return;
+      }
+      if (rest.length === 0 || !isSeparatorRow(rest[0])) {
+        errors.push(`${docId} 第${current.no}行：表格第二行应为分隔行`);
+        return;
+      }
+      const body = rest.slice(1);
+      headRow.forEach((cell, index) => checkInline(cell, docId, current.no, errors, `表头第${index + 1}列`));
+      const rows = body.map((cells, rowIndex) => {
+        if (cells.length !== headRow.length) {
+          errors.push(
+            `${docId} 第${current.no}行：表格列数不一致（表头 ${headRow.length} 列，第 ${rowIndex + 1} 行 ${cells.length} 列）`,
+          );
+        }
+        cells.forEach((cell, index) => checkInline(cell, docId, current.no, errors, `表格第${rowIndex + 1}行第${index + 1}列`));
+        return cells;
+      });
+      blocks.push({ type: 'table', head: [...headRow], rows });
+    }
   }
 
-  const lines = readFileSync(fullPath, 'utf8').split(/\r?\n/);
-  let partNo = fallbackPartNo;
-  let partTitle = '';
+  for (const line of lines) {
+    const text = line.text.trim();
+
+    if (!text || text === '---') {
+      flush();
+      continue;
+    }
+
+    if (text.startsWith('#### ') || text.startsWith('### ') || text.startsWith('## ')) {
+      flush();
+      const level = text.startsWith('#### ') ? 'h4' : text.startsWith('### ') ? 'h3' : 'h2';
+      const content = text.slice(level === 'h4' ? 4 : level === 'h3' ? 3 : 2).trim();
+      if (!content) {
+        errors.push(`${docId} 第${line.no}行：标题为空`);
+        continue;
+      }
+      checkInline(content, docId, line.no, errors, '标题');
+      blocks.push({ type: level, text: content });
+      continue;
+    }
+
+    if (text.startsWith('>')) {
+      if (active?.type !== 'quote') {
+        flush();
+        active = { type: 'quote', no: line.no, lines: [] };
+      }
+      active.lines.push(text.replace(/^>\s?/, '').trim());
+      continue;
+    }
+
+    const checklist = /^-\s+\[([ xX])\]\s*(.*)$/.exec(text);
+    if (checklist) {
+      if (active?.type !== 'checklist') {
+        flush();
+        active = { type: 'checklist', no: line.no, items: [] };
+      }
+      active.items.push({ text: checklist[2].trim(), checked: checklist[1].toLowerCase() === 'x' });
+      continue;
+    }
+
+    if (/^-\s+/.test(text)) {
+      if (active?.type !== 'ul') {
+        flush();
+        active = { type: 'ul', no: line.no, items: [] };
+      }
+      active.items.push(text.replace(/^-\s+/, '').trim());
+      continue;
+    }
+
+    const ordered = /^(\d+)\.\s+(.*)$/.exec(text);
+    if (ordered) {
+      const number = Number(ordered[1]);
+      if (active?.type !== 'ol' || active.start + active.items.length !== number) {
+        flush();
+        active = { type: 'ol', no: line.no, start: number, items: [] };
+      }
+      active.items.push(ordered[2].trim());
+      continue;
+    }
+
+    if (text.startsWith('|')) {
+      if (active?.type !== 'table') {
+        flush();
+        active = { type: 'table', no: line.no, rows: [] };
+      }
+      active.rows.push(splitTableRow(text));
+      continue;
+    }
+
+    if (active?.type !== 'p') {
+      flush();
+      active = { type: 'p', no: line.no, lines: [] };
+    }
+    active.lines.push(text);
+  }
+
+  flush();
+  return blocks;
+}
+
+export function sectionsFromBlocks(blocks) {
+  const sections = [];
+  for (const block of blocks) {
+    if (block.type !== 'h2' && block.type !== 'h3' && block.type !== 'h4') continue;
+    sections.push({
+      id: `s${sections.length + 1}`,
+      level: Number(block.type.slice(1)),
+      title: stripBold(block.text),
+    });
+  }
+  return sections;
+}
+
+function readLines(fullPath) {
+  return readFileSync(fullPath, 'utf8')
+    .split(/\r?\n/)
+    .map((text, index) => ({ text, no: index + 1 }));
+}
+
+function loadProseSource({ fullPath, file, mode, partNo: fallbackPartNo, errors }) {
+  const lines = readLines(fullPath);
+  const docs = [];
+  let partNo = fallbackPartNo ?? null;
+  let current = null;
+  let prelude = [];
+
+  const partIdFor = (no) => (mode === 'front' ? 'front' : mode === 'appendix' ? 'appendix' : `part-${no}`);
+  const metaFor = () => (mode === 'appendix' ? '附录' : '阅读');
+
+  const start = (doc) => {
+    current = { ...doc, lines: [...prelude] };
+    prelude = [];
+  };
+
+  const finish = () => {
+    if (!current) return;
+    const docId = current.id;
+    const blocks = parseProseBlocks(current.lines, { docId, errors });
+    docs.push({
+      schemaVersion: SCHEMA_VERSION,
+      id: docId,
+      no: current.no ?? null,
+      kind: 'prose',
+      title: current.title,
+      partId: current.partId,
+      meta: metaFor(),
+      blocks,
+      sections: sectionsFromBlocks(blocks),
+    });
+    current = null;
+  };
 
   for (const line of lines) {
-    const partMatch = /^#\s*第([一二三四五六七八九十]+)篇\s*([^｜|]+)/.exec(line.trim());
-    if (partMatch) {
-      partNo = CN_NUMBERS[partMatch[1]] ?? fallbackPartNo;
-      partTitle = partMatch[2].trim();
+    const text = line.text.trim();
+
+    const part = parsePartHeading(text);
+    if (part) {
+      finish();
+      partNo = part.no ?? partNo;
+      prelude = [];
+      continue;
+    }
+
+    if (text.startsWith('# ')) {
+      finish();
+      continue;
+    }
+
+    if (mode === 'front') {
+      const heading = /^##\s+(.+)$/.exec(text);
+      if (heading) {
+        if (!current) {
+          start({ id: FRONT_ID, no: null, partId: 'front', title: FRONT_TITLE });
+        }
+        current.lines.push(line);
+        continue;
+      }
+      (current ? current.lines : prelude).push(line);
+      continue;
+    }
+
+    const chapter = parseChapterHeading(text);
+    if (chapter) {
+      finish();
+      start({
+        id: chapterDocId(chapter.no),
+        no: chapter.no,
+        partId: partIdFor(partNo),
+        title: chapter.title,
+      });
+      continue;
+    }
+
+    const appendix = parseAppendixHeading(text);
+    if (appendix) {
+      finish();
+      start({
+        id: appendixDocId(appendix.letter),
+        no: null,
+        partId: 'appendix',
+        title: `附录${appendix.letter} ${appendix.title}`.trim(),
+      });
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+    else prelude.push(line);
+  }
+
+  finish();
+
+  if (prelude.some((line) => line.text.trim() && line.text.trim() !== '---' && !line.text.trim().startsWith('>'))) {
+    errors.push(`${file} 末尾内容未归入任何文档`);
+  }
+
+  return { docs, partNo };
+}
+
+function loadGamesSource({ fullPath, file, partNo: fallbackPartNo, errors }) {
+  const lines = readLines(fullPath);
+  let partNo = fallbackPartNo;
+  let partTitle = '';
+  const docs = [];
+
+  for (const line of lines) {
+    const part = parsePartHeading(line.text.trim());
+    if (part) {
+      partNo = part.no ?? partNo;
+      partTitle = part.title;
       break;
     }
   }
 
-  const chapters = [];
-  const errors = [];
   let current = null;
   let introLines = [];
 
-  const finalizeChapter = () => {
+  const finish = () => {
     if (!current) return;
-    const chapter = {
+    const docId = chapterDocId(current.no);
+    docs.push({
       schemaVersion: SCHEMA_VERSION,
+      id: docId,
       no: current.no,
-      title: current.title,
-      partNo,
-      age: chapterAge(current.title, partNo),
       kind: 'games',
-      intro: current.intro ?? parseBlocks(introLines),
+      title: current.title,
+      partId: `part-${partNo}`,
+      meta: chapterAge(current.title, partNo),
+      intro: current.intro ?? parseIntroBlocks(introLines),
       games: current.games,
-    };
-    chapters.push(chapter);
+    });
   };
 
   for (let index = 0; index < lines.length; index += 1) {
-    const line = lines[index];
-    const chapterHeading = parseChapterHeading(line.trim());
-    if (chapterHeading) {
-      finalizeChapter();
-      current = { ...chapterHeading, games: [], intro: null };
+    const text = lines[index].text;
+    const chapter = parseChapterHeading(text.trim());
+    if (chapter) {
+      finish();
+      current = { ...chapter, games: [] };
       introLines = [];
       continue;
     }
 
     if (!current) continue;
 
-    if (/^###\s+\d{2,3}\s+/.test(line.trim())) {
-      if (current.intro === null) current.intro = parseBlocks(introLines);
-      const parsed = parseGame(lines, index);
-      if (parsed?.game) current.games.push(parsed.game);
-      if (parsed?.error) errors.push(parsed.error);
+    if (/^###\s+\d{2,3}\s+/.test(text.trim())) {
+      if (current.games.length === 0) current.intro = parseIntroBlocks(introLines);
+      const docId = chapterDocId(current.no);
+      const game = parseGame(lines, index, docId, errors);
+      if (game) current.games.push(game);
       introLines = [];
-      // `parseGame` scans ahead; skip game lines to keep intro collection clean.
       let cursor = index + 1;
       while (cursor < lines.length) {
-        const next = lines[cursor].trim();
+        const next = lines[cursor].text.trim();
         if (next.startsWith('### ') || next.startsWith('## ')) break;
         cursor += 1;
       }
@@ -240,19 +616,29 @@ export function loadSource({ sourceDir = DEFAULT_SOURCE_DIR, file, fallbackPartN
       continue;
     }
 
-    if (current.games.length === 0) introLines.push(line);
+    if (current.games.length === 0) introLines.push(text);
   }
 
-  finalizeChapter();
+  finish();
 
-  if (chapters.length === 0) {
-    errors.push(`${file} 未解析到任何章节`);
-  }
-  if (!partTitle) {
-    partTitle = partNo === 2 ? '分月龄游戏图鉴' : '把游戏放进生活';
+  if (docs.length === 0) errors.push(`${file} 未解析到任何章节`);
+  return { docs, partNo, partTitle };
+}
+
+export function loadSource({ sourceDir = DEFAULT_SOURCE_DIR, file, mode = 'games', partNo = 2 } = {}) {
+  const fullPath = join(sourceDir, file);
+  if (!existsSync(fullPath)) {
+    const error = new Error(`源稿件不存在：${fullPath}`);
+    error.code = 'ENOENT_SOURCE';
+    throw error;
   }
 
-  return { partNo, partTitle, chapters, errors };
+  const errors = [];
+  const result = mode === 'games'
+    ? loadGamesSource({ fullPath, file, partNo, errors })
+    : loadProseSource({ fullPath, file, mode, partNo, errors });
+
+  return { mode, partNo: result.partNo, partTitle: result.partTitle ?? '', docs: result.docs, errors };
 }
 
 export function readBookInfo(sourceDir = DEFAULT_SOURCE_DIR) {
@@ -285,70 +671,124 @@ function generatedAtFor(sourceDir) {
   return new Date(times.length > 0 ? Math.max(...times) : Date.now()).toISOString();
 }
 
+export function expectedDocIds() {
+  return [
+    FRONT_ID,
+    ...Array.from({ length: CHAPTER_COUNT }, (_, index) => chapterDocId(index + 1)),
+    ...Array.from({ length: 6 }, (_, index) => appendixDocId(String.fromCharCode(97 + index))),
+  ];
+}
+
+function docShortTitle(doc) {
+  if (doc.id === FRONT_ID) return FRONT_SHORT_TITLE;
+  if (doc.partId === 'appendix') return doc.title.replace(/^附录[A-F]\s*/, '').trim();
+  if (doc.kind === 'games') return chapterShortTitle(doc.title);
+  return chapterShortTitle(doc.title);
+}
+
+function docFile(doc) {
+  return doc.no === null || doc.no === undefined ? unnumberedFile(doc.id) : chapterFile(doc.no);
+}
+
+function groupDocIds(docIds, id) {
+  return docIds.filter((docId) => docId === id);
+}
+
+function tocGroupDocIds(docs, group) {
+  if (group.id === 'front') return groupDocIds(docs.map((doc) => doc.id), FRONT_ID);
+  if (group.id === 'appendix') return docs.filter((doc) => doc.partId === 'appendix').map((doc) => doc.id);
+  return docs.filter((doc) => doc.partId === group.id).map((doc) => doc.id);
+}
+
 /**
- * 从稿件构建目录、章节与游戏数据，不写磁盘。
+ * 从稿件构建目录与 28 个文档，不写磁盘。
  * @param {{ sourceDir?: string, generatedAt?: string }} options
  */
 export function buildDataset({ sourceDir = DEFAULT_SOURCE_DIR, generatedAt = generatedAtFor(sourceDir) } = {}) {
   const errors = [];
-  const sourceResults = SOURCE_FILES.map((source) => {
+  const docs = [];
+  const partTitles = new Map();
+
+  for (const source of SOURCE_FILES) {
     const result = loadSource({ sourceDir, ...source });
     errors.push(...result.errors);
-    return result;
-  });
+    docs.push(...result.docs);
+    if (result.partNo && result.partTitle) partTitles.set(`part-${result.partNo}`, result.partTitle);
+  }
 
-  const partsByNo = new Map();
-  const chapters = [];
-  const games = [];
+  const byId = new Map();
+  for (const doc of docs) {
+    if (byId.has(doc.id)) errors.push(`${doc.id} 文档 id 重复`);
+    byId.set(doc.id, doc);
+  }
 
-  for (const source of sourceResults) {
-    if (!partsByNo.has(source.partNo)) {
-      partsByNo.set(source.partNo, { no: source.partNo, title: source.partTitle, chapterNos: [] });
-    }
-    const part = partsByNo.get(source.partNo);
-    for (const chapter of source.chapters) {
-      if (partsByNo.get(chapter.partNo) && partsByNo.get(chapter.partNo) !== part) {
-        errors.push(`第${chapter.no}章同时属于多个篇`);
-      }
-      chapter.partNo = source.partNo;
-      chapter.age = chapterAge(chapter.title, chapter.partNo);
-      part.chapterNos.push(chapter.no);
-      chapters.push(chapter);
-      games.push(...chapter.games);
+  const expected = expectedDocIds();
+  for (const id of expected) {
+    if (!byId.has(id)) errors.push(`缺少文档 ${id}`);
+  }
+  for (const doc of docs) {
+    if (!expected.includes(doc.id)) errors.push(`未知文档 ${doc.id}`);
+  }
+
+  for (const group of GROUPS) {
+    if (!group.no) continue;
+    const title = partTitles.get(group.id);
+    if (title && title !== group.title) {
+      errors.push(`${group.id} 篇名应为「${group.title}」，稿件为「${title}」`);
     }
   }
 
-  chapters.sort((a, b) => a.no - b.no);
-  games.sort((a, b) => Number(a.id) - Number(b.id));
-  const parts = [...partsByNo.values()].sort((a, b) => a.no - b.no);
-  for (const part of parts) part.chapterNos.sort((a, b) => a - b);
+  const ordered = expected.map((id) => byId.get(id)).filter(Boolean);
 
-  const book = readBookInfo(sourceDir);
+  for (const doc of ordered) {
+    if (doc.kind === 'games' && !/^ch(0[5-9]|1[0-8])$/.test(doc.id)) {
+      errors.push(`${doc.id} 只有第 5-18 章可以是游戏章`);
+    }
+    if (doc.kind !== 'games' && /^ch(0[5-9]|1[0-8])$/.test(doc.id)) {
+      errors.push(`${doc.id} 必须是游戏章`);
+    }
+    if (!doc.title) errors.push(`${doc.id} 缺少标题`);
+    if (doc.kind === 'prose' && (!Array.isArray(doc.blocks) || doc.blocks.length === 0)) {
+      errors.push(`${doc.id} 没有正文块`);
+    }
+  }
+
+  const games = ordered.flatMap((doc) => doc.games ?? []);
+
   const toc = {
     schemaVersion: SCHEMA_VERSION,
-    bookVersion: book.version,
+    bookVersion: readBookInfo(sourceDir).version,
     generatedAt,
     book: {
-      title: book.title,
-      subtitle: book.subtitle,
+      title: readBookInfo(sourceDir).title,
+      subtitle: readBookInfo(sourceDir).subtitle,
       total: games.length,
-      chapterCount: chapters.length,
+      chapterCount: ordered.filter((doc) => doc.no !== null).length,
+      docCount: ordered.length,
     },
-    parts,
-    chapters: chapters.map((chapter) => ({
-      no: chapter.no,
-      title: chapter.title,
-      shortTitle: chapterShortTitle(chapter.title),
-      age: chapter.age,
-      count: chapter.games.length,
-      file: `chapters/ch${String(chapter.no).padStart(2, '0')}.json`,
+    groups: GROUPS.map((group) => ({
+      id: group.id,
+      ...(group.no ? { no: group.no } : {}),
+      title: group.title,
+      docIds: tocGroupDocIds(ordered, group),
+    })),
+    docs: ordered.map((doc) => ({
+      id: doc.id,
+      no: doc.no ?? null,
+      kind: doc.kind,
+      title: doc.title,
+      shortTitle: docShortTitle(doc),
+      meta: doc.meta,
+      count: doc.kind === 'games' ? doc.games.length : 0,
+      file: docFile(doc),
     })),
     gameIndex: games.map((game) => {
-      const chapter = chapters.find((item) => item.games.includes(game));
+      const doc = ordered.find((item) => (item.games ?? []).includes(game));
       return {
         id: game.id,
         name: game.name,
-        chapterNo: chapter ? chapter.no : 0,
+        docId: doc ? doc.id : '',
+        chapterNo: doc ? doc.no : 0,
         age: game.age,
         ability: game.ability,
       };
@@ -356,30 +796,146 @@ export function buildDataset({ sourceDir = DEFAULT_SOURCE_DIR, generatedAt = gen
   };
 
   const artworkExists = (relativePath) => existsSync(join(sourceDir, relativePath));
-  errors.push(...validateDataset({ toc, chapters, games, artworkExists }));
+  errors.push(...validateDataset({ toc, docs: ordered, games, artworkExists }));
 
-  return { toc, chapters, games, errors };
+  return { toc, docs: ordered, games, errors };
+}
+
+const BLOCK_TYPES = new Set(['p', 'h2', 'h3', 'h4', 'ul', 'ol', 'table', 'quote', 'checklist', 'hr']);
+
+export function validateBlocks(blocks, docId) {
+  const errors = [];
+  blocks.forEach((block, index) => {
+    const at = `${docId} 第 ${index + 1} 块`;
+    if (!block || !BLOCK_TYPES.has(block.type)) {
+      errors.push(`${at}：未知块类型 ${block?.type}`);
+      return;
+    }
+    if (block.type === 'p' || block.type === 'h2' || block.type === 'h3' || block.type === 'h4' || block.type === 'quote') {
+      if (typeof block.text !== 'string' || block.text.trim() === '') errors.push(`${at}：文本为空`);
+    }
+    if (block.type === 'ul') {
+      if (!Array.isArray(block.items) || block.items.length === 0) errors.push(`${at}：列表为空`);
+      else if (block.items.some((item) => typeof item !== 'string' || item.trim() === '')) errors.push(`${at}：列表项为空`);
+    }
+    if (block.type === 'ol') {
+      if (!Number.isInteger(block.start) || block.start <= 0) errors.push(`${at}：有序列表 start 非法`);
+      if (!Array.isArray(block.items) || block.items.length === 0) errors.push(`${at}：有序列表为空`);
+      else if (block.items.some((item) => typeof item !== 'string' || item.trim() === '')) errors.push(`${at}：有序列表项为空`);
+    }
+    if (block.type === 'table') {
+      if (!Array.isArray(block.head) || block.head.length === 0) errors.push(`${at}：表头为空`);
+      if (!Array.isArray(block.rows)) {
+        errors.push(`${at}：表格缺少 rows`);
+      } else {
+        block.rows.forEach((row, rowIndex) => {
+          if (!Array.isArray(row) || row.length !== block.head.length) {
+            errors.push(`${at}：表格列数不一致（表头 ${block.head.length} 列，第 ${rowIndex + 1} 行 ${row?.length ?? 0} 列）`);
+          }
+        });
+      }
+    }
+    if (block.type === 'checklist') {
+      if (!Array.isArray(block.items) || block.items.length === 0) errors.push(`${at}：清单为空`);
+      else if (block.items.some((item) => !item || typeof item.text !== 'string' || item.text.trim() === '')) {
+        errors.push(`${at}：清单项为空`);
+      }
+    }
+  });
+
+  const sections = sectionsFromBlocks(blocks);
+  const headings = blocks.filter((block) => block.type === 'h2' || block.type === 'h3' || block.type === 'h4').length;
+  if (sections.length !== headings) errors.push(`${docId}：小节数与标题块不一致`);
+  return errors;
+}
+
+export function validateDoc(doc) {
+  const errors = [];
+  if (!doc || doc.schemaVersion !== SCHEMA_VERSION) {
+    return [`${doc?.id ?? '未知文档'}：schemaVersion 应为 ${SCHEMA_VERSION}`];
+  }
+  if (!['games', 'prose'].includes(doc.kind)) errors.push(`${doc.id}：kind 非法 ${doc.kind}`);
+  if (!doc.title) errors.push(`${doc.id}：标题为空`);
+  if (!doc.partId) errors.push(`${doc.id}：缺少 partId`);
+
+  if (doc.kind === 'games') {
+    if (!Array.isArray(doc.intro) || doc.intro.length === 0) errors.push(`${doc.id}：缺章首导语`);
+    if (!Array.isArray(doc.games)) {
+      errors.push(`${doc.id}：games 不是数组`);
+      return errors;
+    }
+    if (doc.blocks) errors.push(`${doc.id}：游戏章不应有 blocks`);
+    if (doc.games.some((game) => game?.id === undefined)) errors.push(`${doc.id}：游戏缺少 id`);
+  } else if (doc.kind === 'prose') {
+    if (!Array.isArray(doc.blocks) || doc.blocks.length === 0) {
+      errors.push(`${doc.id}：没有正文块`);
+    } else {
+      errors.push(...validateBlocks(doc.blocks, doc.id));
+      const expectedSections = sectionsFromBlocks(doc.blocks);
+      if (!Array.isArray(doc.sections) || doc.sections.length !== expectedSections.length) {
+        errors.push(`${doc.id}：sections 与标题块数量不一致`);
+      }
+    }
+    if (doc.games) errors.push(`${doc.id}：文字章不应有 games`);
+  }
+
+  return errors;
 }
 
 /**
  * 只读产物做硬校验。返回人类可读的错误列表，空数组表示通过。
- * @param {{ toc: any, chapters: any[], games: any[], artworkExists?: (path: string) => boolean }} dataset
+ * @param {{ toc: any, docs: any[], games: any[], artworkExists?: (path: string) => boolean }} dataset
  */
-export function validateDataset({ toc, chapters, games, artworkExists = () => true }) {
+export function validateDataset({ toc, docs, games, artworkExists = () => true }) {
   const errors = [];
   const requiredText = ['id', 'name', 'age', 'ability', 'duration', 'place', 'materials', 'people', 'play', 'up', 'down', 'safety', 'question'];
 
   if (toc.schemaVersion !== SCHEMA_VERSION) errors.push(`目录 schemaVersion 应为 ${SCHEMA_VERSION}`);
-  if (!toc.book || toc.book.total !== 130) errors.push(`游戏总数应为 130，实际 ${toc.book?.total}`);
-  if (toc.book?.chapterCount !== 14) errors.push(`章节数应为 14，实际 ${toc.book?.chapterCount}`);
-  if (toc.chapters?.length !== 14) errors.push(`章列表应有 14 条，实际 ${toc.chapters?.length}`);
-  if (toc.gameIndex?.length !== 130) errors.push(`目录索引应有 130 条，实际 ${toc.gameIndex?.length}`);
-  if (toc.parts?.length !== 2) errors.push(`篇数应为 2，实际 ${toc.parts?.length}`);
+  if (!toc.book || toc.book.total !== GAME_COUNT) errors.push(`游戏总数应为 ${GAME_COUNT}，实际 ${toc.book?.total}`);
+  if (toc.book?.chapterCount !== CHAPTER_COUNT) errors.push(`章节数应为 ${CHAPTER_COUNT}，实际 ${toc.book?.chapterCount}`);
+  if (toc.book?.docCount !== DOC_COUNT) errors.push(`文档数应为 ${DOC_COUNT}，实际 ${toc.book?.docCount}`);
+  if (toc.docs?.length !== DOC_COUNT) errors.push(`docs 应有 ${DOC_COUNT} 条，实际 ${toc.docs?.length}`);
+  if (toc.gameIndex?.length !== GAME_COUNT) errors.push(`目录索引应有 ${GAME_COUNT} 条，实际 ${toc.gameIndex?.length}`);
+  if (toc.groups?.length !== GROUPS.length) errors.push(`分组应为 ${GROUPS.length} 个，实际 ${toc.groups?.length}`);
 
-  const expectedNos = Array.from({ length: 14 }, (_, index) => index + 5);
-  const chapterNos = (toc.chapters ?? []).map((chapter) => chapter.no).sort((a, b) => a - b);
-  if (chapterNos.join(',') !== expectedNos.join(',')) {
-    errors.push(`章号应连续为 5-18，实际 ${chapterNos.join(',')}`);
+  const expected = expectedDocIds();
+  const ids = (toc.docs ?? []).map((doc) => doc.id);
+  if (ids.join(',') !== expected.join(',')) {
+    errors.push(`docs 顺序应为 ${expected.join(',')}`);
+  }
+
+  const covered = (toc.groups ?? []).flatMap((group) => group.docIds ?? []);
+  if (covered.join(',') !== ids.join(',')) {
+    errors.push('分组顺序与 docs 顺序不一致，或未恰好覆盖每个文档一次');
+  }
+
+  for (const doc of toc.docs ?? []) {
+    if (!doc.id || !doc.kind || !doc.title || !doc.shortTitle || !doc.meta || !doc.file) {
+      errors.push(`${doc.id ?? '未知文档'}：目录字段不完整`);
+    }
+    if (doc.kind === 'games' && doc.count <= 0) errors.push(`${doc.id}：游戏章应有游戏`);
+    if (doc.kind === 'prose' && doc.count !== 0) errors.push(`${doc.id}：文字章不应有游戏`);
+  }
+
+  const docsById = new Map(docs.map((doc) => [doc.id, doc]));
+  for (const doc of docs) {
+    if ((doc.games?.length ?? 0) > 0 && !/^ch(0[5-9]|1[0-8])$/.test(doc.id)) {
+      errors.push(`${doc.id}：游戏必须位于第 5-18 章`);
+    }
+  }
+  for (const entry of toc.docs ?? []) {
+    const data = docsById.get(entry.id);
+    if (!data) {
+      errors.push(`${entry.id}：文档数据缺失`);
+      continue;
+    }
+    if (data.no !== entry.no) errors.push(`${entry.id}：文档 no 与目录不一致`);
+    if (data.kind !== entry.kind) errors.push(`${entry.id}：文档 kind 与目录不一致`);
+    if (data.title !== entry.title) errors.push(`${entry.id}：文档 title 与目录不一致`);
+    if ((data.games?.length ?? 0) !== entry.count) {
+      errors.push(`${entry.id}：游戏数不一致（目录 ${entry.count} / 数据 ${data.games?.length ?? 0}）`);
+    }
+    errors.push(...validateDoc(data));
   }
 
   const seenIds = new Set();
@@ -411,45 +967,39 @@ export function validateDataset({ toc, chapters, games, artworkExists = () => tr
     }
   }
 
-  const expectedIds = Array.from({ length: 130 }, (_, index) => String(index + 1).padStart(2, '0'));
+  const expectedIds = Array.from({ length: GAME_COUNT }, (_, index) => String(index + 1).padStart(2, '0'));
   const sortedIds = [...seenIds].sort((a, b) => Number(a) - Number(b));
   if (sortedIds.join(',') !== expectedIds.join(',')) {
     const missing = expectedIds.filter((id) => !seenIds.has(id));
     errors.push(`编号应连续覆盖 01-130，缺失：${missing.join(',') || '无'}`);
   }
 
-  const chapterByNo = new Map(chapters.map((chapter) => [chapter.no, chapter]));
-  for (const chapter of toc.chapters ?? []) {
-    const data = chapterByNo.get(chapter.no);
-    if (!data) {
-      errors.push(`第${chapter.no}章数据缺失`);
-      continue;
-    }
-    if (!chapter.title || !chapter.shortTitle || !chapter.age) errors.push(`第${chapter.no}章目录字段不完整`);
-    if (chapter.count !== data.games.length) {
-      errors.push(`第${chapter.no}章游戏数不一致：目录 ${chapter.count} / 数据 ${data.games.length}`);
-    }
-    if (!data.intro || data.intro.length === 0) errors.push(`第${chapter.no}章缺章首导语`);
+  const chapterByNo = new Map(docs.map((doc) => [doc.no, doc]));
+  for (const entry of toc.docs ?? []) {
+    const data = docsById.get(entry.id);
+    if (!data) continue;
+    if (entry.kind === 'games' && !chapterByNo.has(entry.no)) errors.push(`${entry.id}：章号缺失`);
   }
 
-  const indexByKey = new Map((toc.gameIndex ?? []).map((entry) => [`${entry.chapterNo}:${entry.id}`, entry]));
-  for (const chapter of chapters) {
-    for (const game of chapter.games) {
-      const entry = indexByKey.get(`${chapter.no}:${game.id}`);
+  const indexByKey = new Map((toc.gameIndex ?? []).map((entry) => [`${entry.docId}:${entry.id}`, entry]));
+  for (const doc of docs) {
+    for (const game of doc.games ?? []) {
+      const entry = indexByKey.get(`${doc.id}:${game.id}`);
       if (!entry) {
-        errors.push(`目录索引缺少第${chapter.no}章 ${game.id}`);
+        errors.push(`目录索引缺少 ${doc.id} ${game.id}`);
         continue;
       }
       for (const field of ['name', 'age', 'ability']) {
         if (entry[field] !== game[field]) {
-          errors.push(`第${chapter.no}章 ${game.id} 的 ${field} 与目录索引不一致`);
+          errors.push(`${doc.id} ${game.id} 的 ${field} 与目录索引不一致`);
         }
       }
+      if (entry.chapterNo !== doc.no) errors.push(`${doc.id} ${game.id} 的章号与目录索引不一致`);
     }
   }
 
   for (const entry of toc.gameIndex ?? []) {
-    if (!chapterByNo.has(entry.chapterNo)) errors.push(`索引 ${entry.id} 指向不存在的第${entry.chapterNo}章`);
+    if (!docsById.has(entry.docId)) errors.push(`索引 ${entry.id} 指向不存在的文档 ${entry.docId}`);
     if (!ABILITIES.includes(entry.ability)) errors.push(`索引 ${entry.id} 能力非法：${entry.ability}`);
   }
 
@@ -457,19 +1007,35 @@ export function validateDataset({ toc, chapters, games, artworkExists = () => tr
 }
 
 /**
- * 写出数据产物并复制引用到的插画。
- * @param {{ toc: any, chapters: any[], games: any[] }} dataset
+ * 写出数据产物并复制引用到的插画；清理不再被目录引用的旧文件。
+ * @param {{ toc: any, docs: any[], games: any[] }} dataset
  * @param {{ outDir: string, sourceDir: string }} options
  */
 export function writeDataset(dataset, { outDir, sourceDir }) {
   mkdirSync(join(outDir, 'data/chapters'), { recursive: true });
+  mkdirSync(join(outDir, 'data/docs'), { recursive: true });
 
-  // 目录是首屏资源，压成单行以守住 20 KB 预算；章节数据保留缩进便于排查。
+  // 目录是首屏资源，压成单行以守住 20 KB 预算；文档数据保留缩进便于排查。
   writeFileSync(join(outDir, 'data/toc.json'), `${JSON.stringify(dataset.toc)}\n`);
 
-  for (const chapter of dataset.chapters) {
-    const file = join(outDir, 'data', `chapters/ch${String(chapter.no).padStart(2, '0')}.json`);
-    writeFileSync(file, `${JSON.stringify(chapter, null, 2)}\n`);
+  const written = new Map();
+  for (const doc of dataset.docs) {
+    const relative = dataset.toc.docs.find((entry) => entry.id === doc.id)?.file;
+    if (!relative) continue;
+    const target = join(outDir, 'data', relative);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
+    written.set(relative, true);
+  }
+
+  for (const dir of ['chapters', 'docs']) {
+    const full = join(outDir, 'data', dir);
+    if (!existsSync(full)) continue;
+    for (const name of readdirSync(full)) {
+      if (!name.endsWith('.json')) continue;
+      if (written.has(`${dir}/${name}`)) continue;
+      unlinkSync(join(full, name));
+    }
   }
 
   let copied = 0;
@@ -483,7 +1049,7 @@ export function writeDataset(dataset, { outDir, sourceDir }) {
     }
   }
 
-  return { chapters: dataset.chapters.length, games: dataset.games.length, artwork: copied };
+  return { docs: dataset.docs.length, games: dataset.games.length, artwork: copied };
 }
 
 function formatBytes(bytes) {
@@ -495,12 +1061,19 @@ export function main() {
   const startedAt = performance.now();
 
   console.log(`源目录  ${sourceDir}`);
-  if (!existsSync(join(sourceDir, 'manuscript/ch05-08.md'))) {
-    console.error(`✗ 找不到稿件目录，请设置 BOOK_DIR`);
+  if (!existsSync(join(sourceDir, 'manuscript/front-matter.md'))) {
+    console.error('✗ 找不到稿件目录，请设置 BOOK_DIR');
     process.exit(2);
   }
 
-  const dataset = buildDataset({ sourceDir });
+  let dataset;
+  try {
+    dataset = buildDataset({ sourceDir });
+  } catch (error) {
+    console.error(`✗ ${error.message}`);
+    process.exit(error.code === 'ENOENT_SOURCE' ? 2 : 1);
+  }
+
   if (dataset.errors.length > 0) {
     for (const error of dataset.errors) console.error(`✗ ${error}`);
     console.error(`${dataset.errors.length} 个错误，未写出文件`);
@@ -511,10 +1084,11 @@ export function main() {
   const tocSize = statSync(join(REPO_ROOT, 'data/toc.json')).size;
 
   console.log(`读取    ${SOURCE_FILES.length} 个文件`);
-  console.log(`解析    ${result.games} 条游戏 / ${result.chapters} 章 / ${dataset.toc.parts.length} 篇`);
+  console.log(`解析    ${result.docs} 个文档 / ${result.games} 条游戏 / ${GROUPS.length} 个分组`);
   console.log(`校验    0 error`);
   console.log(`写出    data/toc.json ${formatBytes(tocSize)}`);
-  console.log(`        data/chapters/ch05.json … ch18.json`);
+  console.log('        data/chapters/ch01.json … ch21.json');
+  console.log('        data/docs/front.json、apx-a.json … apx-f.json');
   console.log(`插画    ${result.artwork} 张步骤图 → assets/art/panel_web`);
   console.log(`耗时    ${((performance.now() - startedAt) / 1000).toFixed(2)}s`);
 }

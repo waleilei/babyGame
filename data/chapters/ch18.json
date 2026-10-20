@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch18",
   "no": 18,
-  "title": "分离、入园与二胎",
-  "partNo": 3,
-  "age": "生活场景",
   "kind": "games",
+  "title": "分离、入园与二胎",
+  "partId": "part-3",
+  "meta": "生活场景",
   "intro": [
     {
       "type": "p",

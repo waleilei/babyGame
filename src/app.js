@@ -4,10 +4,11 @@ import { createStore } from './core/store.js';
 import { showToast } from './core/toast.js';
 import { createCatalogRepository } from './data/repository.js';
 import { selectNeighbors } from './domain/catalog.js';
+import { docLabel } from './domain/format.js';
 import { resolveRoute } from './domain/route.js';
-import { createChapterPage } from './pages/chapter-page.js';
+import { createDocPage } from './pages/doc-page.js';
 import { createTocPage } from './pages/toc-page.js';
-import { selectChapterView, selectTocView } from './state/selectors.js';
+import { selectDocView, selectTocView } from './state/selectors.js';
 import { createInitialState } from './state/store.js';
 
 const viewRoot = document.getElementById('view');
@@ -22,8 +23,8 @@ let navToken = 0;
 let tocRequest = null;
 let cancelPrefetch = null;
 
-const setChapter = (no, entry) => store.setState((state) => ({
-  chapters: { ...state.chapters, [no]: entry },
+const setDoc = (docId, entry) => store.setState((state) => ({
+  docs: { ...state.docs, [docId]: entry },
 }));
 
 function requestToc() {
@@ -47,32 +48,32 @@ function requestToc() {
   return tocRequest;
 }
 
-async function loadChapter(no) {
-  const existing = store.getState().chapters[no];
-  if (existing?.status === 'ready') return schedulePrefetch(no);
+async function loadDoc(docId) {
+  const existing = store.getState().docs[docId];
+  if (existing?.status === 'ready') return schedulePrefetch(docId);
   if (existing?.status === 'loading') return;
 
-  setChapter(no, { status: 'loading', data: null, error: null });
+  setDoc(docId, { status: 'loading', data: null, error: null });
   try {
-    const data = await repository.getChapter(no);
+    const data = await repository.getDoc(docId);
 
-    setChapter(no, { status: 'ready', data, error: null });
-    if (store.getState().route?.chapterNo === no) schedulePrefetch(no);
+    setDoc(docId, { status: 'ready', data, error: null });
+    if (store.getState().route?.docId === docId) schedulePrefetch(docId);
   } catch (error) {
-    setChapter(no, { status: 'error', data: null, error });
+    setDoc(docId, { status: 'error', data: null, error });
   }
 }
 
-function schedulePrefetch(no) {
+function schedulePrefetch(docId) {
   if (!prefetchEnabled) return;
   cancelWarmup();
   cancelPrefetch = afterIdle(() => {
     cancelPrefetch = null;
     const toc = store.getState().toc.data;
     if (!toc) return;
-    const { prev, next } = selectNeighbors(toc, no);
-    if (prev) repository.prefetchChapter(prev.no);
-    if (next) repository.prefetchChapter(next.no);
+    const { prev, next } = selectNeighbors(toc, docId);
+    if (prev) repository.prefetchDoc(prev.id);
+    if (next) repository.prefetchDoc(next.id);
   }, 1000);
 }
 
@@ -101,21 +102,21 @@ async function handleRoute(rawRoute) {
       router.navigate(resolved.route, { replace: true });
       return;
     }
-    if (rawRoute.name === 'chapter') await loadChapter(rawRoute.chapterNo);
+    if (resolved.route.name === 'doc') await loadDoc(resolved.route.docId);
   } catch (error) {
-    if (token === navToken && rawRoute.name === 'chapter') {
-      setChapter(rawRoute.chapterNo, { status: 'error', data: null, error });
+    if (token === navToken && rawRoute.name === 'doc') {
+      setDoc(rawRoute.docId, { status: 'error', data: null, error });
     }
   }
 }
 
 const retryToc = () => void handleRoute(store.getState().route);
 
-function retryChapter(no) {
+function retryDoc(docId) {
   store.setState((state) => {
-    const chapters = { ...state.chapters };
-    delete chapters[no];
-    return { chapters };
+    const docs = { ...state.docs };
+    delete docs[docId];
+    return { docs };
   });
   void handleRoute(store.getState().route);
 }
@@ -131,16 +132,14 @@ function createPage(route) {
     });
   }
 
-  return createChapterPage({
+  const docId = route.docId;
+  return createDocPage({
     onHome: () => router.navigate({ name: 'toc' }),
-    onPrev: (no) => router.navigate({ name: 'chapter', chapterNo: no, gameId: null }),
-    onNext: (no) => router.navigate({ name: 'chapter', chapterNo: no, gameId: null }),
-    onOpenGame: (id) => router.navigate({ name: 'chapter', chapterNo: route.chapterNo, gameId: id }),
-    onCloseGame: () => router.navigate(
-      { name: 'chapter', chapterNo: route.chapterNo, gameId: null },
-      { replace: true },
-    ),
-    onRetry: () => retryChapter(route.chapterNo),
+    onPrev: (id) => router.navigate({ name: 'doc', docId: id, gameId: null }),
+    onNext: (id) => router.navigate({ name: 'doc', docId: id, gameId: null }),
+    onOpenGame: (id) => router.navigate({ name: 'doc', docId, gameId: id }),
+    onCloseGame: () => router.navigate({ name: 'doc', docId, gameId: null }, { replace: true }),
+    onRetry: () => retryDoc(docId),
   });
 }
 
@@ -149,7 +148,7 @@ function render() {
   const route = state.route;
   if (!route) return;
 
-  const pageKey = route.name === 'toc' ? 'toc' : `chapter:${route.chapterNo}`;
+  const pageKey = route.name === 'toc' ? 'toc' : `doc:${route.docId}`;
   if (pageKey !== currentPageKey) {
     currentPage?.destroy();
     currentPage = createPage(route);
@@ -172,13 +171,11 @@ function render() {
     return;
   }
 
-  const view = selectChapterView(state, route.chapterNo);
+  const view = selectDocView(state, route.docId);
   currentPage.update(view);
-  const chapter = view.chapter;
-  const entry = view.toc?.chapters?.find((item) => item.no === chapter?.no);
-  document.title = chapter
-    ? `第${chapter.no}章 ${entry?.shortTitle ?? chapter.title} · ${view.toc?.book?.title ?? 'babyGame'}`
-    : '正在加载章节 · babyGame';
+  document.title = view.doc && view.entry
+    ? `${docLabel(view.entry)} · ${view.toc?.book?.title ?? 'babyGame'}`
+    : '正在加载文档 · babyGame';
 
   if (view.status === 'ready' && focusedKey !== pageKey) {
     focusedKey = pageKey;

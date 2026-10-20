@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch15",
   "no": 15,
-  "title": "睡前与安抚",
-  "partNo": 3,
-  "age": "生活场景",
   "kind": "games",
+  "title": "睡前与安抚",
+  "partId": "part-3",
+  "meta": "生活场景",
   "intro": [
     {
       "type": "p",

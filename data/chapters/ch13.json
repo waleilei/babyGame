@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch13",
   "no": 13,
-  "title": "洗澡、换尿布、穿衣",
-  "partNo": 3,
-  "age": "生活场景",
   "kind": "games",
+  "title": "洗澡、换尿布、穿衣",
+  "partId": "part-3",
+  "meta": "生活场景",
   "intro": [
     {
       "type": "p",

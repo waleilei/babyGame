@@ -1,21 +1,21 @@
 import { el } from '../core/dom.js';
-import { chapterButtonLabel } from '../domain/format.js';
+import { pagerText } from '../domain/format.js';
 
 export function createToolbar({ onHome, onPrev, onNext }) {
   const home = el('button', { type: 'button', class: 'toolbar__button toolbar__button--home', onclick: onHome }, [
     el('span', { class: 'toolbar__dir', text: '目录' }),
-    el('span', { class: 'toolbar__chapter', text: '全部章节' }),
+    el('span', { class: 'toolbar__chapter', text: '全书目录' }),
   ]);
 
   const prev = el('button', {
     type: 'button',
     class: 'toolbar__button',
     onclick: () => {
-      const no = Number(prev.dataset.chapterNo);
-      if (no) onPrev(no);
+      const docId = prev.dataset.docId;
+      if (docId) onPrev(docId);
     },
   }, [
-    el('span', { class: 'toolbar__dir', text: '← 上一章' }),
+    el('span', { class: 'toolbar__dir' }),
     el('span', { class: 'toolbar__chapter' }),
   ]);
 
@@ -23,34 +23,30 @@ export function createToolbar({ onHome, onPrev, onNext }) {
     type: 'button',
     class: 'toolbar__button',
     onclick: () => {
-      const no = Number(next.dataset.chapterNo);
-      if (no) onNext(no);
+      const docId = next.dataset.docId;
+      if (docId) onNext(docId);
     },
   }, [
-    el('span', { class: 'toolbar__dir', text: '下一章 →' }),
+    el('span', { class: 'toolbar__dir' }),
     el('span', { class: 'toolbar__chapter' }),
   ]);
 
-  function setButton(button, chapter, direction) {
-    const isPrev = direction === 'prev';
-    button.disabled = !chapter;
-    button.dataset.chapterNo = chapter ? String(chapter.no) : '';
-    button.querySelector('.toolbar__dir').textContent = isPrev ? '← 上一章' : '下一章 →';
-    button.querySelector('.toolbar__chapter').textContent = chapter
-      ? chapterButtonLabel(chapter)
-      : isPrev ? '已是第一章' : '已是最后一章';
-    button.setAttribute('aria-label', chapter
-      ? `${isPrev ? '上一章' : '下一章'}：第${chapter.no}章 ${chapter.title}`
-      : isPrev ? '已经是第一章' : '已经是最后一章');
+  function setButton(button, doc, direction) {
+    const text = pagerText(doc, direction);
+    button.disabled = !doc;
+    button.dataset.docId = doc?.id ?? '';
+    button.querySelector('.toolbar__dir').textContent = text.dir;
+    button.querySelector('.toolbar__chapter').textContent = text.label;
+    button.setAttribute('aria-label', text.aria);
   }
 
   return {
     el: el('div', { class: 'chapter-bar' }, [
-      el('nav', { class: 'toolbar', 'aria-label': '章节导航' }, [home, prev, next]),
+      el('nav', { class: 'toolbar', 'aria-label': '文档导航' }, [home, prev, next]),
     ]),
-    update({ prev: prevChapter, next: nextChapter }) {
-      setButton(prev, prevChapter, 'prev');
-      setButton(next, nextChapter, 'next');
+    update({ prev: prevDoc, next: nextDoc }) {
+      setButton(prev, prevDoc, 'prev');
+      setButton(next, nextDoc, 'next');
     },
   };
 }

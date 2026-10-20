@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch05",
   "no": 5,
-  "title": "0-3个月｜躺着的世界",
-  "partNo": 2,
-  "age": "0-3月",
   "kind": "games",
+  "title": "0-3个月｜躺着的世界",
+  "partId": "part-2",
+  "meta": "0-3月",
   "intro": [
     {
       "type": "p",

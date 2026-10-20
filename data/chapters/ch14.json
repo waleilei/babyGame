@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch14",
   "no": 14,
-  "title": "餐桌与辅食",
-  "partNo": 3,
-  "age": "生活场景",
   "kind": "games",
+  "title": "餐桌与辅食",
+  "partId": "part-3",
+  "meta": "生活场景",
   "intro": [
     {
       "type": "p",

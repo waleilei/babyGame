@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch12",
   "no": 12,
-  "title": "31-36个月｜合作、角色与入园准备",
-  "partNo": 2,
-  "age": "31-36月",
   "kind": "games",
+  "title": "31-36个月｜合作、角色与入园准备",
+  "partId": "part-2",
+  "meta": "31-36月",
   "intro": [
     {
       "type": "p",

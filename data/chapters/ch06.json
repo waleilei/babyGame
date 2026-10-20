@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch06",
   "no": 6,
-  "title": "4-6个月｜翻身与抓握",
-  "partNo": 2,
-  "age": "4-6月",
   "kind": "games",
+  "title": "4-6个月｜翻身与抓握",
+  "partId": "part-2",
+  "meta": "4-6月",
   "intro": [
     {
       "type": "p",

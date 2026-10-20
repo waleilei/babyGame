@@ -1,23 +1,41 @@
+import { buildHash } from '../core/router.js';
 import { el } from '../core/dom.js';
-import { chapterHeading } from '../domain/format.js';
+import { docLabel, groupLabel, isAppendixDoc } from '../domain/format.js';
 
-export function createTocList(parts) {
-  const nav = el('nav', { class: 'toc', 'aria-label': '章节目录' });
+function rowNo(doc) {
+  if (doc.id === 'front') return '序';
+  if (isAppendixDoc(doc)) return doc.id.slice(-1).toUpperCase();
+  return String(doc.no).padStart(2, '0');
+}
 
-  for (const part of parts) {
+function rowTitle(doc) {
+  if (doc.id === 'front' || isAppendixDoc(doc)) return doc.shortTitle;
+  return doc.title;
+}
+
+function rowMeta(doc) {
+  if (doc.kind === 'games') return `${doc.meta} · ${doc.count} 个游戏`;
+  return doc.meta;
+}
+
+export function createTocList(groups) {
+  const nav = el('nav', { class: 'toc', 'aria-label': '全书目录' });
+
+  for (const group of groups) {
     const list = el('ul', { class: 'toc__list' });
-    for (const chapter of part.chapters) {
+    for (const doc of group.docs) {
+      const meta = rowMeta(doc);
       list.append(
         el('li', {}, [
           el('a', {
             class: 'toc-row',
-            href: `#/ch/${chapter.no}`,
-            'aria-label': `${chapterHeading(chapter)}，${chapter.age}，${chapter.count} 个游戏`,
+            href: buildHash({ name: 'doc', docId: doc.id }),
+            'aria-label': `${docLabel(doc)}，${doc.meta}${doc.kind === 'games' ? `，${doc.count} 个游戏` : ''}`,
           }, [
-            el('span', { class: 'toc-row__no', 'aria-hidden': 'true', text: String(chapter.no).padStart(2, '0') }),
+            el('span', { class: 'toc-row__no', 'aria-hidden': 'true', text: rowNo(doc) }),
             el('span', { class: 'toc-row__main', 'aria-hidden': 'true' }, [
-              el('span', { class: 'toc-row__title', text: chapter.title }),
-              el('span', { class: 'toc-row__meta', text: `${chapter.age} · ${chapter.count} 个游戏` }),
+              el('span', { class: 'toc-row__title', text: rowTitle(doc) }),
+              el('span', { class: 'toc-row__meta', text: meta }),
             ]),
             el('span', { class: 'toc-row__arrow', 'aria-hidden': 'true', text: '→' }),
           ]),
@@ -25,7 +43,7 @@ export function createTocList(parts) {
       );
     }
     nav.append(el('section', { class: 'toc__part' }, [
-      el('h2', { class: 'toc__part-title', text: part.title }),
+      el('h2', { class: 'toc__part-title', text: groupLabel(group) }),
       list,
     ]));
   }

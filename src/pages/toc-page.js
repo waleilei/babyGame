@@ -9,7 +9,7 @@ export function createTocPage({ onSearch, onClearSearch, onRetry }) {
   const subtitle = el('p', { class: 'toc-hero__subtitle', text: '130个游戏，把日常变成早教' });
   const count = el('p', { class: 'toc-hero__count' });
   const hero = el('header', { class: 'toc-hero' }, [
-    el('p', { class: 'toc-hero__eyebrow', text: 'babyGame · 按章浏览' }),
+    el('p', { class: 'toc-hero__eyebrow', text: 'babyGame · 全书目录' }),
     title,
     subtitle,
     count,
@@ -33,12 +33,13 @@ export function createTocPage({ onSearch, onClearSearch, onRetry }) {
       hero.hidden = false;
       title.textContent = view.toc.book.title;
       subtitle.textContent = view.toc.book.subtitle;
-      count.textContent = `${view.total} 个游戏 · ${view.chapterCount} 章`;
+      count.textContent = `${view.total} 个游戏 · ${view.chapterCount} 章 · ${view.docCount} 个文档`;
       search.el.hidden = false;
+      search.setDisabled(false);
       search.update({ resultCount: view.resultCount });
 
       if (!tocRendered) {
-        tocHost.replaceChildren(createTocList(view.parts));
+        tocHost.replaceChildren(createTocList(view.groups));
         tocRendered = true;
       }
 
@@ -51,11 +52,13 @@ export function createTocPage({ onSearch, onClearSearch, onRetry }) {
     }
 
     hero.hidden = false;
-    search.el.hidden = true;
+    search.el.hidden = false;
+    search.setDisabled(true);
     resultsHost.replaceChildren();
     tocHost.hidden = false;
 
     if (view.status === 'error') {
+      search.el.hidden = true;
       tocRendered = false;
       hero.hidden = true;
       tocHost.replaceChildren(createErrorBlock({ title: '目录加载失败', error: view.error, onRetry }));

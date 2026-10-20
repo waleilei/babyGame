@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "id": "ch08",
   "no": 8,
-  "title": "10-12个月｜爬、站、走",
-  "partNo": 2,
-  "age": "10-12月",
   "kind": "games",
+  "title": "10-12个月｜爬、站、走",
+  "partId": "part-2",
+  "meta": "10-12月",
   "intro": [
     {
       "type": "p",

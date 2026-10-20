@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 2,
+  "id": "apx-b",
+  "no": null,
+  "kind": "prose",
+  "title": "附录B 家庭安全排查清单",
+  "partId": "appendix",
+  "meta": "附录",
+  "blocks": [
+    {
+      "type": "p",
+      "text": "**使用方法**：蹲下来，用孩子的视角看一遍房间。每次只检查一个区域，10分钟即可。"
+    },
+    {
+      "type": "h4",
+      "text": "睡眠区"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        {
+          "text": "婴儿床栏杆间距小于6厘米，床垫与床架无缝隙",
+          "checked": false
+        },
+        {
+          "text": "床内无枕头、被子、毛绒玩具、床围",
+          "checked": false
+        },
+        {
+          "text": "仰卧入睡，同房不同床",
+          "checked": false
+        },
+        {
+          "text": "窗帘绳、监控线远离床铺",
+          "checked": false
+        },
+        {
+          "text": "婴儿床不靠窗、不靠暖气",
+          "checked": false
+        },
+        {
+          "text": "床铃在会翻身前拆除",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "type": "h4",
+      "text": "客厅"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        {
+          "text": "插座装保护盖，电线收纳",
+          "checked": false
+        },
+        {
+          "text": "茶几、电视柜尖角包边",
+          "checked": false
+        },
+        {
+          "text": "书架、电视柜固定于墙面",
+          "checked": false
+        },
+        {
+          "text": "地面无小于3.5厘米的小物件",
+          "checked": false
+        },
+        {
+          "text": "药品、电池、磁力珠放在高处锁好",
+          "checked": false
+        },
+        {
+          "text": "沙发靠垫不堆成“可攀爬的台阶”",
+          "checked": false
+        },
+        {
+          "text": "玻璃门贴防撞条",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "type": "h4",
+      "text": "厨房"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        {
+          "text": "灶台锅柄朝内，热水壶电线收起",
+          "checked": false
+        },
+        {
+          "text": "刀具、清洁剂放入上锁抽屉",
+          "checked": false
+        },
+        {
+          "text": "不让孩子独自进入厨房",
+          "checked": false
+        },
+        {
+          "text": "餐桌不用桌布（防拉扯热汤）",
+          "checked": false
+        },
+        {
+          "text": "垃圾桶带盖",
+          "checked": false
+        },
+        {
+          "text": "冰箱贴、磁铁收好",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "type": "h4",
+      "text": "浴室"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        {
+          "text": "水深不超过5-8厘米，全程一手不离",
+          "checked": false
+        },
+        {
+          "text": "地面防滑垫，水温不超过40℃",
+          "checked": false
+        },
+        {
+          "text": "水桶、浴盆用完立即清空",
+          "checked": false
+        },
+        {
+          "text": "电器远离水源",
+          "checked": false
+        },
+        {
+          "text": "洗发水、沐浴露放在高处",
+          "checked": false
+        },
+        {
+          "text": "马桶盖加锁",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "type": "h4",
+      "text": "户外"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        {
+          "text": "安全座椅反向安装至至少2岁",
+          "checked": false
+        },
+        {
+          "text": "推车系安全带，停车踩刹车",
+          "checked": false
+        },
+        {
+          "text": "不靠近马路、车库、水池",
+          "checked": false
+        },
+        {
+          "text": "游乐设施下方为软质地面",
+          "checked": false
+        },
+        {
+          "text": "滑梯口不逗留，不抱着孩子滑",
+          "checked": false
+        },
+        {
+          "text": "防晒以遮挡为主，6月内不用防晒霜",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "type": "h4",
+      "text": "玩具"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        {
+          "text": "无小零件、无长绳、无尖锐边",
+          "checked": false
+        },
+        {
+          "text": "电池仓螺丝固定",
+          "checked": false
+        },
+        {
+          "text": "定期检查破损和掉漆",
+          "checked": false
+        },
+        {
+          "text": "气球未充气时收好",
+          "checked": false
+        },
+        {
+          "text": "毛绒玩具的眼睛、纽扣缝牢",
+          "checked": false
+        },
+        {
+          "text": "玩具箱无自动闭合盖",
+          "checked": false
+        }
+      ]
+    },
+    {
+      "type": "h4",
+      "text": "四个巡检时间点"
+    },
+    {
+      "type": "ol",
+      "start": 1,
+      "items": [
+        "会翻身时（约4-6个月）。",
+        "会爬时（约7-10个月）。",
+        "会走时（约12-15个月）。",
+        "每次换季整理衣物玩具时。"
+      ]
+    },
+    {
+      "type": "h4",
+      "text": "不同月龄的排查重点"
+    },
+    {
+      "type": "table",
+      "head": [
+        "月龄",
+        "重点区域"
+      ],
+      "rows": [
+        [
+          "0-6个月",
+          "睡眠环境、抱姿与拍嗝、洗澡水温、婴儿床内杂物"
+        ],
+        [
+          "7-12个月",
+          "地面小物件、插座、桌角、抽屉、窗帘绳"
+        ],
+        [
+          "13-24个月",
+          "柜子固定、窗户限位、楼梯门、厨房门、药品上锁"
+        ],
+        [
+          "25-36个月",
+          "户外活动范围、游乐设施、剪刀等工具收纳、车道与车辆"
+        ]
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "s1",
+      "level": 4,
+      "title": "睡眠区"
+    },
+    {
+      "id": "s2",
+      "level": 4,
+      "title": "客厅"
+    },
+    {
+      "id": "s3",
+      "level": 4,
+      "title": "厨房"
+    },
+    {
+      "id": "s4",
+      "level": 4,
+      "title": "浴室"
+    },
+    {
+      "id": "s5",
+      "level": 4,
+      "title": "户外"
+    },
+    {
+      "id": "s6",
+      "level": 4,
+      "title": "玩具"
+    },
+    {
+      "id": "s7",
+      "level": 4,
+      "title": "四个巡检时间点"
+    },
+    {
+      "id": "s8",
+      "level": 4,
+      "title": "不同月龄的排查重点"
+    }
+  ]
+}

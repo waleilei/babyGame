@@ -16,14 +16,18 @@ function walk(dir) {
 }
 
 const runtimeFiles = walk(join(ROOT, 'src')).filter((file) => file.endsWith('.js'));
+const dataDirs = ['chapters', 'docs'].map((name) => join(ROOT, 'data', name));
 
-test('数据体积满足预算：目录与单章', () => {
+test('数据体积满足预算：目录与单文档', () => {
   const tocSize = statSync(join(ROOT, 'data/toc.json')).size;
   assert.ok(tocSize < BUDGET.toc, `toc.json ${kb(tocSize)} > ${kb(BUDGET.toc)}`);
 
-  for (const file of readdirSync(join(ROOT, 'data/chapters')).filter((name) => name.endsWith('.json'))) {
-    const size = statSync(join(ROOT, 'data/chapters', file)).size;
-    assert.ok(size < BUDGET.chapter, `${file} ${kb(size)} > ${kb(BUDGET.chapter)}`);
+  for (const dir of dataDirs) {
+    assert.ok(existsSync(dir), `缺少 ${dir}`);
+    for (const file of readdirSync(dir).filter((name) => name.endsWith('.json'))) {
+      const size = statSync(join(dir, file)).size;
+      assert.ok(size < BUDGET.doc, `${file} ${kb(size)} > ${kb(BUDGET.doc)}`);
+    }
   }
 });
 
@@ -46,18 +50,21 @@ test('所有资源与模块使用相对路径，支持子目录部署', () => {
   }
 
   const toc = JSON.parse(readFileSync(join(ROOT, 'data/toc.json'), 'utf8'));
-  for (const chapter of toc.chapters) {
-    assert.ok(!chapter.file.startsWith('/'), `第${chapter.no}章数据路径不是相对路径`);
+  for (const doc of toc.docs) {
+    assert.ok(!doc.file.startsWith('/'), `${doc.id} 数据路径不是相对路径`);
+    assert.match(doc.file, /^(chapters|docs)\/[a-z0-9-]+\.json$/, `${doc.id} 数据路径异常：${doc.file}`);
   }
 });
 
-test('章节数据中的插画路径相对页面文档解析', () => {
-  for (const file of readdirSync(join(ROOT, 'data/chapters')).filter((name) => name.endsWith('.json'))) {
-    const chapter = JSON.parse(readFileSync(join(ROOT, 'data/chapters', file), 'utf8'));
-    for (const game of chapter.games) {
-      for (const art of [game.art.main, ...game.art.panels]) {
-        assert.ok(art.startsWith('assets/art/panel_web/'), `${game.id} 插画路径异常：${art}`);
-        assert.ok(existsSync(join(ROOT, art)), `${game.id} 插画缺失：${art}`);
+test('文档数据中的插画路径相对页面文档解析', () => {
+  for (const dir of dataDirs) {
+    for (const file of readdirSync(dir).filter((name) => name.endsWith('.json'))) {
+      const doc = JSON.parse(readFileSync(join(dir, file), 'utf8'));
+      for (const game of doc.games ?? []) {
+        for (const art of [game.art.main, ...game.art.panels]) {
+          assert.ok(art.startsWith('assets/art/panel_web/'), `${game.id} 插画路径异常：${art}`);
+          assert.ok(existsSync(join(ROOT, art)), `${game.id} 插画缺失：${art}`);
+        }
       }
     }
   }
@@ -71,7 +78,18 @@ test('运行期源码不把数据拼进 innerHTML', () => {
 });
 
 test('发布所需文件齐全', () => {
-  for (const file of ['index.html', 'package.json', 'styles/tokens.css', 'styles/base.css', 'styles/app.css', 'data/toc.json']) {
+  const required = [
+    'index.html',
+    'package.json',
+    'styles/tokens.css',
+    'styles/base.css',
+    'styles/app.css',
+    'data/toc.json',
+    'data/docs/front.json',
+    'data/chapters/ch05.json',
+    'data/chapters/ch21.json',
+  ];
+  for (const file of required) {
     assert.ok(existsSync(join(ROOT, file)), `缺少 ${file}`);
   }
 });

@@ -1,13 +1,5 @@
 import { el } from '../core/dom.js';
-
-function inline(text) {
-  const fragment = document.createDocumentFragment();
-  String(text).split('**').forEach((part, index) => {
-    if (!part) return;
-    fragment.append(index % 2 === 1 ? el('strong', { text: part }) : document.createTextNode(part));
-  });
-  return fragment;
-}
+import { inline } from './blocks.js';
 
 export function createIntro(blocks) {
   const root = el('section', { class: 'intro', 'aria-label': '章节导语' });
