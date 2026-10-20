@@ -286,63 +286,6 @@ async function runChecks(cdp, app) {
   check('切页后焦点在标题', await cdp.evaluate('document.activeElement.className'), 'chapter__title');
   check('游戏卡片数', await cdp.evaluate("document.querySelectorAll('.card').length"), 10);
 
-  await cdp.evaluate("location.hash = '#/ch/10'");
-  await cdp.waitFor("document.querySelector('.chapter__title')?.textContent.startsWith('第10章')", '第 10 章');
-  await cdp.evaluate("location.hash = '#/ch/10/game/76'");
-  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '深链打开详情页');
-  check('详情页无对话框元素', await cdp.evaluate("document.querySelector('dialog.game-dialog') === null"), true);
-  check('深链详情标题', await cdp.evaluate("document.querySelector('.game-detail__title').textContent"), '儿歌接龙');
-  check('深链详情位置行', await cdp.evaluate("document.querySelector('.game-detail__location').textContent"), '第10章 · 14/14');
-  check('深链详情焦点在标题', await cdp.evaluate('document.activeElement.className'), 'game-detail__title');
-  check('详情页隐藏工具栏', await cdp.evaluate("document.querySelector('.chapter-bar').hidden"), true);
-  await cdp.evaluate('history.back()');
-  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", '后退回列表');
-  check('后退回到第 10 章', await cdp.evaluate('location.hash'), '#/ch/10');
-
-  await cdp.evaluate("location.hash = '#/ch/5'");
-  await cdp.waitFor("document.querySelectorAll('.card').length === 10", '第 5 章卡片');
-  await cdp.evaluate("window.scrollTo({ top: 400, behavior: 'instant' })");
-  await sleep(120);
-  await cdp.evaluate("document.querySelectorAll('.card')[2].click()");
-  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '点卡片进详情');
-  check('进入详情回到顶部', await cdp.evaluate('window.scrollY'), 0);
-  await cdp.evaluate("document.querySelector('.game-detail__hero').click()");
-  await cdp.waitFor("document.querySelector('.image-lightbox')?.open === true", '详情主图大图');
-  check('大图标题', await cdp.evaluate("document.querySelector('.image-lightbox__title').textContent"), '声音寻源');
-  check('大图计数', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('1 / 4')"), true);
-  await pressEscape(cdp);
-  check('Esc 关闭大图', await cdp.evaluate("document.querySelector('.image-lightbox').open"), false);
-  check('大图关闭后焦点回主图', await cdp.evaluate('document.activeElement.className.includes("game-detail__hero")'), true);
-  await cdp.evaluate("document.querySelector('.game-detail__back').click()");
-  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", '返回列表');
-  check('返回恢复滚动位置', await cdp.evaluate('Math.abs(window.scrollY - 400) < 2'), true);
-  check('返回焦点回触发卡片', await cdp.evaluate("document.activeElement.dataset.gameId"), '03');
-  check('返回回到章节地址', await cdp.evaluate('location.hash'), '#/ch/5');
-
-  await cdp.evaluate("document.querySelectorAll('.card')[0].click()");
-  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '进入第一个游戏');
-  check('第一个游戏禁用上一个', await cdp.evaluate("document.querySelectorAll('.game-detail__pager-button')[0].disabled"), true);
-  check('第一个游戏可下一个', await cdp.evaluate("document.querySelectorAll('.game-detail__pager-button')[1].disabled"), false);
-  await pressKey(cdp, 'ArrowRight', 'ArrowRight', 39);
-  await cdp.waitFor("document.querySelector('.game-detail__location').textContent.includes('02/10')", '方向键切下一个游戏');
-  check('切游戏仍是详情地址', await cdp.evaluate('location.hash'), '#/ch/5/game/02');
-  await cdp.evaluate("document.querySelectorAll('.panel')[1].click()");
-  await cdp.waitFor("document.querySelector('.image-lightbox')?.open === true", '步骤图大图');
-  check('步骤图从第 2 张开始', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('2 / 4')"), true);
-  await pressKey(cdp, 'ArrowRight', 'ArrowRight', 39);
-  check('大图内方向键切图', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('3 / 4')"), true);
-  await pressEscape(cdp);
-  check('Esc 只关大图详情保留', await cdp.evaluate("!document.querySelector('.game-detail-host')?.hidden"), true);
-  await pressEscape(cdp);
-  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", 'Esc 返回列表');
-  check('Esc 后退一次回列表', await cdp.evaluate('location.hash'), '#/ch/5');
-
-  await cdp.evaluate("location.hash = '#/ch/5/game/10'");
-  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '深链最后一个游戏');
-  check('最后一个游戏禁用下一个', await cdp.evaluate("document.querySelectorAll('.game-detail__pager-button')[1].disabled"), true);
-  await pressEscape(cdp);
-  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", '边界游戏返回列表');
-
   await cdp.send('Emulation.setDeviceMetricsOverride', {
     width: 360,
     height: 800,
@@ -391,6 +334,72 @@ async function runChecks(cdp, app) {
   check('非法章号提示', await cdp.evaluate("document.querySelector('#toast').textContent"), '第99章不存在，已回到目录');
 
   await cdp.send('Emulation.clearDeviceMetricsOverride');
+}
+
+/** 游戏详情页：深链、滚动/焦点恢复、游戏间导航、Esc 与后退语义。自洽导航，可单独运行。 */
+async function runDetailChecks(cdp, app) {
+  await cdp.navigate(`${app}/#/`);
+  await cdp.waitFor("document.querySelectorAll('.toc-row').length === 28", '详情：目录');
+
+  await cdp.evaluate("location.hash = '#/ch/10'");
+  await cdp.waitFor("document.querySelector('.chapter__title')?.textContent.startsWith('第10章')", '第 10 章');
+  await cdp.evaluate("location.hash = '#/ch/10/game/76'");
+  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '深链打开详情页');
+  check('详情页无对话框元素', await cdp.evaluate("document.querySelector('dialog.game-dialog') === null"), true);
+  check('深链详情标题', await cdp.evaluate("document.querySelector('.game-detail__title').textContent"), '儿歌接龙');
+  check('深链详情位置行', await cdp.evaluate("document.querySelector('.game-detail__location').textContent"), '第10章 · 14/14');
+  check('深链详情焦点在标题', await cdp.evaluate('document.activeElement.className'), 'game-detail__title');
+  check('详情页隐藏工具栏', await cdp.evaluate("document.querySelector('.chapter-bar').hidden"), true);
+  await cdp.evaluate('history.back()');
+  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", '后退回列表');
+  check('后退回到第 10 章', await cdp.evaluate('location.hash'), '#/ch/10');
+
+  await cdp.evaluate("location.hash = '#/ch/5'");
+  await cdp.waitFor("document.querySelectorAll('.card').length === 10", '第 5 章卡片');
+  await cdp.evaluate("window.scrollTo({ top: 400, behavior: 'instant' })");
+  await sleep(120);
+  await cdp.evaluate("document.querySelectorAll('.card')[2].click()");
+  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '点卡片进详情');
+  check('进入详情回到顶部', await cdp.evaluate('window.scrollY'), 0);
+  await cdp.evaluate("document.querySelector('.game-detail__hero').click()");
+  await cdp.waitFor("document.querySelector('.image-lightbox')?.open === true", '详情主图大图');
+  check('大图标题', await cdp.evaluate("document.querySelector('.image-lightbox__title').textContent"), '声音寻源');
+  check('大图计数', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('1 / 4')"), true);
+  await pressEscape(cdp);
+  check('Esc 关闭大图', await cdp.evaluate("document.querySelector('.image-lightbox').open"), false);
+  check('大图关闭后焦点回主图', await cdp.evaluate('document.activeElement.className.includes("game-detail__hero")'), true);
+  await cdp.evaluate("document.querySelector('.game-detail__back').click()");
+  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", '返回列表');
+  // 首图 decode 会带来 ±5px 级布局微调；恢复语义是"回到离开时的上下文"，
+  // 容差取一行文字高度，完全未恢复（0 或其他章节位置）仍然会红。
+  await cdp.waitFor('Math.abs(window.scrollY - 400) < 24', '返回恢复滚动位置');
+  check('返回恢复滚动位置', await cdp.evaluate('Math.abs(window.scrollY - 400) < 24'), true);
+  check('返回焦点回触发卡片', await cdp.evaluate("document.activeElement.dataset.gameId"), '03');
+  check('返回回到章节地址', await cdp.evaluate('location.hash'), '#/ch/5');
+
+  await cdp.evaluate("document.querySelectorAll('.card')[0].click()");
+  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '进入第一个游戏');
+  check('第一个游戏禁用上一个', await cdp.evaluate("document.querySelectorAll('.game-detail__pager-button')[0].disabled"), true);
+  check('第一个游戏可下一个', await cdp.evaluate("document.querySelectorAll('.game-detail__pager-button')[1].disabled"), false);
+  await pressKey(cdp, 'ArrowRight', 'ArrowRight', 39);
+  await cdp.waitFor("document.querySelector('.game-detail__location').textContent.includes('02/10')", '方向键切下一个游戏');
+  check('切游戏仍是详情地址', await cdp.evaluate('location.hash'), '#/ch/5/game/02');
+  await cdp.evaluate("document.querySelectorAll('.panel')[1].click()");
+  await cdp.waitFor("document.querySelector('.image-lightbox')?.open === true", '步骤图大图');
+  check('步骤图从第 2 张开始', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('2 / 4')"), true);
+  await pressKey(cdp, 'ArrowRight', 'ArrowRight', 39);
+  check('大图内方向键切图', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('3 / 4')"), true);
+  await pressEscape(cdp);
+  check('Esc 只关大图详情保留', await cdp.evaluate("!document.querySelector('.game-detail-host')?.hidden"), true);
+  await pressEscape(cdp);
+  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", 'Esc 返回列表');
+  check('Esc 后退一次回列表', await cdp.evaluate('location.hash'), '#/ch/5');
+
+  await cdp.evaluate("location.hash = '#/ch/5/game/10'");
+  await cdp.waitFor("!document.querySelector('.game-detail-host')?.hidden", '深链最后一个游戏');
+  check('最后一个游戏禁用下一个', await cdp.evaluate("document.querySelectorAll('.game-detail__pager-button')[1].disabled"), true);
+  await pressEscape(cdp);
+  await cdp.waitFor("document.querySelector('.game-detail-host')?.hidden", '边界游戏返回列表');
 }
 
 async function setViewport(cdp, width, height) {
@@ -633,6 +642,11 @@ async function main() {
     return;
   }
 
+  // --only=<关键字>[,<关键字>] 只跑选中的用例组，调试单组时不必全量。
+  // 可选值：catalog / detail / responsive / fallback / offline / network / subpath / perf
+  const only = (process.argv.find((arg) => arg.startsWith('--only=')) ?? '').slice('--only='.length);
+  const want = (key) => !only || only.split(',').includes(key);
+
   const server = await startServer();
   const subServer = await startServer({ mount: '/babyGame/' });
   const app = `http://127.0.0.1:${server.address().port}`;
@@ -650,13 +664,14 @@ async function main() {
     await cdp.send('Runtime.enable');
     await cdp.send('Network.enable');
 
-    await runChecks(cdp, app);
-    await runResponsiveChecks(cdp, app);
-    await runImageFallbackChecks(cdp, app);
-    await runOfflineChecks(cdp, app);
-    await runNetworkChecks(cdp, app);
-    await runSubpathChecks(cdp, subApp);
-    if (PERF) await runPerf(cdp, app);
+    if (want('catalog')) await runChecks(cdp, app);
+    if (want('detail')) await runDetailChecks(cdp, app);
+    if (want('responsive')) await runResponsiveChecks(cdp, app);
+    if (want('fallback')) await runImageFallbackChecks(cdp, app);
+    if (want('offline')) await runOfflineChecks(cdp, app);
+    if (want('network')) await runNetworkChecks(cdp, app);
+    if (want('subpath')) await runSubpathChecks(cdp, subApp);
+    if (PERF && want('perf')) await runPerf(cdp, app);
   } finally {
     cdp?.close();
     chromeProcess?.kill('SIGKILL');
