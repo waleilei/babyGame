@@ -20,7 +20,8 @@ const MIME = {
 };
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function startServer() {
+function startServer({ mount = '/' } = {}) {
+  const prefix = mount.endsWith('/') ? mount : `${mount}/`;
   return new Promise((resolvePromise, reject) => {
     const server = createServer((request, response) => {
       let pathname;
@@ -31,6 +32,12 @@ function startServer() {
         response.end();
         return;
       }
+      if (!pathname.startsWith(prefix)) {
+        response.writeHead(404);
+        response.end();
+        return;
+      }
+      pathname = `/${pathname.slice(prefix.length)}`;
       if (pathname === '/') pathname = '/index.html';
       const file = normalize(join(ROOT, pathname));
       if (file !== ROOT && !file.startsWith(ROOT + sep)) {
@@ -344,6 +351,51 @@ async function runChecks(cdp, app) {
   await cdp.send('Emulation.clearDeviceMetricsOverride');
 }
 
+async function resourceNames(cdp) {
+  return cdp.evaluate("performance.getEntriesByType('resource').map((entry) => entry.name)");
+}
+
+async function runNetworkChecks(cdp, app) {
+  await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
+  await cdp.send('Page.navigate', { url: `${app}/?smoke=network#/` });
+  await cdp.waitFor("document.querySelectorAll('.toc-row').length === 28", '网络：目录');
+
+  const first = await resourceNames(cdp);
+  check('首屏加载 toc.json', first.some((name) => name.includes('/data/toc.json')), true);
+  check('首屏不加载文档 JSON', first.some((name) => /\/data\/(chapters|docs)\//.test(name)), false);
+
+  await cdp.evaluate("location.hash = '#/ch/5'");
+  await cdp.waitFor("document.querySelectorAll('.card').length === 10", '网络：第 5 章');
+  const chapter = await resourceNames(cdp);
+  check('进入第 5 章加载 ch05.json', chapter.some((name) => name.includes('/data/chapters/ch05.json')), true);
+
+  await sleep(1600);
+  const prefetched = await resourceNames(cdp);
+  check('预取上一章 ch04.json', prefetched.some((name) => name.includes('/data/chapters/ch04.json')), true);
+  check('预取下一章 ch06.json', prefetched.some((name) => name.includes('/data/chapters/ch06.json')), true);
+
+  await cdp.send('Page.navigate', { url: `${app}/?prefetch=off#/ch/5` });
+  await cdp.waitFor("document.querySelectorAll('.card').length === 10", '网络：关闭预取');
+  await sleep(1600);
+  const off = await resourceNames(cdp);
+  check('关闭预取后不请求相邻章', off.some((name) => /chapters\/ch0[46]\.json/.test(name)), false);
+}
+
+async function runSubpathChecks(cdp, app) {
+  await cdp.send('Page.navigate', { url: `${app}/#/` });
+  await cdp.waitFor("document.querySelectorAll('.toc-row').length === 28", '子目录：目录');
+  check('子目录：目录 28 行', await cdp.evaluate("document.querySelectorAll('.toc-row').length"), 28);
+
+  await cdp.evaluate("location.hash = '#/appendix/e'");
+  await cdp.waitFor("document.querySelector('.prose-head__title')?.textContent.startsWith('附录E')", '子目录：附录 E');
+  check('子目录：深链标题', await cdp.evaluate("document.querySelector('.prose-head__title').textContent"), '附录E 30首亲子儿歌与手指谣');
+
+  await cdp.evaluate("location.hash = '#/ch/5'");
+  await cdp.waitFor("document.querySelectorAll('.card').length === 10", '子目录：第 5 章');
+  await cdp.waitFor("document.querySelector('.card__art img')?.complete === true", '子目录：插画');
+  check('子目录：插画加载', await cdp.evaluate("document.querySelector('.card__art img')?.naturalWidth > 0"), true);
+}
+
 async function runPerf(cdp, app) {
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', {
     source: `
@@ -447,7 +499,9 @@ async function main() {
   }
 
   const server = await startServer();
+  const subServer = await startServer({ mount: '/babyGame/' });
   const app = `http://127.0.0.1:${server.address().port}`;
+  const subApp = `http://127.0.0.1:${subServer.address().port}/babyGame`;
   const profile = mkdtempSync(join(tmpdir(), 'babygame-smoke-'));
   let chromeProcess = null;
   let cdp = null;
@@ -462,11 +516,14 @@ async function main() {
     await cdp.send('Network.enable');
 
     await runChecks(cdp, app);
+    await runNetworkChecks(cdp, app);
+    await runSubpathChecks(cdp, subApp);
     if (PERF) await runPerf(cdp, app);
   } finally {
     cdp?.close();
     chromeProcess?.kill('SIGKILL');
     server.close();
+    subServer.close();
     try {
       rmSync(profile, { recursive: true, force: true });
     } catch {
