@@ -209,6 +209,7 @@ async function pressKey(cdp, key, code, keyCode) {
       code,
       windowsVirtualKeyCode: keyCode,
       nativeVirtualKeyCode: keyCode,
+      ...(key === ' ' && type === 'keyDown' ? { text: ' ' } : {}),
     });
   }
   await sleep(140);
@@ -265,6 +266,12 @@ async function runChecks(cdp, app) {
   await cdp.evaluate("document.querySelector('.prose-head__reset').click()");
   check('重置后取消勾选', await cdp.evaluate("document.querySelector('.prose__checklist input[type=checkbox]').checked"), false);
   check('重置后清空存储', await cdp.evaluate("localStorage.getItem('babyGame:checklist:apx-b')"), null);
+
+  await cdp.evaluate("document.querySelector('.prose__checklist input[type=checkbox]').focus()");
+  await pressKey(cdp, ' ', 'Space', 32);
+  check('空格键勾选清单', await cdp.evaluate("document.querySelector('.prose__checklist input[type=checkbox]').checked"), true);
+  check('空格勾选写入本地', await cdp.evaluate("JSON.parse(localStorage.getItem('babyGame:checklist:apx-b')).length"), 1);
+  await cdp.evaluate("document.querySelector('.prose-head__reset').click()");
 
   await cdp.evaluate("location.hash = '#/ch/4'");
   await cdp.waitFor("document.querySelector('.prose-head__title')?.textContent.startsWith('第4章')", '第 4 章');
@@ -340,6 +347,17 @@ async function runChecks(cdp, app) {
     '0-36个月发展地图',
   ]);
 
+  await cdp.evaluate("document.querySelector('.section-nav--mobile').open = true");
+  const mobileSectionId = await cdp.evaluate("document.querySelectorAll('.section-nav--mobile .section-nav__button')[1].dataset.sectionId");
+  await cdp.evaluate("document.querySelectorAll('.section-nav--mobile .section-nav__button')[1].click()");
+  await cdp.waitFor("document.querySelector('.section-nav--mobile').open === false", '移动端小节导航收起');
+  check('移动端小节导航地址不变', await cdp.evaluate('location.hash'), '#/front');
+  await cdp.waitFor(`document.getElementById(${JSON.stringify(mobileSectionId)}).getBoundingClientRect().top < 220`, '移动端小节导航滚动');
+  check('移动端小节导航滚动位置', await cdp.evaluate(`(() => {
+    const top = document.getElementById(${JSON.stringify(mobileSectionId)}).getBoundingClientRect().top;
+    return top >= 0 && top < 220;
+  })()`), true);
+
   await cdp.evaluate("location.hash = '#/appendix/f'");
   await cdp.waitFor("document.querySelector('.prose-head__title')?.textContent.startsWith('附录F')", '附录 F');
   check('附录 F 无下一页', await cdp.evaluate("document.querySelectorAll('.footer-nav')[1].disabled"), true);
@@ -349,6 +367,92 @@ async function runChecks(cdp, app) {
   check('非法章号提示', await cdp.evaluate("document.querySelector('#toast').textContent"), '第99章不存在，已回到目录');
 
   await cdp.send('Emulation.clearDeviceMetricsOverride');
+}
+
+async function setViewport(cdp, width, height) {
+  await cdp.send('Emulation.setDeviceMetricsOverride', {
+    width,
+    height,
+    deviceScaleFactor: 1,
+    mobile: width < 600,
+  });
+  await sleep(120);
+}
+
+async function runResponsiveChecks(cdp, app) {
+  await setViewport(cdp, 768, 1024);
+  await cdp.navigate(`${app}/#/`);
+  await cdp.waitFor("document.querySelectorAll('.toc-row').length === 28", '768：目录');
+  check('768 目录无横向滚动', await cdp.evaluate('document.documentElement.scrollWidth <= window.innerWidth'), true);
+
+  await cdp.evaluate("location.hash = '#/appendix/a'");
+  await cdp.waitFor("document.querySelectorAll('.prose-table').length > 0", '768：附录 A');
+  check('768 文档无横向滚动', await cdp.evaluate('document.documentElement.scrollWidth <= window.innerWidth'), true);
+  check('768 表格容器可横向滚动', await cdp.evaluate("getComputedStyle(document.querySelector('.prose-table')).overflowX"), 'auto');
+  check('768 移动端小节导航可见', await cdp.evaluate("document.querySelector('.prose-nav-host').offsetWidth > 0"), true);
+  check('768 桌面小节导航隐藏', await cdp.evaluate("getComputedStyle(document.querySelector('.section-nav--desktop')).display"), 'none');
+
+  await setViewport(cdp, 1440, 900);
+  await cdp.navigate(`${app}/#/`);
+  await cdp.waitFor("document.querySelectorAll('.toc-row').length === 28", '1440：目录');
+  check('1440 目录无横向滚动', await cdp.evaluate('document.documentElement.scrollWidth <= window.innerWidth'), true);
+
+  await cdp.evaluate("location.hash = '#/appendix/a'");
+  await cdp.waitFor("document.querySelectorAll('.prose-table').length > 0", '1440：附录 A');
+  check('1440 文档无横向滚动', await cdp.evaluate('document.documentElement.scrollWidth <= window.innerWidth'), true);
+  check('1440 表格容器可横向滚动', await cdp.evaluate("getComputedStyle(document.querySelector('.prose-table')).overflowX"), 'auto');
+  check('1440 桌面小节导航可见', await cdp.evaluate("document.querySelector('.section-nav--desktop').offsetWidth > 0"), true);
+  check('1440 移动端小节导航隐藏', await cdp.evaluate("getComputedStyle(document.querySelector('.prose-nav-host')).display"), 'none');
+  check('1440 小节导航 sticky', await cdp.evaluate("getComputedStyle(document.querySelector('.prose-aside')).position"), 'sticky');
+
+  const sectionId = await cdp.evaluate("document.querySelectorAll('.section-nav--desktop .section-nav__button')[1].dataset.sectionId");
+  await cdp.evaluate("document.querySelectorAll('.section-nav--desktop .section-nav__button')[1].click()");
+  await cdp.waitFor(`document.getElementById(${JSON.stringify(sectionId)}).getBoundingClientRect().top < 220`, '1440：小节导航滚动');
+  check('1440 小节导航地址不变', await cdp.evaluate('location.hash'), '#/appendix/a');
+  check('1440 小节导航滚动位置', await cdp.evaluate(`(() => {
+    const top = document.getElementById(${JSON.stringify(sectionId)}).getBoundingClientRect().top;
+    return top >= 0 && top < 220;
+  })()`), true);
+
+  await cdp.send('Emulation.clearDeviceMetricsOverride');
+}
+
+async function runImageFallbackChecks(cdp, app) {
+  await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
+  await cdp.send('Network.setBlockedURLs', { urls: ['*001-1.jpg'] });
+  await cdp.send('Page.navigate', { url: `${app}/?smoke=image#/ch/5` });
+  await cdp.waitFor("document.querySelectorAll('.card').length === 10", '图片 404：第 5 章');
+  await cdp.waitFor("document.querySelector('.card__fallback') !== null", '图片 404：占位');
+  check('图片 404 占位文本', await cdp.evaluate("document.querySelector('.card__fallback').textContent"), '01');
+  check('图片 404 卡片高度', await cdp.evaluate("document.querySelector('.card').getBoundingClientRect().height > 100"), true);
+  check('图片 404 大图按钮禁用', await cdp.evaluate("document.querySelector('.card__art-button').disabled"), true);
+  await cdp.send('Network.setBlockedURLs', { urls: [] });
+}
+
+async function runOfflineChecks(cdp, app) {
+  await cdp.send('Page.navigate', { url: `${app}/?smoke=offline#/` });
+  await cdp.waitFor("document.querySelectorAll('.toc-row').length === 28", '断网：目录');
+  await cdp.send('Network.emulateNetworkConditions', {
+    offline: true,
+    latency: 0,
+    downloadThroughput: -1,
+    uploadThroughput: -1,
+  });
+
+  await cdp.evaluate("location.hash = '#/appendix/f'");
+  await cdp.waitFor("document.querySelector('.state--error') !== null", '断网：错误块');
+  check('断网错误标题', await cdp.evaluate("document.querySelector('.state__title').textContent"), '文档加载失败');
+  check('断网重试按钮', await cdp.evaluate("document.querySelector('.state__actions .button--primary').textContent"), '重试');
+
+  await cdp.send('Network.emulateNetworkConditions', {
+    offline: false,
+    latency: 0,
+    downloadThroughput: -1,
+    uploadThroughput: -1,
+  });
+  await cdp.evaluate("document.querySelector('.state__actions .button--primary').click()");
+  await cdp.waitFor("document.querySelector('.prose-head__title')?.textContent.startsWith('附录F')", '断网：重试成功');
+  check('重试后无错误块', await cdp.evaluate("document.querySelector('.state--error') !== null"), false);
 }
 
 async function resourceNames(cdp) {
@@ -397,6 +501,12 @@ async function runSubpathChecks(cdp, app) {
 }
 
 async function runPerf(cdp, app) {
+  await cdp.send('Emulation.setDeviceMetricsOverride', {
+    width: 360,
+    height: 800,
+    deviceScaleFactor: 1,
+    mobile: true,
+  });
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', {
     source: `
       window.__perf = { before: 0, after: 0, cutoff: Infinity, rowsAt: null, contentAt: null };
@@ -486,6 +596,7 @@ async function runPerf(cdp, app) {
   const network = SLOW ? '4G（40ms 延迟、1.5Mbps）' : '本地';
   console.log(`perf   ${network} · FCP ${ms(toc.fcp)} · 目录可交互 ${ms(toc.rows)} · 缓存命中切页 ${ms(switchMs)}`);
   console.log(`perf   CLS 目录 ${cls(toc.clsAfter)} / 文档 ${cls(chapter.clsAfter)}（从内容出现开始累计）`);
+  await cdp.send('Emulation.clearDeviceMetricsOverride');
 }
 
 async function main() {
@@ -516,6 +627,9 @@ async function main() {
     await cdp.send('Network.enable');
 
     await runChecks(cdp, app);
+    await runResponsiveChecks(cdp, app);
+    await runImageFallbackChecks(cdp, app);
+    await runOfflineChecks(cdp, app);
     await runNetworkChecks(cdp, app);
     await runSubpathChecks(cdp, subApp);
     if (PERF) await runPerf(cdp, app);
