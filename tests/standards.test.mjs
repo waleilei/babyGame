@@ -52,3 +52,27 @@ test('运行期每个 <img> 都声明 decoding 策略', () => {
 
   assert.deepEqual(found, [], `<img> 需要 decoding: 'async'：\n${found.join('\n')}`);
 });
+
+// base.css 的 html { scroll-behavior: smooth } 会让 behavior:'auto'（含两参 scrollTo）变成
+// 动画滚动，编程式滚动复位（详情返回恢复、切页回顶）会慢半拍且断言漂移。
+// scrollIntoView 不在列：小节导航的平滑滚动是产品特性，由 prefers-reduced-motion 控制。
+test('运行期 scrollTo 必须显式 behavior: instant', () => {
+  const sources = walk(join(ROOT, 'src')).filter((file) => file.endsWith('.js'));
+  const found = [];
+
+  for (const file of sources) {
+    const source = readFileSync(file, 'utf8');
+    for (const match of source.matchAll(/\.scrollTo\(\s*([^)]*)\)/g)) {
+      const args = match[1];
+      if (/^\s*\{/.test(args) && /behavior\s*:\s*['"]instant['"]/.test(args)) continue;
+      const line = source.slice(0, match.index).split('\n').length;
+      found.push(`${relative(ROOT, file)}:${line} ${match[0].trim()}`);
+    }
+  }
+
+  assert.deepEqual(
+    found,
+    [],
+    `scrollTo 需要 { behavior: 'instant' }（smooth CSS 会把 auto 变成动画滚动）：\n${found.join('\n')}`,
+  );
+});
