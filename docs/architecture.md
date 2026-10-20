@@ -568,7 +568,7 @@ export function el(tag, props = {}, children = []) {
 }
 ```
 
-提交门禁是只读的 `npm run check && npm test`，由 `.githooks/pre-commit` 与 `.github/workflows/verify.yml` 执行。`npm run data` 会重写 `data/` 与 `assets/`，属于改稿流程，不进提交门禁。
+提交门禁是只读的 `npm run check:code && npm test`（`.githooks/pre-commit`）；CI（`.github/workflows/verify.yml`）跑全量 `npm run check`（含提示词校验 `check-prompts`）+ 测试 + 冒烟。`check-prompts` 不进本地提交门禁：提示词对齐是长周期内容工作，台账短暂不一致不应挡住无关提交。`npm run data` 会重写 `data/` 与 `assets/`，属于改稿流程，不进任何门禁。
 
 ### 8.3 资源与缓存
 

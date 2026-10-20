@@ -2,7 +2,9 @@
 # babyGame 提交门禁：只跑只读检查。
 # 不要换成 npm run verify —— 它的第一步 npm run data 会重写 data/ 与 assets/，
 # 把提交变成一次静默的产物重建。
+# check-prompts 不在这里：提示词对齐是长周期的内容工作（.scratch/panel-prompt-alignment），
+# 台账与磁盘图片短暂不一致会挡住所有与它无关的提交；全量校验由 CI 的 npm run check 承担。
 set -e
 
-npm run check --silent
+npm run check:code --silent
 npm test --silent
