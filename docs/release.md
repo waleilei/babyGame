@@ -14,10 +14,10 @@ npm run data && npm run check && npm test
 ```
 
 - `npm run data`：从 `../books/0-3-game-book/manuscript/` 的 8 份稿件提取全书，写出 `data/toc.json`、`data/chapters/ch01…ch21.json` 与 `data/docs/front.json、apx-a…apx-f.json`，并把 520 张水彩步骤图复制到本项目。任一硬校验失败时不写出文件；不再被目录引用的旧 JSON 会被清理。
-- `npm run check`：独立读取产物，复检 28 个文档、130 条游戏、分组覆盖、块结构（表格列宽、清单项、有序列表 `start`、小节与标题一致）、插画存在、目录索引逐条一致、体积预算与孤儿文件。
+- `npm run check`：先按 `docs/architecture.md §15` 扫描分层依赖（越界依赖、深层 `../`、非相对导入），再独立读取产物，复检 28 个文档、130 条游戏、分组覆盖、块结构（表格列宽、清单项、有序列表 `start`、小节与标题一致）、插画存在、目录索引逐条一致、体积预算与孤儿文件。
 - `npm test`：`node --test` 覆盖数据管线、仓储、领域纯函数、清单编码、路由、发布预算与编码规范。条数以命令输出为准，不在此处硬写。
 
-提交与推送跑的是同一条只读门禁 `npm run check && npm test`：本地见 `.githooks/pre-commit`，远端见 `.github/workflows/verify.yml`。`verify` 多出的 `npm run data` 会重写 `data/` 与 `assets/`，只在改稿或更新数据时用。新克隆启用本地钩子：
+提交与推送跑的是同一条只读门禁 `npm run check && npm test`：本地见 `.githooks/pre-commit`，远端见 `.github/workflows/verify.yml`；CI 另跑 `npm run smoke`（无 Chrome 时自动跳过）。`verify` 多出的 `npm run data` 会重写 `data/` 与 `assets/`，只在改稿或更新数据时用。新克隆启用本地钩子：
 
 ```bash
 git config core.hooksPath .githooks
@@ -39,6 +39,16 @@ npm run serve
 必须通过 HTTP 访问；`file://` 下浏览器会拦截 `fetch` 与 ES Modules。
 
 预取开关：默认在文档渲染后 1 秒预取前后文档；访问 `http://localhost:5173/?prefetch=off` 可关闭，行为退化为严格按需加载，功能不变。
+
+端到端冒烟（自带静态服务与 headless Chrome，不需要先开 `npm run serve`）：
+
+```bash
+npm run smoke
+npm run smoke -- --perf          # 本地性能：FCP / 目录可交互 / 缓存命中切页 / CLS
+npm run smoke -- --perf --slow   # 4G 模拟（40ms 延迟、1.5Mbps）
+```
+
+`smoke` 覆盖目录 28 行、搜索、清单刷新与重置、方向键翻页、深链弹层、Esc 分层、图片大图、360px 宽表与前置/附录边界。未找到 Chrome 时会跳过；可用 `CHROME=/path/to/chrome` 指定。
 
 ## 3. 部署
 
@@ -91,6 +101,7 @@ assets/
 - [x] 附录 D 的 1-50、附录 E 的 1-30 跨块编号连续
 - [x] 伪标题升级为 `h4`，带句末标点的整段加粗保留为段落
 - [x] 目录索引以 `docId` 关联文档，并保留章号
+- [x] 分层依赖由 `tools/check-imports.mjs` 强制，越界依赖会让 `npm run check` 失败
 - [x] 所有导入、资源与插画路径均为相对路径
 - [x] 运行期源码不使用 `innerHTML`
 - [x] 写死颜色只出现在 `styles/tokens.css`；每个 `<img>` 声明 `decoding`
@@ -98,17 +109,17 @@ assets/
 
 ### 性能实测
 
-在本机（headless Chrome 155，本地静态服务，360px 视口，禁用缓存）测得：
+在本机（headless Chrome 155，本地静态服务，360px 视口，禁用缓存）用 `npm run smoke -- --perf` 测得：
 
 | 指标 | 预算 | 实测 |
 |---|---|---|
-| 首屏可交互（目录 28 行出现） | 本地 < 1 s | 78.6 ms |
-| 首屏 FCP | — | 72 ms |
-| 4G 首屏可交互 | < 2.5 s | 965.6 ms（40 ms 延迟、1.5 Mbps，缓存禁用） |
-| 缓存命中切页（第 5 → 6 章） | < 50 ms | 6.0 ms |
-| CLS（目录 / 游戏章） | < 0.02 | 0.011 / 0 |
+| 首屏可交互（目录 28 行出现） | 本地 < 1 s | 43.1 ms |
+| 首屏 FCP | — | 40.0 ms |
+| 4G 首屏可交互（`--perf --slow`） | < 2.5 s | 957.0 ms（40 ms 延迟、1.5 Mbps，缓存禁用） |
+| 缓存命中切页（第 5 → 6 章） | < 50 ms | 4.6 ms |
+| CLS（目录 / 文档） | < 0.02 | 0.010 / 0.000 |
 
-测量方式：`PerformanceNavigationTiming`、`first-contentful-paint`、`layout-shift` PerformanceObserver，以及切页点击到文档标题更新的时间。CLS 从正文内容出现开始累计（骨架屏替换骨架本身不计）；目录骨架不再重复 hero、加载期预留搜索框后，替换位移为 0.011。数值随机器与网络波动，发布前建议在目标托管环境复测一次。
+测量方式：`PerformanceNavigationTiming`、`first-contentful-paint`、`layout-shift` PerformanceObserver，以及切页点击到文档标题更新的时间。CLS 从正文内容出现开始累计（骨架替换骨架本身不计）；目录骨架不再重复 hero、加载期预留搜索框后，替换位移为 0.010。数值随机器与网络波动，发布前建议在目标托管环境复测一次。
 
 ### 人工
 

@@ -182,10 +182,13 @@ babyGame/
 ├── tools/
 │   ├── budgets.mjs               # 体积预算与容量阈值的唯一来源
 │   ├── extract-games.mjs
-│   └── check-games.mjs
+│   ├── check-games.mjs
+│   ├── check-imports.mjs         # §15 分层依赖矩阵的静态扫描
+│   └── smoke.mjs                 # headless Chrome 冒烟与性能
 ├── tests/
 │   ├── data-pipeline.test.mjs
 │   ├── domain.test.mjs
+│   ├── imports.test.mjs          # 分层规则与导入提取
 │   ├── repository.test.mjs
 │   ├── release.test.mjs          # 体积预算、相对路径、innerHTML
 │   ├── standards.test.mjs        # 十六进制颜色、img decoding
@@ -537,9 +540,11 @@ export function el(tag, props = {}, children = []) {
   "type": "module",
   "scripts": {
     "data": "node tools/extract-games.mjs",
-    "check": "node tools/check-games.mjs",
-    "serve": "python3 -m http.server 5173",
-    "test": "node --test tests/*.test.mjs"
+    "check": "node tools/check-imports.mjs && node tools/check-games.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "npm run data && npm run check && npm test",
+    "smoke": "node tools/smoke.mjs",
+    "serve": "python3 -m http.server 5173"
   }
 }
 ```
@@ -851,6 +856,9 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 
 | 检查 | 方式 |
 |---|---|
+| 分层依赖 | `node tools/check-imports.mjs`：按 §15 矩阵扫描全部模块，禁止越界依赖、深层 `../` 与非相对导入 |
+| 端到端冒烟 | `npm run smoke`：headless Chrome 检查目录、搜索、清单、翻页、深链、360px、表格与图片大图 |
+| 性能 | `npm run smoke -- --perf`（本地）或 `--perf --slow`（4G 模拟）：FCP、目录可交互、缓存命中切页、CLS |
 | 数据完整性 | `node tools/check-games.mjs`：28 个文档、130 条游戏、块结构、分组覆盖、资源存在、孤儿文件、体积预算 |
 | 提取器 | `tests/data-pipeline.test.mjs`：8 份稿件、伪标题升级、37 项清单、17 张附录表、跨块编号、童谣换行、产物对账 |
 | 路由解析 | `node --test`：前置/章节/游戏/附录、补零、越界、非法字母 |
@@ -862,6 +870,8 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | 编码规范 | `tests/standards.test.mjs`：十六进制颜色只在 `tokens.css`、每个 `<img>` 声明 `decoding` |
 
 ### 13.2 手动验收
+
+`npm run smoke` 已自动覆盖目录、搜索、清单、翻页、深链、360px、表格与图片大图；以下条目保留为发布前复核。
 
 - [ ] 360px / 768px / 1440px 三档无横向滚动；宽表在容器内横向滚动，首列保持可见
 - [ ] 首屏 Network 只有 `toc.json`，无文档 JSON；目录 28 行、6 个分组
@@ -914,7 +924,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | pages | ✓ | ✓ |  |  | ✓ | ✓ |  |
 | app | ✓ | ✓ | ✓ | ✓ |  | ✓ |  |
 
-约束由 code review 保证；模块数继续增长时可加 `tools/check-imports.mjs` 做静态扫描，把规则变成 CI 检查。
+约束由 `tools/check-imports.mjs` 静态扫描，`npm run check`、本地提交钩子与 CI 都会执行；矩阵改动只需改该文件与本节一处。
 
 ---
 

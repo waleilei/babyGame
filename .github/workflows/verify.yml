@@ -17,3 +17,6 @@ jobs:
         run: npm run check
       - name: 单元测试与规范检查
         run: npm test
+      # 自带静态服务与 headless Chrome；无 Chrome 时脚本会跳过而不是失败。
+      - name: 端到端冒烟
+        run: npm run smoke

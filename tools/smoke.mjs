@@ -1,0 +1,487 @@
+import { createServer } from 'node:http';
+import { createReadStream, existsSync, mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, extname, join, normalize, resolve, sep } from 'node:path';
+import { execFileSync, spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const PERF = process.argv.includes('--perf');
+const SLOW = process.argv.includes('--slow');
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+};
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function startServer() {
+  return new Promise((resolvePromise, reject) => {
+    const server = createServer((request, response) => {
+      let pathname;
+      try {
+        pathname = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
+      } catch {
+        response.writeHead(400);
+        response.end();
+        return;
+      }
+      if (pathname === '/') pathname = '/index.html';
+      const file = normalize(join(ROOT, pathname));
+      if (file !== ROOT && !file.startsWith(ROOT + sep)) {
+        response.writeHead(403);
+        response.end();
+        return;
+      }
+      if (!existsSync(file) || !statSync(file).isFile()) {
+        response.writeHead(404);
+        response.end();
+        return;
+      }
+      response.writeHead(200, {
+        'Content-Type': MIME[extname(file)] ?? 'application/octet-stream',
+        'Cache-Control': 'no-store',
+      });
+      createReadStream(file).pipe(response);
+    });
+    server.on('error', reject);
+    server.listen(0, '127.0.0.1', () => resolvePromise(server));
+  });
+}
+
+function findChrome() {
+  const candidates = [
+    process.env.CHROME,
+    'google-chrome',
+    'google-chrome-stable',
+    'chromium',
+    'chromium-browser',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    if (candidate.includes('/')) {
+      if (existsSync(candidate)) return candidate;
+      continue;
+    }
+    try {
+      const found = execFileSync('which', [candidate], { encoding: 'utf8' }).trim();
+      if (found) return found;
+    } catch {
+      // 继续找下一个。
+    }
+  }
+  return null;
+}
+
+async function launchChrome(chrome, profile) {
+  const child = spawn(chrome, [
+    '--headless=new',
+    '--no-sandbox',
+    '--disable-gpu',
+    '--hide-scrollbars',
+    '--remote-debugging-port=0',
+    `--user-data-dir=${profile}`,
+    'about:blank',
+  ], { stdio: 'ignore' });
+
+  const portFile = join(profile, 'DevToolsActivePort');
+  for (let index = 0; index < 120; index += 1) {
+    if (existsSync(portFile)) break;
+    if (child.exitCode !== null) throw new Error('Chrome 启动失败');
+    await sleep(100);
+  }
+  if (!existsSync(portFile)) throw new Error('Chrome 未在 12s 内启动');
+  const [port] = readFileSync(portFile, 'utf8').split('\n');
+  return { child, port: Number(port) };
+}
+
+async function pageTarget(port) {
+  for (let index = 0; index < 100; index += 1) {
+    try {
+      const targets = await fetch(`http://127.0.0.1:${port}/json/list`).then((response) => response.json());
+      const page = targets.find((target) => target.type === 'page');
+      if (page?.webSocketDebuggerUrl) return page;
+    } catch {
+      // Chrome 还在起。
+    }
+    await sleep(100);
+  }
+  throw new Error('找不到 Chrome page target');
+}
+
+class Cdp {
+  constructor(ws) {
+    this.ws = ws;
+    this.seq = 0;
+    this.pending = new Map();
+    ws.addEventListener('message', (event) => {
+      const message = JSON.parse(event.data);
+      const handler = this.pending.get(message.id);
+      if (!handler) return;
+      this.pending.delete(message.id);
+      if (message.error) handler.reject(new Error(JSON.stringify(message.error)));
+      else handler.resolve(message.result);
+    });
+  }
+
+  static async connect(url) {
+    const ws = new WebSocket(url);
+    await new Promise((resolvePromise, reject) => {
+      ws.addEventListener('open', resolvePromise, { once: true });
+      ws.addEventListener('error', reject, { once: true });
+    });
+    return new Cdp(ws);
+  }
+
+  send(method, params = {}) {
+    return new Promise((resolvePromise, reject) => {
+      const id = ++this.seq;
+      this.pending.set(id, { resolve: resolvePromise, reject });
+      this.ws.send(JSON.stringify({ id, method, params }));
+    });
+  }
+
+  async evaluate(expression) {
+    try {
+      const result = await this.send('Runtime.evaluate', {
+        expression,
+        awaitPromise: true,
+        returnByValue: true,
+      });
+      if (result.exceptionDetails) {
+        const text = result.exceptionDetails.exception?.description ?? result.exceptionDetails.text;
+        if (String(text).includes('Execution context was destroyed')) return null;
+        throw new Error(text);
+      }
+      return result.result.value;
+    } catch (error) {
+      if (/context|Cannot find|Inspected target navigated/i.test(String(error.message))) return null;
+      throw error;
+    }
+  }
+
+  async waitFor(expression, label, timeout = 10000) {
+    const started = Date.now();
+    while (Date.now() - started < timeout) {
+      if (await this.evaluate(expression)) return;
+      await sleep(60);
+    }
+    throw new Error(`等待超时：${label}`);
+  }
+
+  async navigate(url) {
+    await this.send('Page.navigate', { url });
+  }
+
+  close() {
+    this.ws.close();
+  }
+}
+
+const failures = [];
+let checkCount = 0;
+
+function check(label, actual, expected) {
+  checkCount += 1;
+  const ok = JSON.stringify(actual) === JSON.stringify(expected);
+  console.log(`${ok ? '✓' : '✗'} ${label}${ok ? '' : `：期望 ${JSON.stringify(expected)}，实际 ${JSON.stringify(actual)}`}`);
+  if (!ok) failures.push(label);
+}
+
+async function pressKey(cdp, key, code, keyCode) {
+  for (const type of ['keyDown', 'keyUp']) {
+    await cdp.send('Input.dispatchKeyEvent', {
+      type,
+      key,
+      code,
+      windowsVirtualKeyCode: keyCode,
+      nativeVirtualKeyCode: keyCode,
+    });
+  }
+  await sleep(140);
+}
+
+const pressEscape = (cdp) => pressKey(cdp, 'Escape', 'Escape', 27);
+
+async function setSearch(cdp, value) {
+  await cdp.evaluate(`(() => {
+    const input = document.querySelector('#catalog-search');
+    input.value = ${JSON.stringify(value)};
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  })()`);
+}
+
+async function runChecks(cdp, app) {
+  await cdp.navigate(`${app}/#/`);
+  await cdp.waitFor("document.querySelectorAll('.toc-row').length === 28", '目录 28 行');
+
+  check('目录分组数', await cdp.evaluate("document.querySelectorAll('.toc__part-title').length"), 6);
+  check('目录首组', await cdp.evaluate("document.querySelector('.toc__part-title').textContent"), '前置');
+  check('目录末组', await cdp.evaluate("document.querySelectorAll('.toc__part-title')[5].textContent"), '附录');
+  check('目录计数', await cdp.evaluate("document.querySelector('.toc-hero__count').textContent"), '130 个游戏 · 21 章 · 28 个文档');
+  check('附录行号', await cdp.evaluate("[...document.querySelectorAll('.toc-row__no')][22].textContent"), 'A');
+
+  await setSearch(cdp, '里程碑');
+  check('搜索类型标签', await cdp.evaluate("document.querySelector('.search-hit__tag').textContent"), '附录');
+  check('搜索命中标题', await cdp.evaluate("document.querySelector('.search-hit__name').textContent"), '附录A 0-36个月发育里程碑与警示信号');
+  check('搜索命中链接', await cdp.evaluate("document.querySelector('.search-hit').getAttribute('href')"), '#/appendix/a');
+  check('搜索计数', await cdp.evaluate("document.querySelector('.search__count').textContent"), '找到 1 条结果');
+
+  await setSearch(cdp, '躲猫猫');
+  check('游戏搜索直达链接', await cdp.evaluate("document.querySelector('.search-hit').getAttribute('href')"), '#/ch/6/game/15');
+  check('游戏搜索补充信息', await cdp.evaluate("document.querySelector('.search-hit__meta').textContent"), '4-6月 · 社会情绪');
+
+  await setSearch(cdp, '不存在的内容');
+  check('空结果提示', await cdp.evaluate("document.querySelector('.search-empty__title').textContent"), '没有找到“不存在的内容”');
+  await cdp.evaluate("document.querySelector('.search__clear').click()");
+  check('清除搜索后输入为空', await cdp.evaluate("document.querySelector('#catalog-search').value"), '');
+  check('清除搜索后目录恢复', await cdp.evaluate("!document.querySelector('.toc-page__toc').hidden"), true);
+
+  await cdp.evaluate("location.hash = '#/appendix/b'");
+  await cdp.waitFor("document.querySelectorAll('.prose__checklist input[type=checkbox]').length === 37", '附录 B 37 项清单');
+  check('清单分组数', await cdp.evaluate("document.querySelectorAll('.prose__checklist').length"), 6);
+  check('重置按钮可见', await cdp.evaluate("!document.querySelector('.prose-head__reset').hidden"), true);
+
+  await cdp.evaluate("document.querySelector('.prose__checklist input[type=checkbox]').click()");
+  check('勾选写入本地', await cdp.evaluate("JSON.parse(localStorage.getItem('babyGame:checklist:apx-b')).length"), 1);
+
+  await cdp.send('Page.reload', { ignoreCache: true });
+  await cdp.waitFor("document.querySelectorAll('.prose__checklist input[type=checkbox]').length === 37", '刷新后清单');
+  check('刷新后勾选保留', await cdp.evaluate("document.querySelector('.prose__checklist input[type=checkbox]').checked"), true);
+
+  await cdp.evaluate("document.querySelector('.prose-head__reset').click()");
+  check('重置后取消勾选', await cdp.evaluate("document.querySelector('.prose__checklist input[type=checkbox]').checked"), false);
+  check('重置后清空存储', await cdp.evaluate("localStorage.getItem('babyGame:checklist:apx-b')"), null);
+
+  await cdp.evaluate("location.hash = '#/ch/4'");
+  await cdp.waitFor("document.querySelector('.prose-head__title')?.textContent.startsWith('第4章')", '第 4 章');
+  check('页头所属篇', await cdp.evaluate("document.querySelector('.prose-head__part').textContent"), '第一篇 会玩的孩子');
+  check('页脚下一页', await cdp.evaluate("document.querySelectorAll('.footer-nav__chapter')[1].textContent"), '第5章 躺着的世界');
+
+  await pressKey(cdp, 'ArrowRight', 'ArrowRight', 39);
+  await cdp.waitFor("location.hash === '#/ch/5' && document.querySelector('.chapter__title')?.textContent.startsWith('第5章')", '方向键进入第 5 章');
+  check('切页后焦点在标题', await cdp.evaluate('document.activeElement.className'), 'chapter__title');
+  check('游戏卡片数', await cdp.evaluate("document.querySelectorAll('.card').length"), 10);
+
+  await cdp.evaluate("location.hash = '#/ch/10'");
+  await cdp.waitFor("document.querySelector('.chapter__title')?.textContent.startsWith('第10章')", '第 10 章');
+  await cdp.evaluate("location.hash = '#/ch/10/game/76'");
+  await cdp.waitFor("document.querySelector('.game-dialog')?.open === true", '游戏弹层打开');
+  check('深链弹层标题', await cdp.evaluate("document.querySelector('.game-dialog__title').textContent"), '儿歌接龙');
+  check('弹层关闭按钮聚焦', await cdp.evaluate('document.activeElement.className'), 'game-dialog__close');
+  await cdp.evaluate('history.back()');
+  await cdp.waitFor("document.querySelector('.game-dialog')?.open === false", '后退关闭弹层');
+  check('后退回到第 10 章', await cdp.evaluate('location.hash'), '#/ch/10');
+
+  await cdp.evaluate("location.hash = '#/ch/5'");
+  await cdp.waitFor("document.querySelectorAll('.card').length === 10", '第 5 章卡片');
+  await cdp.evaluate("document.querySelector('.card__art-button').click()");
+  await cdp.waitFor("document.querySelector('.image-lightbox')?.open === true", '卡片主图大图');
+  check('大图标题', await cdp.evaluate("document.querySelector('.image-lightbox__title').textContent"), '黑白卡追视');
+  check('大图计数', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('1 / 4')"), true);
+  await pressEscape(cdp);
+  check('Esc 关闭大图', await cdp.evaluate("document.querySelector('.image-lightbox').open"), false);
+  check('大图关闭后焦点回图片按钮', await cdp.evaluate('document.activeElement.className'), 'card__art-button');
+
+  await cdp.evaluate("document.querySelector('.card__body').click()");
+  await cdp.waitFor("document.querySelector('.game-dialog')?.open === true", '游戏弹层');
+  await cdp.evaluate("document.querySelector('.game-dialog__hero').click()");
+  await cdp.waitFor("document.querySelector('.image-lightbox')?.open === true", '弹层主图大图');
+  check('大图叠在弹层上', await cdp.evaluate("document.querySelector('.game-dialog').open"), true);
+  await pressEscape(cdp);
+  check('第一次 Esc 只关大图', await cdp.evaluate("document.querySelector('.image-lightbox').open"), false);
+  check('游戏弹层仍在', await cdp.evaluate("document.querySelector('.game-dialog').open"), true);
+  await pressEscape(cdp);
+  check('第二次 Esc 关游戏弹层', await cdp.evaluate("document.querySelector('.game-dialog').open"), false);
+  check('关闭后回到章节地址', await cdp.evaluate('location.hash'), '#/ch/5');
+  check('关闭后焦点回触发按钮', await cdp.evaluate('document.activeElement.className'), 'card__body');
+
+  await cdp.evaluate("document.querySelector('.card__body').click()");
+  await cdp.waitFor("document.querySelector('.game-dialog')?.open === true", '再次打开弹层');
+  await cdp.evaluate("document.querySelectorAll('.panel')[1].click()");
+  await cdp.waitFor("document.querySelector('.image-lightbox')?.open === true", '步骤图大图');
+  check('步骤图从第 2 张开始', await cdp.evaluate("document.querySelector('.image-lightbox__caption').textContent.includes('2 / 4')"), true);
+  await pressEscape(cdp);
+  await pressEscape(cdp);
+
+  await cdp.send('Emulation.setDeviceMetricsOverride', {
+    width: 360,
+    height: 800,
+    deviceScaleFactor: 1,
+    mobile: true,
+  });
+  await cdp.evaluate("location.hash = '#/appendix/f'");
+  await cdp.waitFor("document.querySelectorAll('.prose-table').length === 3", '附录 F 表格');
+  check('360px 页面无横向滚动', await cdp.evaluate('document.documentElement.scrollWidth <= window.innerWidth'), true);
+  check('表格容器可横向滚动', await cdp.evaluate("document.querySelectorAll('.prose-table')[0].scrollWidth > document.querySelectorAll('.prose-table')[0].clientWidth"), true);
+  check('表格第一列 sticky', await cdp.evaluate("getComputedStyle(document.querySelector('.prose__table td:first-child')).position"), 'sticky');
+  check('表格区域可聚焦', await cdp.evaluate("document.querySelectorAll('.prose-table')[0].getAttribute('tabindex')"), '0');
+  check('表格区域可访问名称', await cdp.evaluate("document.querySelectorAll('.prose-table')[0].getAttribute('aria-label')"), '周记录表');
+
+  await cdp.evaluate("location.hash = '#/front'");
+  await cdp.waitFor("document.querySelector('.prose-head__title')?.textContent.startsWith('前置')", '前置');
+  check('前置无上一页', await cdp.evaluate("document.querySelectorAll('.footer-nav')[0].disabled"), true);
+  check('前置小节导航', await cdp.evaluate("[...document.querySelectorAll('.section-nav--desktop .section-nav__button')].map((button) => button.textContent)"), [
+    '序　0-3岁，你才是孩子最好的玩具',
+    '本书使用说明',
+    '0-36个月发展地图',
+  ]);
+
+  await cdp.evaluate("location.hash = '#/appendix/f'");
+  await cdp.waitFor("document.querySelector('.prose-head__title')?.textContent.startsWith('附录F')", '附录 F');
+  check('附录 F 无下一页', await cdp.evaluate("document.querySelectorAll('.footer-nav')[1].disabled"), true);
+
+  await cdp.evaluate("location.hash = '#/ch/99'");
+  await cdp.waitFor("document.querySelector('.toc-page') !== null", '非法章号回目录');
+  check('非法章号提示', await cdp.evaluate("document.querySelector('#toast').textContent"), '第99章不存在，已回到目录');
+
+  await cdp.send('Emulation.clearDeviceMetricsOverride');
+}
+
+async function runPerf(cdp, app) {
+  await cdp.send('Page.addScriptToEvaluateOnNewDocument', {
+    source: `
+      window.__perf = { before: 0, after: 0, cutoff: Infinity, rowsAt: null, contentAt: null };
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.hadRecentInput) continue;
+          if (entry.startTime >= window.__perf.cutoff) window.__perf.after += entry.value;
+          else window.__perf.before += entry.value;
+        }
+      }).observe({ type: 'layout-shift', buffered: true });
+
+      function watch(selector, count, key) {
+        const timer = setInterval(() => {
+          if (document.querySelectorAll(selector).length >= count && !window.__perf[key]) {
+            window.__perf[key] = performance.now();
+            window.__perf.after = 0;
+            window.__perf.cutoff = performance.now();
+            clearInterval(timer);
+          }
+        }, 10);
+      }
+
+      const start = () => {
+        if (!document.documentElement) return setTimeout(start, 0);
+        watch('.toc-row', 28, 'rowsAt');
+        watch('.card', 10, 'contentAt');
+        watch('.prose__p', 3, 'contentAt');
+        watch('.state--error', 1, 'contentAt');
+      };
+      start();
+    `,
+  });
+
+  await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
+  if (SLOW) {
+    await cdp.send('Network.emulateNetworkConditions', {
+      offline: false,
+      latency: 40,
+      downloadThroughput: 1.5 * 1024 * 1024 / 8,
+      uploadThroughput: 750 * 1024 / 8,
+    });
+  }
+
+  await cdp.send('Page.navigate', { url: `${app}/?smoke=perf#/` });
+  await cdp.waitFor('window.__perf?.rowsAt !== null', '性能：目录就绪', 30000);
+
+  const toc = await cdp.evaluate(`(() => {
+    const fcp = performance.getEntriesByName('first-contentful-paint')[0];
+    return {
+      fcp: fcp ? fcp.startTime : null,
+      rows: window.__perf.rowsAt,
+      clsBefore: window.__perf.before,
+      clsAfter: window.__perf.after,
+    };
+  })()`);
+
+  let switchMs = null;
+  if (!SLOW) {
+    await cdp.evaluate("location.hash = '#/ch/5'");
+    await cdp.waitFor("document.querySelectorAll('.card').length === 10", '性能：第 5 章');
+    await sleep(1600);
+    switchMs = await cdp.evaluate(`new Promise((resolve) => {
+      const started = performance.now();
+      const observer = new MutationObserver(() => {
+        const title = document.querySelector('.chapter__title');
+        if (title && title.textContent.startsWith('第6章')) {
+          observer.disconnect();
+          resolve(performance.now() - started);
+        }
+      });
+      observer.observe(document.getElementById('view'), { childList: true, subtree: true, characterData: true });
+      document.querySelectorAll('.footer-nav')[1].click();
+    })`);
+  }
+
+  const chapter = await cdp.evaluate(`(() => {
+    const fcp = performance.getEntriesByName('first-contentful-paint')[0];
+    return {
+      fcp: fcp ? fcp.startTime : null,
+      clsBefore: window.__perf.before,
+      clsAfter: window.__perf.after,
+    };
+  })()`);
+
+  const ms = (value) => (value === null ? 'n/a' : `${value.toFixed(1)} ms`);
+  const cls = (value) => value.toFixed(3);
+  const network = SLOW ? '4G（40ms 延迟、1.5Mbps）' : '本地';
+  console.log(`perf   ${network} · FCP ${ms(toc.fcp)} · 目录可交互 ${ms(toc.rows)} · 缓存命中切页 ${ms(switchMs)}`);
+  console.log(`perf   CLS 目录 ${cls(toc.clsAfter)} / 文档 ${cls(chapter.clsAfter)}（从内容出现开始累计）`);
+}
+
+async function main() {
+  if (typeof WebSocket === 'undefined') {
+    throw new Error('smoke 需要 Node 22+（global WebSocket）');
+  }
+  const chrome = findChrome();
+  if (!chrome) {
+    console.log('! 未找到 Chrome，跳过 smoke。设置 CHROME=/path/to/chrome 后重试。');
+    return;
+  }
+
+  const server = await startServer();
+  const app = `http://127.0.0.1:${server.address().port}`;
+  const profile = mkdtempSync(join(tmpdir(), 'babygame-smoke-'));
+  let chromeProcess = null;
+  let cdp = null;
+
+  try {
+    const launched = await launchChrome(chrome, profile);
+    chromeProcess = launched.child;
+    const target = await pageTarget(launched.port);
+    cdp = await Cdp.connect(target.webSocketDebuggerUrl);
+    await cdp.send('Page.enable');
+    await cdp.send('Runtime.enable');
+    await cdp.send('Network.enable');
+
+    await runChecks(cdp, app);
+    if (PERF) await runPerf(cdp, app);
+  } finally {
+    cdp?.close();
+    chromeProcess?.kill('SIGKILL');
+    server.close();
+    try {
+      rmSync(profile, { recursive: true, force: true });
+    } catch {
+      // Chrome 可能还在释放 profile，留给系统临时目录清理。
+    }
+  }
+
+  if (failures.length > 0) {
+    console.error(`\n${failures.length} 项失败`);
+    process.exit(1);
+  }
+  console.log(`\n全部通过（${checkCount} 项）`);
+}
+
+main().catch((error) => {
+  console.error(`✗ ${error.message}`);
+  process.exit(1);
+});
