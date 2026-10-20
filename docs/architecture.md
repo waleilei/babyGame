@@ -179,12 +179,19 @@ babyGame/
 │   ├── chapters/ch01.json … ch21.json
 │   └── docs/front.json、apx-a.json … apx-f.json
 ├── assets/art/panel_web/**       # 520 张水彩步骤图（每游戏 4 张，首张兼作主图）
+├── prompts/                      # 步骤图提示词目录（唯一来源，不进入运行期）
+│   ├── presets/                  # 风格 / 人物 / 镜头 / 场景 / 负面
+│   ├── ch05.md … ch18.md         # 520 张步骤图的格层
+│   └── archive/                  # 迁入前的原总表，只读
 ├── tools/
 │   ├── budgets.mjs               # 体积预算与容量阈值的唯一来源
 │   ├── extract-games.mjs
 │   ├── check-games.mjs
 │   ├── check-imports.mjs         # §15 分层依赖矩阵的静态扫描
 │   ├── check-docs.mjs            # 文档路径存在、旧符号不残留
+│   ├── check-prompts.mjs         # 提示词完整性与禁画项校验
+│   ├── prompt-catalog.mjs        # 提示词解析、组合与校验（纯函数）
+│   ├── prompt.mjs                # npm run prompt 的入口
 │   ├── baseline.mjs              # 稿件内容基线与 spec 对照
 │   └── smoke.mjs                 # headless Chrome 冒烟与性能
 ├── tests/
@@ -204,6 +211,8 @@ babyGame/
 ```
 
 估算代码量：运行期约 2,350 行（不含 CSS），构建期约 1,230 行，样式约 1,900 行（含 v0.1 的大图查看器）。
+
+`prompts/` 是内容资产而不是运行期模块：网页不读取它，`src/` 也不引用它；它的维护入口是 `prompts/README.md`，校验入口是 `npm run check`。
 
 ---
 
@@ -544,7 +553,8 @@ export function el(tag, props = {}, children = []) {
   "scripts": {
     "data": "node tools/extract-games.mjs",
     "baseline": "node tools/baseline.mjs",
-    "check": "node tools/check-imports.mjs && node tools/check-docs.mjs && node tools/check-games.mjs",
+    "check": "node tools/check-imports.mjs && node tools/check-docs.mjs && node tools/check-games.mjs && node tools/check-prompts.mjs",
+    "prompt": "node tools/prompt.mjs",
     "test": "node --test tests/*.test.mjs",
     "verify": "npm run data && npm run check && npm test",
     "smoke": "node tools/smoke.mjs",
@@ -866,6 +876,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | 端到端冒烟 | `npm run smoke`：headless Chrome 检查目录、搜索、清单（含键盘）、翻页、深链、大图、360/768/1440、表格、断网重试、图片 404、首屏/预取请求与子目录部署 |
 | 性能 | `npm run smoke -- --perf`（本地）或 `--perf --slow`（4G 模拟）：FCP、目录可交互、缓存命中切页、CLS |
 | 数据完整性 | `node tools/check-games.mjs`：28 个文档、130 条游戏、块结构、分组覆盖、资源存在、孤儿文件、体积预算 |
+| 提示词目录 | `node tools/check-prompts.mjs`：520 条与图片双向一致、字典引用、禁画项、月龄对齐、reviewed/draft 统计 |
 | 提取器 | `tests/data-pipeline.test.mjs`：8 份稿件、伪标题升级、37 项清单、17 张附录表、跨块编号、童谣换行、产物对账 |
 | 路由解析 | `node --test`：前置/章节/游戏/附录、补零、越界、非法字母 |
 | selector | 搜索大小写、空白、无结果、类型标签、相邻页边界（front/ch01/4→5/12→13/18→19/21→附录） |
