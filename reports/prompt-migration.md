@@ -11,15 +11,15 @@
 | 步骤图 | 520 |
 | 章节 | 14 |
 | 来源 | 插画脚本 440、游戏步骤改写 80 |
-| 状态 | reviewed 40、draft 480 |
+| 状态 | 已复核 40、待复核 480 |
 
 ### 镜头分布
 
-eye-level 267、overhead 122、close-up 69、low-side 44、wide 18
+平视中景 268、俯拍 121、特写 69、侧低角 44、全景 18
 
 ### 场景分布
 
-living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24、entryway 12、kitchen 4
+客厅 187、卧室 96、餐椅餐桌 96、室内 69、户外 26、浴室 20、门厅 18、厨房 4、公共交通 4
 
 ## 逐章
 
@@ -29,9 +29,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 10 / 40 |
 | 来源 | 插画脚本 32、步骤改写 8 |
-| 状态 | reviewed 40、draft 0 |
-| 场景 | living-room 24、bedroom 12、bathroom 4 |
-| 镜头 | eye-level 16、overhead 14、close-up 7、low-side 3 |
+| 状态 | 已复核 40、待复核 0 |
+| 场景 | 客厅 24、卧室 12、浴室 4 |
+| 镜头 | 平视中景 16、俯拍 14、特写 7、侧低角 3 |
 
 **改写对照：`001-1` 黑白卡追视**
 
@@ -44,9 +44,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 12 / 48 |
 | 来源 | 插画脚本 40、步骤改写 8 |
-| 状态 | reviewed 0、draft 48 |
-| 场景 | bedroom 44、indoor 4 |
-| 镜头 | eye-level 16、low-side 12、overhead 11、close-up 9 |
+| 状态 | 已复核 0、待复核 48 |
+| 场景 | 卧室 36、客厅 8、室内 4 |
+| 镜头 | 平视中景 16、侧低角 12、俯拍 11、特写 9 |
 
 **改写对照：`011-1` 翻身引诱**
 
@@ -59,9 +59,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 12 / 48 |
 | 来源 | 插画脚本 40、步骤改写 8 |
-| 状态 | reviewed 0、draft 48 |
-| 场景 | living-room 24、dining 8、indoor 8、bathroom 4、entryway 4 |
-| 镜头 | eye-level 25、overhead 11、close-up 8、low-side 4 |
+| 状态 | 已复核 0、待复核 48 |
+| 场景 | 客厅 28、餐椅餐桌 8、室内 8、门厅 4 |
+| 镜头 | 平视中景 25、俯拍 11、特写 8、侧低角 4 |
 
 **改写对照：`023-1` 坐姿取物**
 
@@ -74,9 +74,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 14 / 56 |
 | 来源 | 插画脚本 44、步骤改写 12 |
-| 状态 | reviewed 0、draft 56 |
-| 场景 | living-room 36、indoor 8、dining 8、bedroom 4 |
-| 镜头 | eye-level 31、low-side 9、overhead 9、close-up 7 |
+| 状态 | 已复核 0、待复核 56 |
+| 场景 | 客厅 36、室内 8、餐椅餐桌 8、卧室 4 |
+| 镜头 | 平视中景 31、侧低角 9、俯拍 9、特写 7 |
 
 **改写对照：`035-1` 推车学步**
 
@@ -89,9 +89,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 14 / 56 |
 | 来源 | 插画脚本 40、步骤改写 16 |
-| 状态 | reviewed 0、draft 56 |
-| 场景 | indoor 20、living-room 16、dining 12、outdoor 4、bathroom 4 |
-| 镜头 | eye-level 25、overhead 14、low-side 8、close-up 8、wide 1 |
+| 状态 | 已复核 0、待复核 56 |
+| 场景 | 客厅 24、室内 12、餐椅餐桌 12、户外 4、浴室 4 |
+| 镜头 | 平视中景 26、俯拍 13、侧低角 8、特写 8、全景 1 |
 
 **改写对照：`049-1` 追球跑**
 
@@ -104,9 +104,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 14 / 56 |
 | 来源 | 插画脚本 48、步骤改写 8 |
-| 状态 | reviewed 0、draft 56 |
-| 场景 | living-room 24、dining 12、indoor 8、kitchen 4、entryway 4、bathroom 4 |
-| 镜头 | eye-level 36、overhead 11、close-up 8、low-side 1 |
+| 状态 | 已复核 0、待复核 56 |
+| 场景 | 客厅 24、餐椅餐桌 12、室内 8、厨房 4、门厅 4、浴室 4 |
+| 镜头 | 平视中景 36、俯拍 11、特写 8、侧低角 1 |
 
 **改写对照：`063-1` 命名卡片**
 
@@ -119,9 +119,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 12 / 48 |
 | 来源 | 插画脚本 40、步骤改写 8 |
-| 状态 | reviewed 0、draft 48 |
-| 场景 | living-room 20、dining 12、bedroom 8、indoor 4、outdoor 4 |
-| 镜头 | eye-level 22、overhead 14、close-up 6、low-side 4、wide 2 |
+| 状态 | 已复核 0、待复核 48 |
+| 场景 | 客厅 18、餐椅餐桌 12、卧室 8、户外 6、室内 4 |
+| 镜头 | 平视中景 22、俯拍 14、特写 6、侧低角 4、全景 2 |
 
 **改写对照：`077-1` 角色扮演**
 
@@ -134,9 +134,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 12 / 48 |
 | 来源 | 插画脚本 48、步骤改写 0 |
-| 状态 | reviewed 0、draft 48 |
-| 场景 | indoor 16、dining 16、living-room 12、outdoor 4 |
-| 镜头 | eye-level 25、overhead 18、wide 3、close-up 2 |
+| 状态 | 已复核 0、待复核 48 |
+| 场景 | 客厅 16、餐椅餐桌 16、室内 11、户外 4、门厅 1 |
+| 镜头 | 平视中景 25、俯拍 18、全景 3、特写 2 |
 
 **改写对照：`089-1` 骰子桌游**
 
@@ -149,9 +149,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 6 / 24 |
 | 来源 | 插画脚本 20、步骤改写 4 |
-| 状态 | reviewed 0、draft 24 |
-| 场景 | bedroom 16、bathroom 8 |
-| 镜头 | eye-level 11、overhead 8、close-up 5 |
+| 状态 | 已复核 0、待复核 24 |
+| 场景 | 卧室 16、浴室 8 |
+| 镜头 | 平视中景 11、俯拍 8、特写 5 |
 
 **改写对照：`101-1` 换尿布飞机操**
 
@@ -164,9 +164,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 6 / 24 |
 | 来源 | 插画脚本 20、步骤改写 4 |
-| 状态 | reviewed 0、draft 24 |
-| 场景 | dining 24 |
-| 镜头 | eye-level 14、overhead 6、close-up 3、low-side 1 |
+| 状态 | 已复核 0、待复核 24 |
+| 场景 | 餐椅餐桌 24 |
+| 镜头 | 平视中景 14、俯拍 6、特写 3、侧低角 1 |
 
 **改写对照：`107-1` 手指食物寻宝**
 
@@ -179,9 +179,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 5 / 20 |
 | 来源 | 插画脚本 20、步骤改写 0 |
-| 状态 | reviewed 0、draft 20 |
-| 场景 | bedroom 20 |
-| 镜头 | eye-level 16、low-side 2、overhead 1、close-up 1 |
+| 状态 | 已复核 0、待复核 20 |
+| 场景 | 卧室 20 |
+| 镜头 | 平视中景 16、侧低角 2、俯拍 1、特写 1 |
 
 **改写对照：`113-1` 睡前程序图卡**
 
@@ -194,9 +194,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 5 / 20 |
 | 来源 | 插画脚本 20、步骤改写 0 |
-| 状态 | reviewed 0、draft 20 |
-| 场景 | outdoor 12、indoor 4、dining 4 |
-| 镜头 | wide 12、eye-level 7、overhead 1 |
+| 状态 | 已复核 0、待复核 20 |
+| 场景 | 户外 12、公共交通 4、餐椅餐桌 4 |
+| 镜头 | 全景 12、平视中景 7、俯拍 1 |
 
 **改写对照：`118-1` 推车寻宝**
 
@@ -209,9 +209,9 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 4 / 16 |
 | 来源 | 插画脚本 12、步骤改写 4 |
-| 状态 | reviewed 0、draft 16 |
-| 场景 | indoor 12、living-room 4 |
-| 镜头 | eye-level 11、close-up 3、overhead 2 |
+| 状态 | 已复核 0、待复核 16 |
+| 场景 | 室内 11、客厅 5 |
+| 镜头 | 平视中景 11、特写 3、俯拍 2 |
 
 **改写对照：`123-1` 玩具听诊器**
 
@@ -224,12 +224,12 @@ living-room 160、bedroom 104、indoor 96、dining 96、bathroom 24、outdoor 24
 |---|---|
 | 游戏 / 步骤图 | 4 / 16 |
 | 来源 | 插画脚本 16、步骤改写 0 |
-| 状态 | reviewed 0、draft 16 |
-| 场景 | indoor 12、entryway 4 |
-| 镜头 | eye-level 12、close-up 2、overhead 2 |
+| 状态 | 已复核 0、待复核 16 |
+| 场景 | 门厅 9、客厅 4、室内 3 |
+| 镜头 | 平视中景 12、特写 2、俯拍 2 |
 
 **改写对照：`127-1` 再见窗口**
 
 - 旧：吉卜力式水彩动画风，原创角色。妈妈28岁、低马尾、赤陶上衣、米色长裙；宝宝8-24月、圆脸短发、米色连体衣。门口，妈妈蹲下说“妈妈走了，拜拜”。柔和自然光，水彩晕染，无文字无水印无logo，不出现已有动画角色。横向构图。
-- 新：儿童绘本透明水彩插画，高调低饱和暖米色调，可见水彩纸纹与湿画法晕染，轮廓线轻柔不闭合，自然窗光，画面干净留白，无文字、无标签、无边框、无水印。画幅 3:2 横构图。人物设定固定：年轻东亚妈妈，深棕低马尾，砖红色针织上衣，米色长裙，赤脚或棕色布鞋；宝宝8-24月、圆脸大眼、短软头发、米色连体衣、赤脚。平视中景，室内空间，木质家具与米色布艺，自然窗光。门口，妈妈蹲下说“妈妈走了，拜拜”；双手扶肩；宝宝看她。道具：窗户/门口。避免：文字、标签、数字、字母、对话框、页码、边框、拼贴、分镜线、水印、3D 渲染、照片写实、厚涂油画、矢量扁平、动漫大眼、赛博霓虹、强对比、纯黑描边、荧光色、脏色、六指、粘连手、多余肢体、扭曲比例、贴边裁切、学步车、脖圈、床围、趴睡、手机哄娃、整粒坚果、蜂蜜。
+- 新：儿童绘本透明水彩插画，高调低饱和暖米色调，可见水彩纸纹与湿画法晕染，轮廓线轻柔不闭合，自然窗光，画面干净留白，无文字、无标签、无边框、无水印。画幅 3:2 横构图。人物设定固定：年轻东亚妈妈，深棕低马尾，砖红色针织上衣，米色长裙，赤脚或棕色布鞋；宝宝8-24月、圆脸大眼、短软头发、米色连体衣、赤脚。平视中景，门厅木门与鞋柜，挂钩与地垫，室内暖光与门外冷光。门口，妈妈蹲下说“妈妈走了，拜拜”；双手扶肩；宝宝看她。道具：窗户/门口。避免：文字、标签、数字、字母、对话框、页码、边框、拼贴、分镜线、水印、3D 渲染、照片写实、厚涂油画、矢量扁平、动漫大眼、赛博霓虹、强对比、纯黑描边、荧光色、脏色、六指、粘连手、多余肢体、扭曲比例、贴边裁切、学步车、脖圈、床围、趴睡、手机哄娃、整粒坚果、蜂蜜。
 

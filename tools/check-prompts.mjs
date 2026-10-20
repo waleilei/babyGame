@@ -16,7 +16,7 @@ for (const warning of warnings) console.warn(`警告：${warning}`);
 for (const error of allErrors) console.error(`错误：${error}`);
 
 console.log(
-  `提示词：${status.total} 条，reviewed ${status.reviewed}，draft ${status.draft}；错误 ${allErrors.length}，警告 ${warnings.length}`,
+  `提示词：${status.total} 条，已复核 ${status.reviewed}，待复核 ${status.draft}；错误 ${allErrors.length}，警告 ${warnings.length}`,
 );
 
 if (allErrors.length) process.exit(1);

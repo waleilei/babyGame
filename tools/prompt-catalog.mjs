@@ -7,13 +7,19 @@ export const FIELD_KEYS = ['镜头', '场景', '月龄', '动作', '道具', '�
 /** 必填字段。道具可省略，也可写「无」。 */
 export const REQUIRED_KEYS = ['镜头', '场景', '月龄', '动作', '状态'];
 
-export const STATUSES = ['draft', 'reviewed'];
+export const STATUSES = ['待复核', '已复核'];
 
 /** 内容层禁画项。负面层本身含有这些词，所以只在「避免：」之前检查。 */
 export const BANNED = ['学步车', '脖圈', '床围', '趴睡', '手机哄娃', '整粒坚果', '蜂蜜'];
 
 /** 特写镜头取场景的 brief 文案。 */
-export const BRIEF_CAMERAS = new Set(['close-up']);
+export const BRIEF_CAMERAS = new Set(['特写']);
+
+/** 动作里出现这些人物时，人物层补一句「其他人物同色系低饱和」。 */
+export const MULTI_PERSON = /爸爸|爷爷|奶奶|姥姥|姥爷|大宝|小宝|小朋友|三人/;
+
+/** 材料字段里不算道具的取值。 */
+export const NON_PROP_MATERIALS = new Set(['无', '无。', '阳光']);
 
 export const MAX_PROMPT_LENGTH = 380;
 
@@ -119,7 +125,7 @@ function sections(text, pattern) {
 
 export function parseCameraPreset(text) {
   const cameras = new Map();
-  for (const { id, fields } of sections(text, /^## ([a-z-]+)$/)) {
+  for (const { id, fields } of sections(text, /^## (.+)$/)) {
     if (!fields['名称']) continue;
     cameras.set(id, {
       id,
@@ -148,12 +154,16 @@ export function normalizeCamera(view, presets) {
 
 export function parseScenePreset(text) {
   const scenes = new Map();
-  for (const { id, fields } of sections(text, /^## ([a-z-]+)$/)) {
+  for (const { id, fields } of sections(text, /^## (.+)$/)) {
     if (!fields['名称'] || !fields.full || !fields.brief) continue;
     scenes.set(id, {
       id,
       name: fields['名称'],
       places: (fields['场地'] ?? '')
+        .split('、')
+        .map((place) => place.trim())
+        .filter(Boolean),
+      extra: (fields['兼用'] ?? '')
         .split('、')
         .map((place) => place.trim())
         .filter(Boolean),
@@ -273,17 +283,19 @@ export function loadAssetKeys(root) {
  * @param {string} place
  * @param {{ scenes: Map<string, { places: string[] }> }} presets
  */
-function sceneIdsForToken(token, presets) {
+function sceneIdsForToken(token, presets, includeExtra = false) {
   const ids = [];
   for (const scene of presets.scenes.values()) {
-    if (scene.places.includes(token)) ids.push(scene.id);
+    const hit =
+      scene.places.includes(token) || (includeExtra && (scene.extra ?? []).includes(token));
+    if (hit) ids.push(scene.id);
   }
   return ids;
 }
 
 export function sceneForPlace(place, presets) {
   const first = String(place ?? '').split('/')[0].trim();
-  return sceneIdsForToken(first, presets)[0] ?? 'indoor';
+  return sceneIdsForToken(first, presets)[0] ?? '室内';
 }
 
 /**
@@ -300,7 +312,7 @@ export function sceneOptions(place, presets) {
   if (parts.includes('任意')) return null;
   const allowed = new Set();
   for (const part of parts) {
-    for (const id of sceneIdsForToken(part, presets)) allowed.add(id);
+    for (const id of sceneIdsForToken(part, presets, true)) allowed.add(id);
   }
   return allowed;
 }
@@ -316,8 +328,9 @@ export function composePrompt(entry, presets) {
   const scene = presets.scenes.get(fields['场景']);
   const cameraName = camera ? camera.name : fields['镜头'];
   const sceneText = scene ? (BRIEF_CAMERAS.has(fields['镜头']) ? scene.brief : scene.full) : fields['场景'];
-  const character = presets.character.replaceAll('{age}', fields['月龄'] ?? '');
   const action = String(fields['动作'] ?? '').trim();
+  const multi = MULTI_PERSON.test(action);
+  const character = `${presets.character.replaceAll('{age}', fields['月龄'] ?? '')}${multi ? '其他人物同色系低饱和。' : ''}`;
   const props = fields['道具'];
   const negative = presets.negative.map((item) => item.value).join('、');
   const propText = props && props !== '无' ? `道具：${props}。` : '';
@@ -373,7 +386,8 @@ export function validatePrompts({ entries, presets, games, assetKeys }) {
       if (fields['月龄'] && fields['月龄'] !== game.age) {
         errors.push(`${id}：月龄「${fields['月龄']}」与游戏数据「${game.age}」不一致`);
       }
-      if ((!fields['道具'] || fields['道具'] === '无') && game.materials && game.materials !== '无') {
+      const material = game.materials;
+      if ((!fields['道具'] || fields['道具'] === '无') && material && !NON_PROP_MATERIALS.has(material)) {
         warnings.push(`${id}：游戏材料是「${game.materials}」，提示词道具却为空`);
       }
       const allowed = fields['场景'] ? sceneOptions(game.place, presets) : null;
@@ -418,8 +432,8 @@ export function validatePrompts({ entries, presets, games, assetKeys }) {
 
   const status = { total: entries.length, reviewed: 0, draft: 0 };
   for (const entry of entries) {
-    if (entry.fields['状态'] === 'reviewed') status.reviewed += 1;
-    else if (entry.fields['状态'] === 'draft') status.draft += 1;
+    if (entry.fields['状态'] === '已复核') status.reviewed += 1;
+    else if (entry.fields['状态'] === '待复核') status.draft += 1;
   }
 
   return { errors, warnings, status };
