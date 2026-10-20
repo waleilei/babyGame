@@ -10,7 +10,6 @@ export function createImageLightbox() {
   let trigger = null;
   let transform = { scale: 1, x: 0, y: 0 };
   let suppressClose = false;
-  let escapeAt = 0;
   const pointers = new Map();
   let drag = null;
   let pinch = null;
@@ -24,7 +23,12 @@ export function createImageLightbox() {
     onclick: () => close(),
   }, ['×']);
 
-  const image = el('img', { class: 'image-lightbox__image', alt: '', draggable: 'false' });
+  const image = el('img', {
+    class: 'image-lightbox__image',
+    alt: '',
+    draggable: 'false',
+    decoding: 'async',
+  });
   const error = el('p', { class: 'image-lightbox__error', hidden: true, text: '图片加载失败' });
   const stage = el('div', { class: 'image-lightbox__stage' }, [image, error]);
 
@@ -227,20 +231,22 @@ export function createImageLightbox() {
     trigger = null;
   }
 
-  dialog.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
+  // Esc 归属按「谁在最上层」判定，不按时间。大图打开时在 document 捕获阶段吞掉这次 Esc：
+  // preventDefault 抑制浏览器派发 cancel，stopPropagation 让它到不了底层的游戏详情。大图一旦
+  // 关闭，同一个处理器立即失效，下一次 Esc 自然落到游戏详情 —— 因此不需要任何拦截窗口。
+  function onDocumentEscape(event) {
+    if (event.key !== 'Escape' || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (!dialog.open) return;
     event.preventDefault();
-    event.stopImmediatePropagation();
-    escapeAt = performance.now();
-    // 延后一个任务关闭，避免同一次 Esc 继续关掉底层的游戏详情弹层。
-    setTimeout(() => close(), 0);
-  }, true);
+    event.stopPropagation();
+    close();
+  }
+
+  document.addEventListener('keydown', onDocumentEscape, true);
 
   dialog.addEventListener('cancel', (event) => {
     event.preventDefault();
-    event.stopPropagation();
-    escapeAt = performance.now();
-    setTimeout(() => close(), 0);
+    close();
   });
 
   dialog.addEventListener('close', () => {
@@ -287,9 +293,9 @@ export function createImageLightbox() {
 
     close,
     destroy() {
+      document.removeEventListener('keydown', onDocumentEscape, true);
       close({ restoreFocus: false });
     },
     isOpen: () => dialog.open,
-    escapedRecently: () => performance.now() - escapeAt < 250,
   };
 }

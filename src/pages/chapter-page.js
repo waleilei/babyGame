@@ -70,7 +70,6 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
       onCloseGame();
     },
     onZoomImage: (game, index, trigger) => openLightbox(game, index, trigger),
-    isBlocked: () => lightbox.isOpen() || lightbox.escapedRecently(),
   });
 
   const root = el('div', { class: 'chapter-page' }, [toolbar.el, content, dialog.el, lightbox.el]);

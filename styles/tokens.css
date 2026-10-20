@@ -20,6 +20,13 @@
   --green-dark: #33503f;
   --green-soft: #e7efe9;
 
+  /* 大图叠层：深色舞台 */
+  --stage-surface: #141210;
+  --stage-ink: #f6f1e7;
+  --stage-ink-soft: #d8c7b4;
+  --stage-muted: #b9b1a4;
+  --stage-hint: #9d9589;
+
   --radius: 16px;
   --radius-sm: 10px;
   --shadow: 0 10px 30px rgba(46, 42, 38, 0.07);

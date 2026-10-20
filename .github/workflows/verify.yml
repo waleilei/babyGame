@@ -1,0 +1,19 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # 无 npm 依赖，不需要 install
+      - name: 数据与体积校验
+        run: npm run check
+      - name: 单元测试与规范检查
+        run: npm test

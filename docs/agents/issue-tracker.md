@@ -7,7 +7,7 @@
 - 一个特性一个目录：`.scratch/<feature-slug>/`
 - spec 为 `.scratch/<feature-slug>/spec.md`
 - 实现类 issue 一个 ticket 一个文件：`.scratch/<feature-slug>/issues/<NN>-<slug>.md`，从 `01` 起编号，禁止把所有 ticket 合并成一个文件
-- triage 状态记录在文件顶部附近的 `Status:` 行（角色字符串见 `triage-labels.md`）
+- triage 状态记录在文件顶部附近的 `Status:` 行，取值就是五个规范角色字符串本身：`needs-triage` / `needs-info` / `ready-for-agent` / `ready-for-human` / `wontfix`
 - 评论与对话历史追加到文件末尾的 `## Comments` 标题下
 
 ## 当技能说「publish to the issue tracker」

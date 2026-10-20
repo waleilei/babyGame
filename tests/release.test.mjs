@@ -4,6 +4,8 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { BUDGET, kb } from '../tools/budgets.mjs';
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 function walk(dir) {
@@ -15,19 +17,19 @@ function walk(dir) {
 
 const runtimeFiles = walk(join(ROOT, 'src')).filter((file) => file.endsWith('.js'));
 
-test('数据体积满足预算：目录 < 20KB，单章 < 45KB', () => {
+test('数据体积满足预算：目录与单章', () => {
   const tocSize = statSync(join(ROOT, 'data/toc.json')).size;
-  assert.ok(tocSize < 20 * 1024, `toc.json ${(tocSize / 1024).toFixed(1)}KB`);
+  assert.ok(tocSize < BUDGET.toc, `toc.json ${kb(tocSize)} > ${kb(BUDGET.toc)}`);
 
   for (const file of readdirSync(join(ROOT, 'data/chapters')).filter((name) => name.endsWith('.json'))) {
     const size = statSync(join(ROOT, 'data/chapters', file)).size;
-    assert.ok(size < 45 * 1024, `${file} ${(size / 1024).toFixed(1)}KB`);
+    assert.ok(size < BUDGET.chapter, `${file} ${kb(size)} > ${kb(BUDGET.chapter)}`);
   }
 });
 
-test('运行期 JS 未压缩小于 56KB', () => {
+test('运行期 JS 未压缩总量满足预算', () => {
   const total = runtimeFiles.reduce((sum, file) => sum + statSync(file).size, 0);
-  assert.ok(total < 56 * 1024, `运行期 JS ${(total / 1024).toFixed(1)}KB`);
+  assert.ok(total < BUDGET.runtimeJs, `运行期 JS ${kb(total)} > ${kb(BUDGET.runtimeJs)}`);
 });
 
 test('所有资源与模块使用相对路径，支持子目录部署', () => {

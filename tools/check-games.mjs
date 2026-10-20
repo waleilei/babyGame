@@ -2,6 +2,8 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { BUDGET, MAX_GAMES_PER_CHAPTER } from './budgets.mjs';
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DATA_DIR = join(ROOT, 'data');
 const TOC_PATH = join(DATA_DIR, 'toc.json');
@@ -64,7 +66,7 @@ function main() {
     process.exit(2);
   }
 
-  checkSize(TOC_PATH, 20 * 1024, 'data/toc.json');
+  checkSize(TOC_PATH, BUDGET.toc, 'data/toc.json');
   if (toc.schemaVersion !== 1) fail(`toc.schemaVersion 应为 1，实际 ${toc.schemaVersion}`);
   if (toc.book?.total !== 130) fail(`book.total 应为 130，实际 ${toc.book?.total}`);
   if (toc.book?.chapterCount !== 14) fail(`book.chapterCount 应为 14，实际 ${toc.book?.chapterCount}`);
@@ -82,7 +84,7 @@ function main() {
     const path = join(DATA_DIR, entry.file);
     const chapter = readJSON(path, `第${entry.no}章数据`);
     if (!chapter) continue;
-    checkSize(path, 45 * 1024, `第${entry.no}章数据`);
+    checkSize(path, BUDGET.chapter, `第${entry.no}章数据`);
 
     chapters.push(chapter);
     if (chapter.no !== entry.no) fail(`第${entry.no}章文件内 no=${chapter.no}`);
@@ -93,7 +95,7 @@ function main() {
       continue;
     }
     if (entry.count !== chapter.games.length) fail(`第${entry.no}章游戏数不一致：目录 ${entry.count} / 数据 ${chapter.games.length}`);
-    if (chapter.games.length > 14) fail(`第${entry.no}章游戏数超过 14，需要重新评估分页`);
+    if (chapter.games.length > MAX_GAMES_PER_CHAPTER) fail(`第${entry.no}章游戏数超过 ${MAX_GAMES_PER_CHAPTER}，需要重新评估分页`);
 
     for (const game of chapter.games) {
       allGames.push(game);
@@ -137,7 +139,7 @@ function main() {
   console.log(`✓ 章节  ${chapters.length} 个文件 / ${allGames.length} 条游戏`);
   console.log(`✓ 字段  8 模块齐全 / 步骤 4 条 / 观察 2-3 条 / 能力枚举合法`);
   console.log(`✓ 资源  520 张步骤图存在（首张兼作主图）`);
-  console.log(`✓ 体积  toc ${(statSync(TOC_PATH).size / 1024).toFixed(1)} KB / 单章 ≤ 45 KB`);
+  console.log(`✓ 体积  toc ${(statSync(TOC_PATH).size / 1024).toFixed(1)} KB / 单章 ≤ ${BUDGET.chapter / 1024} KB`);
   console.log(`✓ 索引  与章节内游戏逐条一致`);
 }
 

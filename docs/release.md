@@ -15,7 +15,13 @@ npm run data && npm run check && npm test
 
 - `npm run data`：从 `../books/0-3-game-book/manuscript/` 提取 130 条游戏，写出 `data/toc.json`、14 个章节 JSON，并把 `assets/art/panel_web/` 的 520 张水彩步骤图复制到本项目（每游戏 4 张，首张兼作卡片主图）。任一硬校验失败时不写出文件。
 - `npm run check`：独立读取产物，复检 130 条、编号连续、8 模块、能力枚举、插画存在、目录索引与章节游戏逐条一致、体积预算。
-- `npm test`：`node --test` 覆盖数据管线、仓储、领域纯函数与发布预算；共 37 条测试。
+- `npm test`：`node --test` 覆盖数据管线、仓储、领域纯函数、发布预算与编码规范检查。条数以命令输出为准，不在此处硬写。
+
+提交与推送跑的是同一条只读门禁 `npm run check && npm test`：本地见 `.githooks/pre-commit`，远端见 `.github/workflows/verify.yml`。`verify` 多出的 `npm run data` 会重写 `data/` 与 `assets/`，只在改稿或更新数据时用。新克隆启用本地钩子：
+
+```bash
+git config core.hooksPath .githooks
+```
 
 源稿件路径默认是仓库同级的 `../books/0-3-game-book`，可用 `BOOK_DIR` 覆盖：
 
@@ -77,13 +83,12 @@ assets/
 
 ### 自动化
 
-- [x] `data/toc.json` < 20 KB（实测约 13.8 KB）
-- [x] 单章 JSON < 45 KB（实测最大约 18.3 KB）
-- [x] 运行期 JS 未压缩 < 56 KB（实测 52,249 字节，约 51.0 KB；v0.1 原预算 40 KB，图片大图功能新增约 12.3 KB）
+- [x] 三项体积预算（目录 / 单章 / 运行期 JS）由 `npm test` 自动校验，阈值定义在 `tools/budgets.mjs`；实测 toc 13.8 KB、单章最大 18.3 KB、运行期 JS 约 51 KB
 - [x] 130 条游戏、14 章、2 篇、编号 01-130 连续唯一
 - [x] 目录索引与章节游戏逐条一致
 - [x] 所有导入、资源与插画路径均为相对路径
 - [x] 运行期源码不使用 `innerHTML`
+- [x] 写死颜色只出现在 `styles/tokens.css`；每个 `<img>` 声明 `decoding`
 
 ### 性能实测
 

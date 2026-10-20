@@ -1,0 +1,8 @@
+#!/bin/sh
+# babyGame 提交门禁：只跑只读检查。
+# 不要换成 npm run verify —— 它的第一步 npm run data 会重写 data/ 与 assets/，
+# 把提交变成一次静默的产物重建。
+set -e
+
+npm run check --silent
+npm test --silent

@@ -30,7 +30,7 @@ const fact = (label, value) => el('div', { class: 'fact' }, [
   el('dd', { class: 'fact__value', text: value }),
 ]);
 
-export function createGameDialog({ onRequestClose, onZoomImage, isBlocked }) {
+export function createGameDialog({ onRequestClose, onZoomImage }) {
   let suppressClose = false;
   let currentGame = null;
 
@@ -118,7 +118,6 @@ export function createGameDialog({ onRequestClose, onZoomImage, isBlocked }) {
 
   dialog.addEventListener('cancel', (event) => {
     event.preventDefault();
-    if (isBlocked?.()) return;
     requestClose();
   });
 

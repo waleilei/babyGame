@@ -1,14 +1,16 @@
 # babyGame
 
+## 文档地图
+
+- `docs/architecture.md`：当前架构的权威描述（分层、路由、数据契约、性能预算、质量保障）。
+- `docs/design.md`：v0.1 设计方案，**已归档**。只作历史依据；与 architecture 冲突时以 architecture 为准。
+- `docs/release.md`：发布门禁、验收清单与部署方式。
+
 ## Agent skills
 
 ### Issue tracker
 
 Issue 与 spec 以本地 markdown 文件存放在 `.scratch/` 下。详见 `docs/agents/issue-tracker.md`。
-
-### Triage labels
-
-五个规范 triage 角色，标签字符串与角色同名。详见 `docs/agents/triage-labels.md`。
 
 ### Domain docs
 
