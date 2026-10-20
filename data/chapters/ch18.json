@@ -42,12 +42,12 @@
       "safety": "不偷偷溜走，不把他锁在房间，全程确保环境安全。",
       "question": "玩得很好，真走还是哭？游戏降低的是“不确定感”，真实分离仍需固定仪式和准时接回。",
       "art": {
-        "main": "assets/ill/127.svg",
+        "main": "assets/art/panel_web/127-1.jpg",
         "panels": [
-          "assets/ill/panel/127-1.svg",
-          "assets/ill/panel/127-2.svg",
-          "assets/ill/panel/127-3.svg",
-          "assets/ill/panel/127-4.svg"
+          "assets/art/panel_web/127-1.jpg",
+          "assets/art/panel_web/127-2.jpg",
+          "assets/art/panel_web/127-3.jpg",
+          "assets/art/panel_web/127-4.jpg"
         ]
       }
     },
@@ -81,12 +81,12 @@
       "safety": "无需特别防护，不在手背画易掉色的笔。",
       "question": "孩子说“吻掉了”怎么办？认真补一个，说“妈妈再给你一个，这个不会掉”。",
       "art": {
-        "main": "assets/ill/128.svg",
+        "main": "assets/art/panel_web/128-1.jpg",
         "panels": [
-          "assets/ill/panel/128-1.svg",
-          "assets/ill/panel/128-2.svg",
-          "assets/ill/panel/128-3.svg",
-          "assets/ill/panel/128-4.svg"
+          "assets/art/panel_web/128-1.jpg",
+          "assets/art/panel_web/128-2.jpg",
+          "assets/art/panel_web/128-3.jpg",
+          "assets/art/panel_web/128-4.jpg"
         ]
       }
     },
@@ -120,12 +120,12 @@
       "safety": "每次都说清接的时间并准时出现，不评价“你怎么还哭”。",
       "question": "入园第一周天天哭？多数持续1-3周，稳定接送、不逗留、不偷偷走，比反复安抚有效。",
       "art": {
-        "main": "assets/ill/129.svg",
+        "main": "assets/art/panel_web/129-1.jpg",
         "panels": [
-          "assets/ill/panel/129-1.svg",
-          "assets/ill/panel/129-2.svg",
-          "assets/ill/panel/129-3.svg",
-          "assets/ill/panel/129-4.svg"
+          "assets/art/panel_web/129-1.jpg",
+          "assets/art/panel_web/129-2.jpg",
+          "assets/art/panel_web/129-3.jpg",
+          "assets/art/panel_web/129-4.jpg"
         ]
       }
     },
@@ -159,12 +159,12 @@
       "safety": "不让大宝抱小宝，不让小宝拿到大宝的小零件玩具。",
       "question": "大宝故意捣乱怎么办？捣乱通常是在争取关注，每天留10分钟“只属于大宝”的时间，比讲道理有效。",
       "art": {
-        "main": "assets/ill/130.svg",
+        "main": "assets/art/panel_web/130-1.jpg",
         "panels": [
-          "assets/ill/panel/130-1.svg",
-          "assets/ill/panel/130-2.svg",
-          "assets/ill/panel/130-3.svg",
-          "assets/ill/panel/130-4.svg"
+          "assets/art/panel_web/130-1.jpg",
+          "assets/art/panel_web/130-2.jpg",
+          "assets/art/panel_web/130-3.jpg",
+          "assets/art/panel_web/130-4.jpg"
         ]
       }
     }

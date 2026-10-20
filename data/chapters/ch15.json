@@ -42,12 +42,12 @@
       "safety": "图卡不用图钉，贴纸不入口。",
       "question": "每天还是拖？程序固定比内容重要，时间点、顺序、结尾的话都保持一致。",
       "art": {
-        "main": "assets/ill/113.svg",
+        "main": "assets/art/panel_web/113-1.jpg",
         "panels": [
-          "assets/ill/panel/113-1.svg",
-          "assets/ill/panel/113-2.svg",
-          "assets/ill/panel/113-3.svg",
-          "assets/ill/panel/113-4.svg"
+          "assets/art/panel_web/113-1.jpg",
+          "assets/art/panel_web/113-2.jpg",
+          "assets/art/panel_web/113-3.jpg",
+          "assets/art/panel_web/113-4.jpg"
         ]
       }
     },
@@ -81,12 +81,12 @@
       "safety": "手电不直射眼睛，亮度调低，不在黑暗中走动。",
       "question": "越玩越兴奋？把故事固定成“结尾即关灯”，用同一个结尾建立睡眠信号。",
       "art": {
-        "main": "assets/ill/114.svg",
+        "main": "assets/art/panel_web/114-1.jpg",
         "panels": [
-          "assets/ill/panel/114-1.svg",
-          "assets/ill/panel/114-2.svg",
-          "assets/ill/panel/114-3.svg",
-          "assets/ill/panel/114-4.svg"
+          "assets/art/panel_web/114-1.jpg",
+          "assets/art/panel_web/114-2.jpg",
+          "assets/art/panel_web/114-3.jpg",
+          "assets/art/panel_web/114-4.jpg"
         ]
       }
     },
@@ -120,12 +120,12 @@
       "safety": "不走太多房间导致兴奋，路线固定为2-3处。",
       "question": "每天要亲十几次才肯睡？设置上限“亲三次”，用数数把结束变得可预期。",
       "art": {
-        "main": "assets/ill/115.svg",
+        "main": "assets/art/panel_web/115-1.jpg",
         "panels": [
-          "assets/ill/panel/115-1.svg",
-          "assets/ill/panel/115-2.svg",
-          "assets/ill/panel/115-3.svg",
-          "assets/ill/panel/115-4.svg"
+          "assets/art/panel_web/115-1.jpg",
+          "assets/art/panel_web/115-2.jpg",
+          "assets/art/panel_web/115-3.jpg",
+          "assets/art/panel_web/115-4.jpg"
         ]
       }
     },
@@ -159,12 +159,12 @@
       "safety": "玩偶不放脸上，不强迫深呼吸，出现头晕立即停止。",
       "question": "孩子说“不想呼吸”？改成“吹蜡烛”“吹泡泡”，用游戏化的说法替代指令。",
       "art": {
-        "main": "assets/ill/116.svg",
+        "main": "assets/art/panel_web/116-1.jpg",
         "panels": [
-          "assets/ill/panel/116-1.svg",
-          "assets/ill/panel/116-2.svg",
-          "assets/ill/panel/116-3.svg",
-          "assets/ill/panel/116-4.svg"
+          "assets/art/panel_web/116-1.jpg",
+          "assets/art/panel_web/116-2.jpg",
+          "assets/art/panel_web/116-3.jpg",
+          "assets/art/panel_web/116-4.jpg"
         ]
       }
     },
@@ -198,12 +198,12 @@
       "safety": "不在走动中睡着抱娃，放下时先放屁股再放头。",
       "question": "必须抱睡怎么办？先固定“歌—静默—放下”的顺序，再逐步缩短抱的时间。",
       "art": {
-        "main": "assets/ill/117.svg",
+        "main": "assets/art/panel_web/117-1.jpg",
         "panels": [
-          "assets/ill/panel/117-1.svg",
-          "assets/ill/panel/117-2.svg",
-          "assets/ill/panel/117-3.svg",
-          "assets/ill/panel/117-4.svg"
+          "assets/art/panel_web/117-1.jpg",
+          "assets/art/panel_web/117-2.jpg",
+          "assets/art/panel_web/117-3.jpg",
+          "assets/art/panel_web/117-4.jpg"
         ]
       }
     }

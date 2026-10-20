@@ -50,12 +50,12 @@
       "safety": "卡片不反光、不长时间悬在脸正上方，宝宝扭头或烦躁立即停。",
       "question": "宝宝不看怎么办？先调成柔和的侧光，等清醒安静期再试，不必强求。",
       "art": {
-        "main": "assets/ill/001.svg",
+        "main": "assets/art/panel_web/001-1.jpg",
         "panels": [
-          "assets/ill/panel/001-1.svg",
-          "assets/ill/panel/001-2.svg",
-          "assets/ill/panel/001-3.svg",
-          "assets/ill/panel/001-4.svg"
+          "assets/art/panel_web/001-1.jpg",
+          "assets/art/panel_web/001-2.jpg",
+          "assets/art/panel_web/001-3.jpg",
+          "assets/art/panel_web/001-4.jpg"
         ]
       }
     },
@@ -88,12 +88,12 @@
       "safety": "不要用头发或手遮住宝宝口鼻，不在宝宝哭闹时强行互动。",
       "question": "一直不模仿是发育慢吗？3个月前模仿不稳定很常见，满4个月仍完全没有回应可在体检时提出。",
       "art": {
-        "main": "assets/ill/002.svg",
+        "main": "assets/art/panel_web/002-1.jpg",
         "panels": [
-          "assets/ill/panel/002-1.svg",
-          "assets/ill/panel/002-2.svg",
-          "assets/ill/panel/002-3.svg",
-          "assets/ill/panel/002-4.svg"
+          "assets/art/panel_web/002-1.jpg",
+          "assets/art/panel_web/002-2.jpg",
+          "assets/art/panel_web/002-3.jpg",
+          "assets/art/panel_web/002-4.jpg"
         ]
       }
     },
@@ -126,12 +126,12 @@
       "safety": "音量接近说话声即可，不贴耳、不连续摇，避免过度刺激。",
       "question": "宝宝被声音吓哭正常吗？3个月内惊跳反射正常，抱起来安抚即可，不必因此完全静音生活。",
       "art": {
-        "main": "assets/ill/003.svg",
+        "main": "assets/art/panel_web/003-1.jpg",
         "panels": [
-          "assets/ill/panel/003-1.svg",
-          "assets/ill/panel/003-2.svg",
-          "assets/ill/panel/003-3.svg",
-          "assets/ill/panel/003-4.svg"
+          "assets/art/panel_web/003-1.jpg",
+          "assets/art/panel_web/003-2.jpg",
+          "assets/art/panel_web/003-3.jpg",
+          "assets/art/panel_web/003-4.jpg"
         ]
       }
     },
@@ -165,12 +165,12 @@
       "safety": "避开囟门、脊柱和皮肤破损处；宝宝哭闹、打挺立即停止。",
       "question": "需要买按摩油吗？不需要，无香型植物油少量即可，敏感肌先在小面积试用。",
       "art": {
-        "main": "assets/ill/004.svg",
+        "main": "assets/art/panel_web/004-1.jpg",
         "panels": [
-          "assets/ill/panel/004-1.svg",
-          "assets/ill/panel/004-2.svg",
-          "assets/ill/panel/004-3.svg",
-          "assets/ill/panel/004-4.svg"
+          "assets/art/panel_web/004-1.jpg",
+          "assets/art/panel_web/004-2.jpg",
+          "assets/art/panel_web/004-3.jpg",
+          "assets/art/panel_web/004-4.jpg"
         ]
       }
     },
@@ -204,12 +204,12 @@
       "safety": "必须全程看护；一旦睡着立刻翻回仰卧；不在软床、沙发做。",
       "question": "宝宝一趴就哭还要练吗？先缩短到10秒、增加次数，哭闹时改为趴胸口，不必硬撑。",
       "art": {
-        "main": "assets/ill/005.svg",
+        "main": "assets/art/panel_web/005-1.jpg",
         "panels": [
-          "assets/ill/panel/005-1.svg",
-          "assets/ill/panel/005-2.svg",
-          "assets/ill/panel/005-3.svg",
-          "assets/ill/panel/005-4.svg"
+          "assets/art/panel_web/005-1.jpg",
+          "assets/art/panel_web/005-2.jpg",
+          "assets/art/panel_web/005-3.jpg",
+          "assets/art/panel_web/005-4.jpg"
         ]
       }
     },
@@ -243,12 +243,12 @@
       "safety": "动作轻柔，不压肚子、不强行拉直关节，刚吃完奶不做。",
       "question": "会伤到髋关节吗？顺势屈伸、不施力外展就不会，出现哭闹或弹响应停止并咨询医生。",
       "art": {
-        "main": "assets/ill/006.svg",
+        "main": "assets/art/panel_web/006-1.jpg",
         "panels": [
-          "assets/ill/panel/006-1.svg",
-          "assets/ill/panel/006-2.svg",
-          "assets/ill/panel/006-3.svg",
-          "assets/ill/panel/006-4.svg"
+          "assets/art/panel_web/006-1.jpg",
+          "assets/art/panel_web/006-2.jpg",
+          "assets/art/panel_web/006-3.jpg",
+          "assets/art/panel_web/006-4.jpg"
         ]
       }
     },
@@ -282,12 +282,12 @@
       "safety": "只轻提，不拉起身体；不戴戒指、不留长指甲。",
       "question": "宝宝只握一只手正常吗？3个月前左右差异常见，满4个月仍明显只用一侧可在体检时提出。",
       "art": {
-        "main": "assets/ill/007.svg",
+        "main": "assets/art/panel_web/007-1.jpg",
         "panels": [
-          "assets/ill/panel/007-1.svg",
-          "assets/ill/panel/007-2.svg",
-          "assets/ill/panel/007-3.svg",
-          "assets/ill/panel/007-4.svg"
+          "assets/art/panel_web/007-1.jpg",
+          "assets/art/panel_web/007-2.jpg",
+          "assets/art/panel_web/007-3.jpg",
+          "assets/art/panel_web/007-4.jpg"
         ]
       }
     },
@@ -321,12 +321,12 @@
       "safety": "始终护住头颈，不上下颠、不摇晃，不在走动时松手。",
       "question": "会不会抱惯？3个月前及时回应不会“惯坏”，反而让宝宝更有安全感。",
       "art": {
-        "main": "assets/ill/008.svg",
+        "main": "assets/art/panel_web/008-1.jpg",
         "panels": [
-          "assets/ill/panel/008-1.svg",
-          "assets/ill/panel/008-2.svg",
-          "assets/ill/panel/008-3.svg",
-          "assets/ill/panel/008-4.svg"
+          "assets/art/panel_web/008-1.jpg",
+          "assets/art/panel_web/008-2.jpg",
+          "assets/art/panel_web/008-3.jpg",
+          "assets/art/panel_web/008-4.jpg"
         ]
       }
     },
@@ -360,12 +360,12 @@
       "safety": "使用亚克力安全镜并固定牢靠，不用玻璃镜，不长时间强光直射。",
       "question": "宝宝知道镜子里是自己吗？真正认出自己要18个月左右，此前他只是在享受“有个小伙伴”。",
       "art": {
-        "main": "assets/ill/009.svg",
+        "main": "assets/art/panel_web/009-1.jpg",
         "panels": [
-          "assets/ill/panel/009-1.svg",
-          "assets/ill/panel/009-2.svg",
-          "assets/ill/panel/009-3.svg",
-          "assets/ill/panel/009-4.svg"
+          "assets/art/panel_web/009-1.jpg",
+          "assets/art/panel_web/009-2.jpg",
+          "assets/art/panel_web/009-3.jpg",
+          "assets/art/panel_web/009-4.jpg"
         ]
       }
     },
@@ -399,12 +399,12 @@
       "safety": "一手不离人，绝不离开去接电话；先放冷水再放热水，全程试温。",
       "question": "宝宝洗澡哭怎么办？先降低水声和光线，用毛巾裹住肩膀再入水，多数宝宝2-3周会适应。",
       "art": {
-        "main": "assets/ill/010.svg",
+        "main": "assets/art/panel_web/010-1.jpg",
         "panels": [
-          "assets/ill/panel/010-1.svg",
-          "assets/ill/panel/010-2.svg",
-          "assets/ill/panel/010-3.svg",
-          "assets/ill/panel/010-4.svg"
+          "assets/art/panel_web/010-1.jpg",
+          "assets/art/panel_web/010-2.jpg",
+          "assets/art/panel_web/010-3.jpg",
+          "assets/art/panel_web/010-4.jpg"
         ]
       }
     }

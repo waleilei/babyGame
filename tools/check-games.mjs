@@ -136,7 +136,7 @@ function main() {
   console.log(`✓ 目录  ${toc.chapters.length} 章 / ${toc.gameIndex.length} 个索引 / 2 篇`);
   console.log(`✓ 章节  ${chapters.length} 个文件 / ${allGames.length} 条游戏`);
   console.log(`✓ 字段  8 模块齐全 / 步骤 4 条 / 观察 2-3 条 / 能力枚举合法`);
-  console.log(`✓ 资源  130 主图 + 520 步骤图存在`);
+  console.log(`✓ 资源  520 张步骤图存在（首张兼作主图）`);
   console.log(`✓ 体积  toc ${(statSync(TOC_PATH).size / 1024).toFixed(1)} KB / 单章 ≤ 45 KB`);
   console.log(`✓ 索引  与章节内游戏逐条一致`);
 }

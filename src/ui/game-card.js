@@ -7,8 +7,8 @@ export function createGameCard(game, { onOpen }) {
     alt: '',
     loading: 'lazy',
     decoding: 'async',
-    width: '820',
-    height: '640',
+    width: '900',
+    height: '600',
   });
 
   image.addEventListener('error', () => {

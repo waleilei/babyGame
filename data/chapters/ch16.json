@@ -42,12 +42,12 @@
       "safety": "推车系好安全带，停车观察时踩刹车，不让他站起来。",
       "question": "坐不住怎么办？把寻宝目标换成他当下感兴趣的（挖掘机、快递车），成功率更高。",
       "art": {
-        "main": "assets/ill/118.svg",
+        "main": "assets/art/panel_web/118-1.jpg",
         "panels": [
-          "assets/ill/panel/118-1.svg",
-          "assets/ill/panel/118-2.svg",
-          "assets/ill/panel/118-3.svg",
-          "assets/ill/panel/118-4.svg"
+          "assets/art/panel_web/118-1.jpg",
+          "assets/art/panel_web/118-2.jpg",
+          "assets/art/panel_web/118-3.jpg",
+          "assets/art/panel_web/118-4.jpg"
         ]
       }
     },
@@ -81,12 +81,12 @@
       "safety": "全程牵手或抱稳，不靠车门，不在车厢走动。",
       "question": "太吵听不清？改成看窗外数“红色的车”，同样能稳定情绪。",
       "art": {
-        "main": "assets/ill/119.svg",
+        "main": "assets/art/panel_web/119-1.jpg",
         "panels": [
-          "assets/ill/panel/119-1.svg",
-          "assets/ill/panel/119-2.svg",
-          "assets/ill/panel/119-3.svg",
-          "assets/ill/panel/119-4.svg"
+          "assets/art/panel_web/119-1.jpg",
+          "assets/art/panel_web/119-2.jpg",
+          "assets/art/panel_web/119-3.jpg",
+          "assets/art/panel_web/119-4.jpg"
         ]
       }
     },
@@ -120,12 +120,12 @@
       "safety": "不玩餐具、不喝热饮，座位远离上菜口。",
       "question": "还是要看手机？等待包的效果取决于“只在这个时候出现”，平时收好，保持新鲜感。",
       "art": {
-        "main": "assets/ill/120.svg",
+        "main": "assets/art/panel_web/120-1.jpg",
         "panels": [
-          "assets/ill/panel/120-1.svg",
-          "assets/ill/panel/120-2.svg",
-          "assets/ill/panel/120-3.svg",
-          "assets/ill/panel/120-4.svg"
+          "assets/art/panel_web/120-1.jpg",
+          "assets/art/panel_web/120-2.jpg",
+          "assets/art/panel_web/120-3.jpg",
+          "assets/art/panel_web/120-4.jpg"
         ]
       }
     },
@@ -159,12 +159,12 @@
       "safety": "在封闭场地玩，远离马路，地面平整。",
       "question": "停不住总往前冲？把“停”练成游戏而不是命令，从1秒开始，成功就夸张表扬。",
       "art": {
-        "main": "assets/ill/121.svg",
+        "main": "assets/art/panel_web/121-1.jpg",
         "panels": [
-          "assets/ill/panel/121-1.svg",
-          "assets/ill/panel/121-2.svg",
-          "assets/ill/panel/121-3.svg",
-          "assets/ill/panel/121-4.svg"
+          "assets/art/panel_web/121-1.jpg",
+          "assets/art/panel_web/121-2.jpg",
+          "assets/art/panel_web/121-3.jpg",
+          "assets/art/panel_web/121-4.jpg"
         ]
       }
     },
@@ -198,12 +198,12 @@
       "safety": "避开正午暴晒，场地无台阶和车辆，穿防滑鞋。",
       "question": "阴天玩不了？改成“踩地砖线”或“踩落叶”，规则一样。",
       "art": {
-        "main": "assets/ill/122.svg",
+        "main": "assets/art/panel_web/122-1.jpg",
         "panels": [
-          "assets/ill/panel/122-1.svg",
-          "assets/ill/panel/122-2.svg",
-          "assets/ill/panel/122-3.svg",
-          "assets/ill/panel/122-4.svg"
+          "assets/art/panel_web/122-1.jpg",
+          "assets/art/panel_web/122-2.jpg",
+          "assets/art/panel_web/122-3.jpg",
+          "assets/art/panel_web/122-4.jpg"
         ]
       }
     }

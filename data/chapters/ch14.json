@@ -42,12 +42,12 @@
       "safety": "食物切成小于1厘米的条或块，坐直进食，全程看护。",
       "question": "只吃白米饭怎么办？新食物先“上桌不要求吃”，重复出现8-15次再鼓励尝试。",
       "art": {
-        "main": "assets/ill/107.svg",
+        "main": "assets/art/panel_web/107-1.jpg",
         "panels": [
-          "assets/ill/panel/107-1.svg",
-          "assets/ill/panel/107-2.svg",
-          "assets/ill/panel/107-3.svg",
-          "assets/ill/panel/107-4.svg"
+          "assets/art/panel_web/107-1.jpg",
+          "assets/art/panel_web/107-2.jpg",
+          "assets/art/panel_web/107-3.jpg",
+          "assets/art/panel_web/107-4.jpg"
         ]
       }
     },
@@ -81,12 +81,12 @@
       "safety": "全程看护，颗粒必须大于3厘米，玩后彻底收净。",
       "question": "直接上手抓怎么办？手也是工具，先允许，再把勺子递到他手里说“用这个试试”。",
       "art": {
-        "main": "assets/ill/108.svg",
+        "main": "assets/art/panel_web/108-1.jpg",
         "panels": [
-          "assets/ill/panel/108-1.svg",
-          "assets/ill/panel/108-2.svg",
-          "assets/ill/panel/108-3.svg",
-          "assets/ill/panel/108-4.svg"
+          "assets/art/panel_web/108-1.jpg",
+          "assets/art/panel_web/108-2.jpg",
+          "assets/art/panel_web/108-3.jpg",
+          "assets/art/panel_web/108-4.jpg"
         ]
       }
     },
@@ -120,12 +120,12 @@
       "safety": "用不易碎杯，水不装太满，不边跑边喝。",
       "question": "玩杯子不吃饭？干杯玩3次就收，把杯子拿走，餐桌上只保留“吃饭”这一件事。",
       "art": {
-        "main": "assets/ill/109.svg",
+        "main": "assets/art/panel_web/109-1.jpg",
         "panels": [
-          "assets/ill/panel/109-1.svg",
-          "assets/ill/panel/109-2.svg",
-          "assets/ill/panel/109-3.svg",
-          "assets/ill/panel/109-4.svg"
+          "assets/art/panel_web/109-1.jpg",
+          "assets/art/panel_web/109-2.jpg",
+          "assets/art/panel_web/109-3.jpg",
+          "assets/art/panel_web/109-4.jpg"
         ]
       }
     },
@@ -159,12 +159,12 @@
       "safety": "食物大小合适，不边说话边大笑进食。",
       "question": "说了也不吃？命名不是为了让他吃，是为了熟悉，熟悉感积累到一定程度才会尝试。",
       "art": {
-        "main": "assets/ill/110.svg",
+        "main": "assets/art/panel_web/110-1.jpg",
         "panels": [
-          "assets/ill/panel/110-1.svg",
-          "assets/ill/panel/110-2.svg",
-          "assets/ill/panel/110-3.svg",
-          "assets/ill/panel/110-4.svg"
+          "assets/art/panel_web/110-1.jpg",
+          "assets/art/panel_web/110-2.jpg",
+          "assets/art/panel_web/110-3.jpg",
+          "assets/art/panel_web/110-4.jpg"
         ]
       }
     },
@@ -198,12 +198,12 @@
       "safety": "坐直进食，食物软烂，不强迫进食，出现呛咳立即停止。",
       "question": "总把食物吐出来？可能是质地不接受，退回上一阶质地，隔几天再试，不追喂。",
       "art": {
-        "main": "assets/ill/111.svg",
+        "main": "assets/art/panel_web/111-1.jpg",
         "panels": [
-          "assets/ill/panel/111-1.svg",
-          "assets/ill/panel/111-2.svg",
-          "assets/ill/panel/111-3.svg",
-          "assets/ill/panel/111-4.svg"
+          "assets/art/panel_web/111-1.jpg",
+          "assets/art/panel_web/111-2.jpg",
+          "assets/art/panel_web/111-3.jpg",
+          "assets/art/panel_web/111-4.jpg"
         ]
       }
     },
@@ -237,12 +237,12 @@
       "safety": "不端热汤、不碰刀具，用不易碎餐具。",
       "question": "帮倒忙还要让他做吗？要，把任务限定在他能胜任的一小块，完成感比结果重要。",
       "art": {
-        "main": "assets/ill/112.svg",
+        "main": "assets/art/panel_web/112-1.jpg",
         "panels": [
-          "assets/ill/panel/112-1.svg",
-          "assets/ill/panel/112-2.svg",
-          "assets/ill/panel/112-3.svg",
-          "assets/ill/panel/112-4.svg"
+          "assets/art/panel_web/112-1.jpg",
+          "assets/art/panel_web/112-2.jpg",
+          "assets/art/panel_web/112-3.jpg",
+          "assets/art/panel_web/112-4.jpg"
         ]
       }
     }

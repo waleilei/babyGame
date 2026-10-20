@@ -13,7 +13,7 @@ npm run verify
 npm run data && npm run check && npm test
 ```
 
-- `npm run data`：从 `../books/0-3-game-book/manuscript/` 提取 130 条游戏，写出 `data/toc.json`、14 个章节 JSON，并复制 130 主图 + 520 步骤图到 `assets/ill/`。任一硬校验失败时不写出文件。
+- `npm run data`：从 `../books/0-3-game-book/manuscript/` 提取 130 条游戏，写出 `data/toc.json`、14 个章节 JSON，并把 `assets/art/panel_web/` 的 520 张水彩步骤图复制到本项目（每游戏 4 张，首张兼作卡片主图）。任一硬校验失败时不写出文件。
 - `npm run check`：独立读取产物，复检 130 条、编号连续、8 模块、能力枚举、插画存在、目录索引与章节游戏逐条一致、体积预算。
 - `npm test`：`node --test` 覆盖数据管线、仓储、领域纯函数与发布预算；共 37 条测试。
 
@@ -66,7 +66,9 @@ assets/
 |---|---|
 | `index.html` | `Cache-Control: no-cache` |
 | `data/toc.json`、`data/chapters/*.json` | `Cache-Control: public, max-age=300` |
-| `assets/ill/**` | `Cache-Control: public, max-age=31536000, immutable` |
+| `assets/art/panel_web/**` | `Cache-Control: public, max-age=31536000, immutable` |
+
+水彩步骤图共 520 张（900×600 JPG，约 65 MB），每游戏 4 张，首张兼作卡片主图。首屏不请求插画；卡片图片使用 `loading="lazy"` 与固定 3:2 比例，章节页按需加载。
 | `src/**/*.js`、`styles/*.css` | `Cache-Control: public, max-age=300` |
 
 数据更新后最多 5 分钟生效；如需立即生效，可在发布时给 `data/*.json` 加版本查询参数，或刷新 CDN 缓存。插画文件名含游戏编号，内容变更时应使用新版本目录或刷新 CDN，不要复用旧缓存。
@@ -76,7 +78,7 @@ assets/
 ### 自动化
 
 - [x] `data/toc.json` < 20 KB（实测约 13.8 KB）
-- [x] 单章 JSON < 45 KB（实测最大约 18.0 KB）
+- [x] 单章 JSON < 45 KB（实测最大约 18.3 KB）
 - [x] 运行期 JS 未压缩 < 40 KB（实测 39,693 字节，约 38.8 KB）
 - [x] 130 条游戏、14 章、2 篇、编号 01-130 连续唯一
 - [x] 目录索引与章节游戏逐条一致
@@ -120,7 +122,7 @@ assets/
 
 ## 5. 回滚
 
-部署产物与 Git 提交一一对应。回滚时重新部署上一个通过的提交中的 `index.html + styles/ + src/ + data/ + assets/` 即可；不要单独手改 `data/*.json` 或 `assets/ill/**`，它们是构建产物。
+部署产物与 Git 提交一一对应。回滚时重新部署上一个通过的提交中的 `index.html + styles/ + src/ + data/ + assets/` 即可；不要单独手改 `data/*.json` 或 `assets/art/panel_web/**`，它们是构建产物。
 
 ## 6. 数据更新流程
 
@@ -128,4 +130,4 @@ assets/
 2. 运行 `npm run data`。
 3. 运行 `npm run check`，失败时按输出的游戏编号与缺失项修稿。
 4. 运行 `npm test`，确认目录索引与章节数据对账通过。
-5. 提交 `data/` 与 `assets/ill/` 的变更；页面代码无需改动。
+5. 提交 `data/` 与 `assets/art/panel_web/` 的变更；页面代码无需改动。

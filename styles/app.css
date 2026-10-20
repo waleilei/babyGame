@@ -345,7 +345,7 @@
 }
 
 .skeleton--card {
-  aspect-ratio: 820 / 720;
+  aspect-ratio: 3 / 2;
 }
 
 .skeleton-grid {
@@ -565,7 +565,7 @@
 }
 
 .card__art {
-  aspect-ratio: 820 / 640;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   background: linear-gradient(135deg, var(--art-1), var(--art-2));
 }
@@ -773,7 +773,7 @@
 
 .game-dialog__hero {
   margin: 0 -20px 20px;
-  aspect-ratio: 820 / 640;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   background: linear-gradient(135deg, var(--art-1), var(--art-2));
 }
@@ -889,7 +889,7 @@
 }
 
 .panel {
-  aspect-ratio: 400 / 300;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 10px;

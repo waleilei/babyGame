@@ -42,12 +42,12 @@
       "safety": "玩具无小零件，不把玩具塞进耳鼻口。",
       "question": "演了还是怕医生？熟悉感需要多次预演，出发前再演一遍，并明确告诉他“会做什么、什么时候结束”。",
       "art": {
-        "main": "assets/ill/123.svg",
+        "main": "assets/art/panel_web/123-1.jpg",
         "panels": [
-          "assets/ill/panel/123-1.svg",
-          "assets/ill/panel/123-2.svg",
-          "assets/ill/panel/123-3.svg",
-          "assets/ill/panel/123-4.svg"
+          "assets/art/panel_web/123-1.jpg",
+          "assets/art/panel_web/123-2.jpg",
+          "assets/art/panel_web/123-3.jpg",
+          "assets/art/panel_web/123-4.jpg"
         ]
       }
     },
@@ -81,12 +81,12 @@
       "safety": "不欺骗“一点都不疼”，不强行按压，接种后按要求留观。",
       "question": "数到三还在哭？哭是正常反应，重点不是不哭，而是让他知道“疼有尽头”。",
       "art": {
-        "main": "assets/ill/124.svg",
+        "main": "assets/art/panel_web/124-1.jpg",
         "panels": [
-          "assets/ill/panel/124-1.svg",
-          "assets/ill/panel/124-2.svg",
-          "assets/ill/panel/124-3.svg",
-          "assets/ill/panel/124-4.svg"
+          "assets/art/panel_web/124-1.jpg",
+          "assets/art/panel_web/124-2.jpg",
+          "assets/art/panel_web/124-3.jpg",
+          "assets/art/panel_web/124-4.jpg"
         ]
       }
     },
@@ -120,12 +120,12 @@
       "safety": "严格按医嘱剂量，不混在奶里（除非医生同意），不捏鼻子灌药，药品放高处锁好。",
       "question": "吐出来要不要补？不要自行补服，记录呕吐时间并咨询医生或药师。",
       "art": {
-        "main": "assets/ill/125.svg",
+        "main": "assets/art/panel_web/125-1.jpg",
         "panels": [
-          "assets/ill/panel/125-1.svg",
-          "assets/ill/panel/125-2.svg",
-          "assets/ill/panel/125-3.svg",
-          "assets/ill/panel/125-4.svg"
+          "assets/art/panel_web/125-1.jpg",
+          "assets/art/panel_web/125-2.jpg",
+          "assets/art/panel_web/125-3.jpg",
+          "assets/art/panel_web/125-4.jpg"
         ]
       }
     },
@@ -159,12 +159,12 @@
       "safety": "别针不放在孩子能拿到的地方，用贴纸替代更安全。",
       "question": "会不会变成物质奖励？重点是“命名勇气”而不是“交换条件”，尽量不给玩具和零食。",
       "art": {
-        "main": "assets/ill/126.svg",
+        "main": "assets/art/panel_web/126-1.jpg",
         "panels": [
-          "assets/ill/panel/126-1.svg",
-          "assets/ill/panel/126-2.svg",
-          "assets/ill/panel/126-3.svg",
-          "assets/ill/panel/126-4.svg"
+          "assets/art/panel_web/126-1.jpg",
+          "assets/art/panel_web/126-2.jpg",
+          "assets/art/panel_web/126-3.jpg",
+          "assets/art/panel_web/126-4.jpg"
         ]
       }
     }

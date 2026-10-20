@@ -50,12 +50,12 @@
       "safety": "不用学步车；地面不滑、前方无障碍；纸箱不能高过胸口。",
       "question": "用学步车不是更快吗？学步车有翻倒和碰撞风险，且不利于髋部发力，不推荐使用。",
       "art": {
-        "main": "assets/ill/035.svg",
+        "main": "assets/art/panel_web/035-1.jpg",
         "panels": [
-          "assets/ill/panel/035-1.svg",
-          "assets/ill/panel/035-2.svg",
-          "assets/ill/panel/035-3.svg",
-          "assets/ill/panel/035-4.svg"
+          "assets/art/panel_web/035-1.jpg",
+          "assets/art/panel_web/035-2.jpg",
+          "assets/art/panel_web/035-3.jpg",
+          "assets/art/panel_web/035-4.jpg"
         ]
       }
     },
@@ -89,12 +89,12 @@
       "safety": "不用塑料袋、不堆太高；周围清空硬物，全程在旁。",
       "question": "宝宝直接绕过去怎么办？绕路也是解决问题的能力，把玩具放到必须翻越的位置即可。",
       "art": {
-        "main": "assets/ill/036.svg",
+        "main": "assets/art/panel_web/036-1.jpg",
         "panels": [
-          "assets/ill/panel/036-1.svg",
-          "assets/ill/panel/036-2.svg",
-          "assets/ill/panel/036-3.svg",
-          "assets/ill/panel/036-4.svg"
+          "assets/art/panel_web/036-1.jpg",
+          "assets/art/panel_web/036-2.jpg",
+          "assets/art/panel_web/036-3.jpg",
+          "assets/art/panel_web/036-4.jpg"
         ]
       }
     },
@@ -128,12 +128,12 @@
       "safety": "杯口无毛刺，不套在头上，玩后收好。",
       "question": "只会拆不会套？拆也是理解空间，先让他拆，再慢慢示范套。",
       "art": {
-        "main": "assets/ill/037.svg",
+        "main": "assets/art/panel_web/037-1.jpg",
         "panels": [
-          "assets/ill/panel/037-1.svg",
-          "assets/ill/panel/037-2.svg",
-          "assets/ill/panel/037-3.svg",
-          "assets/ill/panel/037-4.svg"
+          "assets/art/panel_web/037-1.jpg",
+          "assets/art/panel_web/037-2.jpg",
+          "assets/art/panel_web/037-3.jpg",
+          "assets/art/panel_web/037-4.jpg"
         ]
       }
     },
@@ -167,12 +167,12 @@
       "safety": "不用订书钉、胶带外露；纸袋不套头。",
       "question": "宝宝吃包装纸怎么办？换成大张牛皮纸，玩前去掉胶带，全程看护。",
       "art": {
-        "main": "assets/ill/038.svg",
+        "main": "assets/art/panel_web/038-1.jpg",
         "panels": [
-          "assets/ill/panel/038-1.svg",
-          "assets/ill/panel/038-2.svg",
-          "assets/ill/panel/038-3.svg",
-          "assets/ill/panel/038-4.svg"
+          "assets/art/panel_web/038-1.jpg",
+          "assets/art/panel_web/038-2.jpg",
+          "assets/art/panel_web/038-3.jpg",
+          "assets/art/panel_web/038-4.jpg"
         ]
       }
     },
@@ -206,12 +206,12 @@
       "safety": "篮子无锐边，球不能太小，周围无易碎品。",
       "question": "总往地上扔怎么办？扔是手臂练习，先允许扔，再用“投进筐”的游戏把扔变成目标。",
       "art": {
-        "main": "assets/ill/039.svg",
+        "main": "assets/art/panel_web/039-1.jpg",
         "panels": [
-          "assets/ill/panel/039-1.svg",
-          "assets/ill/panel/039-2.svg",
-          "assets/ill/panel/039-3.svg",
-          "assets/ill/panel/039-4.svg"
+          "assets/art/panel_web/039-1.jpg",
+          "assets/art/panel_web/039-2.jpg",
+          "assets/art/panel_web/039-3.jpg",
+          "assets/art/panel_web/039-4.jpg"
         ]
       }
     },
@@ -245,12 +245,12 @@
       "safety": "动作幅度小，不在床上站立做。",
       "question": "宝宝只学喜欢的动作？正常，先从他感兴趣的入手，模仿能力建立后再扩展。",
       "art": {
-        "main": "assets/ill/040.svg",
+        "main": "assets/art/panel_web/040-1.jpg",
         "panels": [
-          "assets/ill/panel/040-1.svg",
-          "assets/ill/panel/040-2.svg",
-          "assets/ill/panel/040-3.svg",
-          "assets/ill/panel/040-4.svg"
+          "assets/art/panel_web/040-1.jpg",
+          "assets/art/panel_web/040-2.jpg",
+          "assets/art/panel_web/040-3.jpg",
+          "assets/art/panel_web/040-4.jpg"
         ]
       }
     },
@@ -284,12 +284,12 @@
       "safety": "不戳眼睛和耳朵，动作轻。",
       "question": "总指错怎么办？指错也是参与，笑着说“这是嘴巴，鼻子在这里”，不纠正过头。",
       "art": {
-        "main": "assets/ill/041.svg",
+        "main": "assets/art/panel_web/041-1.jpg",
         "panels": [
-          "assets/ill/panel/041-1.svg",
-          "assets/ill/panel/041-2.svg",
-          "assets/ill/panel/041-3.svg",
-          "assets/ill/panel/041-4.svg"
+          "assets/art/panel_web/041-1.jpg",
+          "assets/art/panel_web/041-2.jpg",
+          "assets/art/panel_web/041-3.jpg",
+          "assets/art/panel_web/041-4.jpg"
         ]
       }
     },
@@ -323,12 +323,12 @@
       "safety": "不用指令引导宝宝接近危险物；不在哭闹时训练。",
       "question": "不听指令是不乖吗？10-12个月理解有限，先确保指令短、有动作示范，不配合就换个时间。",
       "art": {
-        "main": "assets/ill/042.svg",
+        "main": "assets/art/panel_web/042-1.jpg",
         "panels": [
-          "assets/ill/panel/042-1.svg",
-          "assets/ill/panel/042-2.svg",
-          "assets/ill/panel/042-3.svg",
-          "assets/ill/panel/042-4.svg"
+          "assets/art/panel_web/042-1.jpg",
+          "assets/art/panel_web/042-2.jpg",
+          "assets/art/panel_web/042-3.jpg",
+          "assets/art/panel_web/042-4.jpg"
         ]
       }
     },
@@ -362,12 +362,12 @@
       "safety": "颜料必须可水洗、无毒，全程看护不入口，铺好防污布。",
       "question": "宝宝吃颜料怎么办？用酸奶加食用色素替代，或改在洗澡时用清水画。",
       "art": {
-        "main": "assets/ill/043.svg",
+        "main": "assets/art/panel_web/043-1.jpg",
         "panels": [
-          "assets/ill/panel/043-1.svg",
-          "assets/ill/panel/043-2.svg",
-          "assets/ill/panel/043-3.svg",
-          "assets/ill/panel/043-4.svg"
+          "assets/art/panel_web/043-1.jpg",
+          "assets/art/panel_web/043-2.jpg",
+          "assets/art/panel_web/043-3.jpg",
+          "assets/art/panel_web/043-4.jpg"
         ]
       }
     },
@@ -401,12 +401,12 @@
       "safety": "积木轻软、无尖角，不在玻璃桌边玩。",
       "question": "总是推倒怎么办？推倒也是实验，先陪他推，再示范搭，两个游戏交替玩。",
       "art": {
-        "main": "assets/ill/044.svg",
+        "main": "assets/art/panel_web/044-1.jpg",
         "panels": [
-          "assets/ill/panel/044-1.svg",
-          "assets/ill/panel/044-2.svg",
-          "assets/ill/panel/044-3.svg",
-          "assets/ill/panel/044-4.svg"
+          "assets/art/panel_web/044-1.jpg",
+          "assets/art/panel_web/044-2.jpg",
+          "assets/art/panel_web/044-3.jpg",
+          "assets/art/panel_web/044-4.jpg"
         ]
       }
     },
@@ -440,12 +440,12 @@
       "safety": "地面清空，音量适中，不突然吓到宝宝。",
       "question": "宝宝听不懂“停”？先用手势和身体停住示范，节奏游戏本身就是听指令的练习。",
       "art": {
-        "main": "assets/ill/045.svg",
+        "main": "assets/art/panel_web/045-1.jpg",
         "panels": [
-          "assets/ill/panel/045-1.svg",
-          "assets/ill/panel/045-2.svg",
-          "assets/ill/panel/045-3.svg",
-          "assets/ill/panel/045-4.svg"
+          "assets/art/panel_web/045-1.jpg",
+          "assets/art/panel_web/045-2.jpg",
+          "assets/art/panel_web/045-3.jpg",
+          "assets/art/panel_web/045-4.jpg"
         ]
       }
     },
@@ -479,12 +479,12 @@
       "safety": "坐直系安全带，不边走边吃，勺子不插入口中太深。",
       "question": "弄得太脏要不要喂？10-12个月弄脏是学习成本，铺好报纸，允许他探索10分钟再收尾。",
       "art": {
-        "main": "assets/ill/046.svg",
+        "main": "assets/art/panel_web/046-1.jpg",
         "panels": [
-          "assets/ill/panel/046-1.svg",
-          "assets/ill/panel/046-2.svg",
-          "assets/ill/panel/046-3.svg",
-          "assets/ill/panel/046-4.svg"
+          "assets/art/panel_web/046-1.jpg",
+          "assets/art/panel_web/046-2.jpg",
+          "assets/art/panel_web/046-3.jpg",
+          "assets/art/panel_web/046-4.jpg"
         ]
       }
     },
@@ -518,12 +518,12 @@
       "safety": "袜子不能过紧，不在站立时单脚脱袜。",
       "question": "脱了就往嘴里放？正常探索，脱完立刻收走，换成可以咬的牙胶。",
       "art": {
-        "main": "assets/ill/047.svg",
+        "main": "assets/art/panel_web/047-1.jpg",
         "panels": [
-          "assets/ill/panel/047-1.svg",
-          "assets/ill/panel/047-2.svg",
-          "assets/ill/panel/047-3.svg",
-          "assets/ill/panel/047-4.svg"
+          "assets/art/panel_web/047-1.jpg",
+          "assets/art/panel_web/047-2.jpg",
+          "assets/art/panel_web/047-3.jpg",
+          "assets/art/panel_web/047-4.jpg"
         ]
       }
     },
@@ -557,12 +557,12 @@
       "safety": "不裹紧、不盖脸，速度慢，刚吃完奶不做。",
       "question": "会晕吗？幅度小、次数少不会，观察表情，出现不适立即停。",
       "art": {
-        "main": "assets/ill/048.svg",
+        "main": "assets/art/panel_web/048-1.jpg",
         "panels": [
-          "assets/ill/panel/048-1.svg",
-          "assets/ill/panel/048-2.svg",
-          "assets/ill/panel/048-3.svg",
-          "assets/ill/panel/048-4.svg"
+          "assets/art/panel_web/048-1.jpg",
+          "assets/art/panel_web/048-2.jpg",
+          "assets/art/panel_web/048-3.jpg",
+          "assets/art/panel_web/048-4.jpg"
         ]
       }
     }

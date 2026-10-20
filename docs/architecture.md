@@ -66,7 +66,7 @@
 │        │ tools/extract-games.mjs                                     │
 │        ▼                                                             │
 │  data/toc.json  +  data/chapters/ch05.json … ch18.json               │
-│  assets/ill/**                                                       │
+│  assets/art/panel_web/**                                             │
 │        │ tools/check-games.mjs（独立复检）                             │
 └────────┼─────────────────────────────────────────────────────────────┘
          │ 静态文件（HTTP）
@@ -157,7 +157,7 @@ babyGame/
 ├── data/
 │   ├── toc.json                  # 目录 + 130 条游戏名索引
 │   └── chapters/ch05.json … ch18.json
-├── assets/ill/**                 # 130 主图 + 520 步骤图（复制而来）
+├── assets/art/panel_web/**       # 520 张水彩步骤图（每游戏 4 张，首张兼作主图）
 ├── tools/
 │   ├── extract-games.mjs
 │   └── check-games.mjs
@@ -475,7 +475,7 @@ export function el(tag, props = {}, children = []) {
 |---|---|
 | HTML | `Cache-Control: no-cache`（托管默认即可） |
 | `data/*.json` | 短缓存（5 分钟）或按 `bookVersion` 加查询参数；数据更新需刷新 |
-| `assets/ill/**` | 长缓存（1 年）；文件名含编号，内容变更时同步换版本目录 |
+| `assets/art/panel_web/**` | 长缓存（1 年）；文件名含编号，内容变更时同步换版本目录 |
 | JS/CSS | 短缓存；v0.1 不做 hash 文件名 |
 
 ### 8.4 部署
@@ -552,7 +552,7 @@ export function el(tag, props = {}, children = []) {
       "down": "……",
       "safety": "……",
       "question": "……",
-      "art": { "main": "assets/ill/001.svg", "panels": ["assets/ill/panel/001-1.svg"] }
+      "art": { "main": "assets/art/panel_web/001-1.jpg", "panels": ["assets/art/panel_web/001-1.jpg", "…-2.jpg", "…-3.jpg", "…-4.jpg"] }
     }
   ]
 }
@@ -789,7 +789,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | 风险 | 影响 | 应对 |
 |---|---|---|
 | 稿件格式变化 | 提取失败 | 校验器定位到编号；JSON 契约隔离浏览器代码 |
-| SVG 体积或缺失 | 图文错位 | 构建期检查存在性；`onerror` 色块兜底；固定宽高比 |
+| 水彩 JPG 体积或缺失 | 图文错位 | 构建期检查存在性；`onerror` 色块兜底；固定宽高比 |
 | 预取被误解为加载多章 | 需求争议 | 预取只暖缓存、不渲染；可一行关闭 |
 | 无框架导致页面耦合 | 维护成本上升 | 依赖矩阵 + 页面对象契约 + review |
 | 静态托管缓存旧 JSON | 内容不更新 | 短缓存或 `bookVersion` 查询参数 |

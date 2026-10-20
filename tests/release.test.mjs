@@ -54,7 +54,7 @@ test('章节数据中的插画路径相对页面文档解析', () => {
     const chapter = JSON.parse(readFileSync(join(ROOT, 'data/chapters', file), 'utf8'));
     for (const game of chapter.games) {
       for (const art of [game.art.main, ...game.art.panels]) {
-        assert.ok(art.startsWith('assets/ill/'), `${game.id} 插画路径异常：${art}`);
+        assert.ok(art.startsWith('assets/art/panel_web/'), `${game.id} 插画路径异常：${art}`);
         assert.ok(existsSync(join(ROOT, art)), `${game.id} 插画缺失：${art}`);
       }
     }

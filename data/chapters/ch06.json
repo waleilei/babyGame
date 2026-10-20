@@ -50,12 +50,12 @@
       "safety": "在地垫上做，周围不放枕头被子；不硬掰手臂和脖子。",
       "question": "只会往一边翻要紧吗？一侧熟练后再练另一侧即可，满7个月仍完全不会翻身可在体检时提出。",
       "art": {
-        "main": "assets/ill/011.svg",
+        "main": "assets/art/panel_web/011-1.jpg",
         "panels": [
-          "assets/ill/panel/011-1.svg",
-          "assets/ill/panel/011-2.svg",
-          "assets/ill/panel/011-3.svg",
-          "assets/ill/panel/011-4.svg"
+          "assets/art/panel_web/011-1.jpg",
+          "assets/art/panel_web/011-2.jpg",
+          "assets/art/panel_web/011-3.jpg",
+          "assets/art/panel_web/011-4.jpg"
         ]
       }
     },
@@ -89,12 +89,12 @@
       "safety": "全程看护，口鼻不被堵住，流口水及时擦，出现塌腰低头就休息。",
       "question": "趴多久合适？以宝宝不烦躁为准，每次1-2分钟，一天累计20分钟以上即可。",
       "art": {
-        "main": "assets/ill/012.svg",
+        "main": "assets/art/panel_web/012-1.jpg",
         "panels": [
-          "assets/ill/panel/012-1.svg",
-          "assets/ill/panel/012-2.svg",
-          "assets/ill/panel/012-3.svg",
-          "assets/ill/panel/012-4.svg"
+          "assets/art/panel_web/012-1.jpg",
+          "assets/art/panel_web/012-2.jpg",
+          "assets/art/panel_web/012-3.jpg",
+          "assets/art/panel_web/012-4.jpg"
         ]
       }
     },
@@ -128,12 +128,12 @@
       "safety": "积木大于3厘米、无小零件；玩前检查有无破损。",
       "question": "总用一只手正常吗？6个月前有偏好很常见，若另一侧始终不主动使用，体检时提出。",
       "art": {
-        "main": "assets/ill/013.svg",
+        "main": "assets/art/panel_web/013-1.jpg",
         "panels": [
-          "assets/ill/panel/013-1.svg",
-          "assets/ill/panel/013-2.svg",
-          "assets/ill/panel/013-3.svg",
-          "assets/ill/panel/013-4.svg"
+          "assets/art/panel_web/013-1.jpg",
+          "assets/art/panel_web/013-2.jpg",
+          "assets/art/panel_web/013-3.jpg",
+          "assets/art/panel_web/013-4.jpg"
         ]
       }
     },
@@ -167,12 +167,12 @@
       "safety": "全程看护，防止把纸塞进嘴；不用带香精的湿巾和印刷油墨纸。",
       "question": "吃纸怎么办？这个月龄用嘴探索很正常，及时换成可入口的纱布，纸类只在他清醒且你在旁时给。",
       "art": {
-        "main": "assets/ill/014.svg",
+        "main": "assets/art/panel_web/014-1.jpg",
         "panels": [
-          "assets/ill/panel/014-1.svg",
-          "assets/ill/panel/014-2.svg",
-          "assets/ill/panel/014-3.svg",
-          "assets/ill/panel/014-4.svg"
+          "assets/art/panel_web/014-1.jpg",
+          "assets/art/panel_web/014-2.jpg",
+          "assets/art/panel_web/014-3.jpg",
+          "assets/art/panel_web/014-4.jpg"
         ]
       }
     },
@@ -206,12 +206,12 @@
       "safety": "手帕不盖住口鼻超过2秒，宝宝害怕就立刻停止。",
       "question": "遮宝宝脸会吓到他吗？6个月前部分宝宝会紧张，先只遮自己，等他笑出声再试。",
       "art": {
-        "main": "assets/ill/015.svg",
+        "main": "assets/art/panel_web/015-1.jpg",
         "panels": [
-          "assets/ill/panel/015-1.svg",
-          "assets/ill/panel/015-2.svg",
-          "assets/ill/panel/015-3.svg",
-          "assets/ill/panel/015-4.svg"
+          "assets/art/panel_web/015-1.jpg",
+          "assets/art/panel_web/015-2.jpg",
+          "assets/art/panel_web/015-3.jpg",
+          "assets/art/panel_web/015-4.jpg"
         ]
       }
     },
@@ -245,12 +245,12 @@
       "safety": "不强行掰脚趾，室温低时先暖脚，袜子里的线头要剪掉。",
       "question": "吃脚要阻止吗？不用，这是正常的身体探索，保持脚部清洁即可。",
       "art": {
-        "main": "assets/ill/016.svg",
+        "main": "assets/art/panel_web/016-1.jpg",
         "panels": [
-          "assets/ill/panel/016-1.svg",
-          "assets/ill/panel/016-2.svg",
-          "assets/ill/panel/016-3.svg",
-          "assets/ill/panel/016-4.svg"
+          "assets/art/panel_web/016-1.jpg",
+          "assets/art/panel_web/016-2.jpg",
+          "assets/art/panel_web/016-3.jpg",
+          "assets/art/panel_web/016-4.jpg"
         ]
       }
     },
@@ -284,12 +284,12 @@
       "safety": "袋口必须缝死，线头剪净；不用绿豆、米粒等小颗粒填充。",
       "question": "宝宝只拍不摸正常吗？拍也是探索，示范用手指捏一捏，他会模仿。",
       "art": {
-        "main": "assets/ill/017.svg",
+        "main": "assets/art/panel_web/017-1.jpg",
         "panels": [
-          "assets/ill/panel/017-1.svg",
-          "assets/ill/panel/017-2.svg",
-          "assets/ill/panel/017-3.svg",
-          "assets/ill/panel/017-4.svg"
+          "assets/art/panel_web/017-1.jpg",
+          "assets/art/panel_web/017-2.jpg",
+          "assets/art/panel_web/017-3.jpg",
+          "assets/art/panel_web/017-4.jpg"
         ]
       }
     },
@@ -323,12 +323,12 @@
       "safety": "头明显后垂立即停止；不猛拉、不甩手腕；刚吃完奶不做。",
       "question": "可以练坐了吗？拉坐是练力量，不是让宝宝久坐，6个月前每次坐起不超过几秒。",
       "art": {
-        "main": "assets/ill/018.svg",
+        "main": "assets/art/panel_web/018-1.jpg",
         "panels": [
-          "assets/ill/panel/018-1.svg",
-          "assets/ill/panel/018-2.svg",
-          "assets/ill/panel/018-3.svg",
-          "assets/ill/panel/018-4.svg"
+          "assets/art/panel_web/018-1.jpg",
+          "assets/art/panel_web/018-2.jpg",
+          "assets/art/panel_web/018-3.jpg",
+          "assets/art/panel_web/018-4.jpg"
         ]
       }
     },
@@ -362,12 +362,12 @@
       "safety": "罐盖必须胶带封死，玩前检查；声音不贴耳，玩后收进高处。",
       "question": "可以用矿泉水瓶吗？可以，但要去标签、装满一半、瓶盖用胶封死，防止误开。",
       "art": {
-        "main": "assets/ill/019.svg",
+        "main": "assets/art/panel_web/019-1.jpg",
         "panels": [
-          "assets/ill/panel/019-1.svg",
-          "assets/ill/panel/019-2.svg",
-          "assets/ill/panel/019-3.svg",
-          "assets/ill/panel/019-4.svg"
+          "assets/art/panel_web/019-1.jpg",
+          "assets/art/panel_web/019-2.jpg",
+          "assets/art/panel_web/019-3.jpg",
+          "assets/art/panel_web/019-4.jpg"
         ]
       }
     },
@@ -401,12 +401,12 @@
       "safety": "镜子固定牢靠，边缘无锐角；不把镜子放在婴儿床内。",
       "question": "宝宝拍镜子要阻止吗？不用，拍打是正常的社交探索，注意别让镜子倒下。",
       "art": {
-        "main": "assets/ill/020.svg",
+        "main": "assets/art/panel_web/020-1.jpg",
         "panels": [
-          "assets/ill/panel/020-1.svg",
-          "assets/ill/panel/020-2.svg",
-          "assets/ill/panel/020-3.svg",
-          "assets/ill/panel/020-4.svg"
+          "assets/art/panel_web/020-1.jpg",
+          "assets/art/panel_web/020-2.jpg",
+          "assets/art/panel_web/020-3.jpg",
+          "assets/art/panel_web/020-4.jpg"
         ]
       }
     },
@@ -440,12 +440,12 @@
       "safety": "护住胸颈，不离手、不快速俯冲，刚吃完奶不做。",
       "question": "会吓到宝宝吗？动作慢、幅度小、全程说话，多数宝宝喜欢；出现紧张就降低幅度。",
       "art": {
-        "main": "assets/ill/021.svg",
+        "main": "assets/art/panel_web/021-1.jpg",
         "panels": [
-          "assets/ill/panel/021-1.svg",
-          "assets/ill/panel/021-2.svg",
-          "assets/ill/panel/021-3.svg",
-          "assets/ill/panel/021-4.svg"
+          "assets/art/panel_web/021-1.jpg",
+          "assets/art/panel_web/021-2.jpg",
+          "assets/art/panel_web/021-3.jpg",
+          "assets/art/panel_web/021-4.jpg"
         ]
       }
     },
@@ -479,12 +479,12 @@
       "safety": "不把手指伸进宝宝嘴里，不强迫模仿。",
       "question": "流口水变多是坏事吗？4-6个月唾液腺发育加快，加上要长牙，流口水正常，注意擦干防疹。",
       "art": {
-        "main": "assets/ill/022.svg",
+        "main": "assets/art/panel_web/022-1.jpg",
         "panels": [
-          "assets/ill/panel/022-1.svg",
-          "assets/ill/panel/022-2.svg",
-          "assets/ill/panel/022-3.svg",
-          "assets/ill/panel/022-4.svg"
+          "assets/art/panel_web/022-1.jpg",
+          "assets/art/panel_web/022-2.jpg",
+          "assets/art/panel_web/022-3.jpg",
+          "assets/art/panel_web/022-4.jpg"
         ]
       }
     }

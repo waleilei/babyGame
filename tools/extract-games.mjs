@@ -121,6 +121,7 @@ function parseGame(lines, index) {
   const [age, ability, duration, place, materials, people] = info;
   const ageRange = parseAgeRange(age);
   const artId = padId(id);
+  const panels = [1, 2, 3, 4].map((n) => `assets/art/panel_web/${artId}-${n}.jpg`);
   const game = {
     id,
     name,
@@ -139,8 +140,9 @@ function parseGame(lines, index) {
     safety: fields['安全'] ?? '',
     question: fields['问'] ?? '',
     art: {
-      main: `assets/ill/${artId}.svg`,
-      panels: [1, 2, 3, 4].map((n) => `assets/ill/panel/${artId}-${n}.svg`),
+      // web 版为 900×600 水彩步骤图，首张兼作卡片主图。
+      main: panels[0],
+      panels,
     },
   };
 
@@ -472,7 +474,7 @@ export function writeDataset(dataset, { outDir, sourceDir }) {
 
   let copied = 0;
   for (const game of dataset.games) {
-    for (const relativePath of [game.art.main, ...game.art.panels]) {
+    for (const relativePath of new Set([game.art.main, ...game.art.panels])) {
       const source = join(sourceDir, relativePath);
       const target = join(outDir, relativePath);
       mkdirSync(dirname(target), { recursive: true });
@@ -513,7 +515,7 @@ export function main() {
   console.log(`校验    0 error`);
   console.log(`写出    data/toc.json ${formatBytes(tocSize)}`);
   console.log(`        data/chapters/ch05.json … ch18.json`);
-  console.log(`插画    ${result.artwork} 个文件 → assets/ill`);
+  console.log(`插画    ${result.artwork} 张步骤图 → assets/art/panel_web`);
   console.log(`耗时    ${((performance.now() - startedAt) / 1000).toFixed(2)}s`);
 }
 

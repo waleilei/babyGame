@@ -42,12 +42,12 @@
       "safety": "一手始终护住身体，不把宝宝单独留在尿布台，湿巾不擦眼睛。",
       "question": "换尿布总翻身怎么办？给一个专属“换尿布玩具”，只在这时出现，比强行按住有效。",
       "art": {
-        "main": "assets/ill/101.svg",
+        "main": "assets/art/panel_web/101-1.jpg",
         "panels": [
-          "assets/ill/panel/101-1.svg",
-          "assets/ill/panel/101-2.svg",
-          "assets/ill/panel/101-3.svg",
-          "assets/ill/panel/101-4.svg"
+          "assets/art/panel_web/101-1.jpg",
+          "assets/art/panel_web/101-2.jpg",
+          "assets/art/panel_web/101-3.jpg",
+          "assets/art/panel_web/101-4.jpg"
         ]
       }
     },
@@ -81,12 +81,12 @@
       "safety": "用无泪配方，泡泡不入口、不进眼，地面防滑。",
       "question": "宝宝吃泡泡怎么办？少量无泪配方不危险，但要及时用清水冲掉，别让他一直舔。",
       "art": {
-        "main": "assets/ill/102.svg",
+        "main": "assets/art/panel_web/102-1.jpg",
         "panels": [
-          "assets/ill/panel/102-1.svg",
-          "assets/ill/panel/102-2.svg",
-          "assets/ill/panel/102-3.svg",
-          "assets/ill/panel/102-4.svg"
+          "assets/art/panel_web/102-1.jpg",
+          "assets/art/panel_web/102-2.jpg",
+          "assets/art/panel_web/102-3.jpg",
+          "assets/art/panel_web/102-4.jpg"
         ]
       }
     },
@@ -120,12 +120,12 @@
       "safety": "不盖住口鼻，浴巾不裹太紧，浴室地面先擦干。",
       "question": "玩兴奋了不肯睡怎么办？睡前的躲猫猫要“低强度”，动作慢、声音轻，玩两次就收。",
       "art": {
-        "main": "assets/ill/103.svg",
+        "main": "assets/art/panel_web/103-1.jpg",
         "panels": [
-          "assets/ill/panel/103-1.svg",
-          "assets/ill/panel/103-2.svg",
-          "assets/ill/panel/103-3.svg",
-          "assets/ill/panel/103-4.svg"
+          "assets/art/panel_web/103-1.jpg",
+          "assets/art/panel_web/103-2.jpg",
+          "assets/art/panel_web/103-3.jpg",
+          "assets/art/panel_web/103-4.jpg"
         ]
       }
     },
@@ -159,12 +159,12 @@
       "safety": "不用带长绳的帽子，纽扣缝牢，不穿过多衣物。",
       "question": "每天早上像打仗？把“选择权”给他（红袜子还是蓝袜子），配合度会明显上升。",
       "art": {
-        "main": "assets/ill/104.svg",
+        "main": "assets/art/panel_web/104-1.jpg",
         "panels": [
-          "assets/ill/panel/104-1.svg",
-          "assets/ill/panel/104-2.svg",
-          "assets/ill/panel/104-3.svg",
-          "assets/ill/panel/104-4.svg"
+          "assets/art/panel_web/104-1.jpg",
+          "assets/art/panel_web/104-2.jpg",
+          "assets/art/panel_web/104-3.jpg",
+          "assets/art/panel_web/104-4.jpg"
         ]
       }
     },
@@ -198,12 +198,12 @@
       "safety": "袜子不套手奔跑，抽屉不夹手。",
       "question": "配错要不要纠正？先问“为什么觉得是一对”，再一起看花纹，保护他的判断欲。",
       "art": {
-        "main": "assets/ill/105.svg",
+        "main": "assets/art/panel_web/105-1.jpg",
         "panels": [
-          "assets/ill/panel/105-1.svg",
-          "assets/ill/panel/105-2.svg",
-          "assets/ill/panel/105-3.svg",
-          "assets/ill/panel/105-4.svg"
+          "assets/art/panel_web/105-1.jpg",
+          "assets/art/panel_web/105-2.jpg",
+          "assets/art/panel_web/105-3.jpg",
+          "assets/art/panel_web/105-4.jpg"
         ]
       }
     },
@@ -237,12 +237,12 @@
       "safety": "避开眼周和破损皮肤，敏感肌先小面积试用，不涂在手上任其入口。",
       "question": "宝宝怕痒扭来扭去？力度放轻、速度放慢，从脚开始，比从肚子开始更容易接受。",
       "art": {
-        "main": "assets/ill/106.svg",
+        "main": "assets/art/panel_web/106-1.jpg",
         "panels": [
-          "assets/ill/panel/106-1.svg",
-          "assets/ill/panel/106-2.svg",
-          "assets/ill/panel/106-3.svg",
-          "assets/ill/panel/106-4.svg"
+          "assets/art/panel_web/106-1.jpg",
+          "assets/art/panel_web/106-2.jpg",
+          "assets/art/panel_web/106-3.jpg",
+          "assets/art/panel_web/106-4.jpg"
         ]
       }
     }

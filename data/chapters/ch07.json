@@ -50,12 +50,12 @@
       "safety": "周围铺软垫，背后不靠硬物，摔倒时不要猛拉手臂。",
       "question": "坐多久合适？以宝宝不东倒西歪为准，每次3-5分钟，一天多次，不追求时长。",
       "art": {
-        "main": "assets/ill/023.svg",
+        "main": "assets/art/panel_web/023-1.jpg",
         "panels": [
-          "assets/ill/panel/023-1.svg",
-          "assets/ill/panel/023-2.svg",
-          "assets/ill/panel/023-3.svg",
-          "assets/ill/panel/023-4.svg"
+          "assets/art/panel_web/023-1.jpg",
+          "assets/art/panel_web/023-2.jpg",
+          "assets/art/panel_web/023-3.jpg",
+          "assets/art/panel_web/023-4.jpg"
         ]
       }
     },
@@ -89,12 +89,12 @@
       "safety": "积木无尖角、无掉漆；不让他站着敲，避免后仰摔倒。",
       "question": "只会咬积木怎么办？口腔探索优先于功能探索，先给可咬的软积木，敲击示范多做几次。",
       "art": {
-        "main": "assets/ill/024.svg",
+        "main": "assets/art/panel_web/024-1.jpg",
         "panels": [
-          "assets/ill/panel/024-1.svg",
-          "assets/ill/panel/024-2.svg",
-          "assets/ill/panel/024-3.svg",
-          "assets/ill/panel/024-4.svg"
+          "assets/art/panel_web/024-1.jpg",
+          "assets/art/panel_web/024-2.jpg",
+          "assets/art/panel_web/024-3.jpg",
+          "assets/art/panel_web/024-4.jpg"
         ]
       }
     },
@@ -128,12 +128,12 @@
       "safety": "全程看护并坐直，不躺卧进食；不给整粒坚果、葡萄、果冻。",
       "question": "捏不起来会挫败吗？一次只放2-3颗，成功率高；他急躁时你先捏一颗递到他指尖。",
       "art": {
-        "main": "assets/ill/025.svg",
+        "main": "assets/art/panel_web/025-1.jpg",
         "panels": [
-          "assets/ill/panel/025-1.svg",
-          "assets/ill/panel/025-2.svg",
-          "assets/ill/panel/025-3.svg",
-          "assets/ill/panel/025-4.svg"
+          "assets/art/panel_web/025-1.jpg",
+          "assets/art/panel_web/025-2.jpg",
+          "assets/art/panel_web/025-3.jpg",
+          "assets/art/panel_web/025-4.jpg"
         ]
       }
     },
@@ -167,12 +167,12 @@
       "safety": "容器和积木都大于3厘米，瓶口不卡手，玩后立即收走。",
       "question": "只倒不投正常吗？倒比投容易，先让他倒，再示范投，两个动作都算达标。",
       "art": {
-        "main": "assets/ill/026.svg",
+        "main": "assets/art/panel_web/026-1.jpg",
         "panels": [
-          "assets/ill/panel/026-1.svg",
-          "assets/ill/panel/026-2.svg",
-          "assets/ill/panel/026-3.svg",
-          "assets/ill/panel/026-4.svg"
+          "assets/art/panel_web/026-1.jpg",
+          "assets/art/panel_web/026-2.jpg",
+          "assets/art/panel_web/026-3.jpg",
+          "assets/art/panel_web/026-4.jpg"
         ]
       }
     },
@@ -206,12 +206,12 @@
       "safety": "隧道内无尖锐物，不盖住头部，全程在另一端守着。",
       "question": "宝宝不肯进去怎么办？先让他看着你爬一遍，或只钻一半就抱出来，不要推他进去。",
       "art": {
-        "main": "assets/ill/027.svg",
+        "main": "assets/art/panel_web/027-1.jpg",
         "panels": [
-          "assets/ill/panel/027-1.svg",
-          "assets/ill/panel/027-2.svg",
-          "assets/ill/panel/027-3.svg",
-          "assets/ill/panel/027-4.svg"
+          "assets/art/panel_web/027-1.jpg",
+          "assets/art/panel_web/027-2.jpg",
+          "assets/art/panel_web/027-3.jpg",
+          "assets/art/panel_web/027-4.jpg"
         ]
       }
     },
@@ -245,12 +245,12 @@
       "safety": "全程看护，印刷油墨纸不入口；玩后洗手、清理碎屑。",
       "question": "撕书怎么办？这个阶段撕书是正常的手部练习，把可撕的纸和绘本分开，绘本收高即可。",
       "art": {
-        "main": "assets/ill/028.svg",
+        "main": "assets/art/panel_web/028-1.jpg",
         "panels": [
-          "assets/ill/panel/028-1.svg",
-          "assets/ill/panel/028-2.svg",
-          "assets/ill/panel/028-3.svg",
-          "assets/ill/panel/028-4.svg"
+          "assets/art/panel_web/028-1.jpg",
+          "assets/art/panel_web/028-2.jpg",
+          "assets/art/panel_web/028-3.jpg",
+          "assets/art/panel_web/028-4.jpg"
         ]
       }
     },
@@ -284,12 +284,12 @@
       "safety": "鼓面不过紧，澡盆内水不超过5厘米且全程扶住。",
       "question": "一直拍不停要阻止吗？重复是他在验证因果，玩5分钟再引导换活动即可。",
       "art": {
-        "main": "assets/ill/029.svg",
+        "main": "assets/art/panel_web/029-1.jpg",
         "panels": [
-          "assets/ill/panel/029-1.svg",
-          "assets/ill/panel/029-2.svg",
-          "assets/ill/panel/029-3.svg",
-          "assets/ill/panel/029-4.svg"
+          "assets/art/panel_web/029-1.jpg",
+          "assets/art/panel_web/029-2.jpg",
+          "assets/art/panel_web/029-3.jpg",
+          "assets/art/panel_web/029-4.jpg"
         ]
       }
     },
@@ -323,12 +323,12 @@
       "safety": "毛巾轻薄透气，不盖宝宝的头，玩具无小零件。",
       "question": "找不到就哭怎么办？把玩具露出一半，降低难度，成功体验比“考倒他”重要。",
       "art": {
-        "main": "assets/ill/030.svg",
+        "main": "assets/art/panel_web/030-1.jpg",
         "panels": [
-          "assets/ill/panel/030-1.svg",
-          "assets/ill/panel/030-2.svg",
-          "assets/ill/panel/030-3.svg",
-          "assets/ill/panel/030-4.svg"
+          "assets/art/panel_web/030-1.jpg",
+          "assets/art/panel_web/030-2.jpg",
+          "assets/art/panel_web/030-3.jpg",
+          "assets/art/panel_web/030-4.jpg"
         ]
       }
     },
@@ -362,12 +362,12 @@
       "safety": "动作轻，不掰宝宝手指，指甲剪短。",
       "question": "宝宝不看手只看脸？正常，7-9个月对人脸兴趣仍大于手，继续做，他会慢慢注意到手势。",
       "art": {
-        "main": "assets/ill/031.svg",
+        "main": "assets/art/panel_web/031-1.jpg",
         "panels": [
-          "assets/ill/panel/031-1.svg",
-          "assets/ill/panel/031-2.svg",
-          "assets/ill/panel/031-3.svg",
-          "assets/ill/panel/031-4.svg"
+          "assets/art/panel_web/031-1.jpg",
+          "assets/art/panel_web/031-2.jpg",
+          "assets/art/panel_web/031-3.jpg",
+          "assets/art/panel_web/031-4.jpg"
         ]
       }
     },
@@ -401,12 +401,12 @@
       "safety": "沙发稳固、地面防滑、周围无茶几尖角；不穿袜子，光脚更稳。",
       "question": "会走太早伤腿吗？顺其自然即可，不人为扶走、不用学步车，宝宝自己准备好就会走。",
       "art": {
-        "main": "assets/ill/032.svg",
+        "main": "assets/art/panel_web/032-1.jpg",
         "panels": [
-          "assets/ill/panel/032-1.svg",
-          "assets/ill/panel/032-2.svg",
-          "assets/ill/panel/032-3.svg",
-          "assets/ill/panel/032-4.svg"
+          "assets/art/panel_web/032-1.jpg",
+          "assets/art/panel_web/032-2.jpg",
+          "assets/art/panel_web/032-3.jpg",
+          "assets/art/panel_web/032-4.jpg"
         ]
       }
     },
@@ -440,12 +440,12 @@
       "safety": "不指热锅、刀具、插座等危险物；抱着时注意头顶。",
       "question": "说几遍都记不住？名词需要几十次重复，先固定3个高频词（灯、球、妈妈），不要频繁换。",
       "art": {
-        "main": "assets/ill/033.svg",
+        "main": "assets/art/panel_web/033-1.jpg",
         "panels": [
-          "assets/ill/panel/033-1.svg",
-          "assets/ill/panel/033-2.svg",
-          "assets/ill/panel/033-3.svg",
-          "assets/ill/panel/033-4.svg"
+          "assets/art/panel_web/033-1.jpg",
+          "assets/art/panel_web/033-2.jpg",
+          "assets/art/panel_web/033-3.jpg",
+          "assets/art/panel_web/033-4.jpg"
         ]
       }
     },
@@ -479,12 +479,12 @@
       "safety": "不在门缝处停留，抱着宝宝时远离门轴。",
       "question": "宝宝挥手是模仿还是理解？先模仿后理解，重复几百次后，他会用挥手主动告别。",
       "art": {
-        "main": "assets/ill/034.svg",
+        "main": "assets/art/panel_web/034-1.jpg",
         "panels": [
-          "assets/ill/panel/034-1.svg",
-          "assets/ill/panel/034-2.svg",
-          "assets/ill/panel/034-3.svg",
-          "assets/ill/panel/034-4.svg"
+          "assets/art/panel_web/034-1.jpg",
+          "assets/art/panel_web/034-2.jpg",
+          "assets/art/panel_web/034-3.jpg",
+          "assets/art/panel_web/034-4.jpg"
         ]
       }
     }

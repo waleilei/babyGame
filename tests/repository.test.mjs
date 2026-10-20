@@ -44,7 +44,7 @@ const CHAPTER_5 = {
       down: '静止',
       safety: '不反光',
       question: '不看怎么办',
-      art: { main: 'assets/ill/001.svg', panels: ['1', '2', '3', '4'] },
+      art: { main: 'assets/art/panel_web/001-1.jpg', panels: ['1', '2', '3', '4'] },
     },
   ],
 };

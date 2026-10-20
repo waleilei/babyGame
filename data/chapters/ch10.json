@@ -50,12 +50,12 @@
       "safety": "卡片无尖角、不覆反光膜，不入口。",
       "question": "发音不准要纠正吗？不要打断，用正确发音重复一遍即可，这个阶段清晰度不重要。",
       "art": {
-        "main": "assets/ill/063.svg",
+        "main": "assets/art/panel_web/063-1.jpg",
         "panels": [
-          "assets/ill/panel/063-1.svg",
-          "assets/ill/panel/063-2.svg",
-          "assets/ill/panel/063-3.svg",
-          "assets/ill/panel/063-4.svg"
+          "assets/art/panel_web/063-1.jpg",
+          "assets/art/panel_web/063-2.jpg",
+          "assets/art/panel_web/063-3.jpg",
+          "assets/art/panel_web/063-4.jpg"
         ]
       }
     },
@@ -89,12 +89,12 @@
       "safety": "不强迫表演，不在外人面前逼他说。",
       "question": "只说单字正常吗？24个月前单词为主很常见，若满24个月仍无两词句且词汇少于50个，建议做语言评估。",
       "art": {
-        "main": "assets/ill/064.svg",
+        "main": "assets/art/panel_web/064-1.jpg",
         "panels": [
-          "assets/ill/panel/064-1.svg",
-          "assets/ill/panel/064-2.svg",
-          "assets/ill/panel/064-3.svg",
-          "assets/ill/panel/064-4.svg"
+          "assets/art/panel_web/064-1.jpg",
+          "assets/art/panel_web/064-2.jpg",
+          "assets/art/panel_web/064-3.jpg",
+          "assets/art/panel_web/064-4.jpg"
         ]
       }
     },
@@ -128,12 +128,12 @@
       "safety": "书角圆钝，不边吃边看，光线充足。",
       "question": "总撕书怎么办？给布书或硬纸板书的“自己看”副本，贵重绘本放在他拿不到的地方。",
       "art": {
-        "main": "assets/ill/065.svg",
+        "main": "assets/art/panel_web/065-1.jpg",
         "panels": [
-          "assets/ill/panel/065-1.svg",
-          "assets/ill/panel/065-2.svg",
-          "assets/ill/panel/065-3.svg",
-          "assets/ill/panel/065-4.svg"
+          "assets/art/panel_web/065-1.jpg",
+          "assets/art/panel_web/065-2.jpg",
+          "assets/art/panel_web/065-3.jpg",
+          "assets/art/panel_web/065-4.jpg"
         ]
       }
     },
@@ -167,12 +167,12 @@
       "safety": "娃娃配件大于3厘米，不用真食物玩过家家。",
       "question": "男孩玩娃娃合适吗？照顾类游戏练的是共情和语言，与性别无关，所有孩子都适合。",
       "art": {
-        "main": "assets/ill/066.svg",
+        "main": "assets/art/panel_web/066-1.jpg",
         "panels": [
-          "assets/ill/panel/066-1.svg",
-          "assets/ill/panel/066-2.svg",
-          "assets/ill/panel/066-3.svg",
-          "assets/ill/panel/066-4.svg"
+          "assets/art/panel_web/066-1.jpg",
+          "assets/art/panel_web/066-2.jpg",
+          "assets/art/panel_web/066-3.jpg",
+          "assets/art/panel_web/066-4.jpg"
         ]
       }
     },
@@ -206,12 +206,12 @@
       "safety": "远离灶台和刀具，热水壶电线收起，全程在视线内。",
       "question": "总在厨房捣乱怎么办？给他一个专属抽屉和一套专属工具，比反复制止有效。",
       "art": {
-        "main": "assets/ill/067.svg",
+        "main": "assets/art/panel_web/067-1.jpg",
         "panels": [
-          "assets/ill/panel/067-1.svg",
-          "assets/ill/panel/067-2.svg",
-          "assets/ill/panel/067-3.svg",
-          "assets/ill/panel/067-4.svg"
+          "assets/art/panel_web/067-1.jpg",
+          "assets/art/panel_web/067-2.jpg",
+          "assets/art/panel_web/067-3.jpg",
+          "assets/art/panel_web/067-4.jpg"
         ]
       }
     },
@@ -245,12 +245,12 @@
       "safety": "拼图块大于3厘米，边缘光滑。",
       "question": "只会拍打不会拼？先玩“把两半合在一起”的动作，再过渡到拼图，不急于求成。",
       "art": {
-        "main": "assets/ill/068.svg",
+        "main": "assets/art/panel_web/068-1.jpg",
         "panels": [
-          "assets/ill/panel/068-1.svg",
-          "assets/ill/panel/068-2.svg",
-          "assets/ill/panel/068-3.svg",
-          "assets/ill/panel/068-4.svg"
+          "assets/art/panel_web/068-1.jpg",
+          "assets/art/panel_web/068-2.jpg",
+          "assets/art/panel_web/068-3.jpg",
+          "assets/art/panel_web/068-4.jpg"
         ]
       }
     },
@@ -284,12 +284,12 @@
       "safety": "全程看护，绳长不超过20厘米，玩后立即收走防缠绕。",
       "question": "穿不进去就扔？把绳头用胶带缠硬，成功率会明显提高。",
       "art": {
-        "main": "assets/ill/069.svg",
+        "main": "assets/art/panel_web/069-1.jpg",
         "panels": [
-          "assets/ill/panel/069-1.svg",
-          "assets/ill/panel/069-2.svg",
-          "assets/ill/panel/069-3.svg",
-          "assets/ill/panel/069-4.svg"
+          "assets/art/panel_web/069-1.jpg",
+          "assets/art/panel_web/069-2.jpg",
+          "assets/art/panel_web/069-3.jpg",
+          "assets/art/panel_web/069-4.jpg"
         ]
       }
     },
@@ -323,12 +323,12 @@
       "safety": "积木无小零件，碗为塑料或木制。",
       "question": "总说错颜色？2岁前颜色命名常混淆，先练“配对”（一样的放一起），再练“命名”。",
       "art": {
-        "main": "assets/ill/070.svg",
+        "main": "assets/art/panel_web/070-1.jpg",
         "panels": [
-          "assets/ill/panel/070-1.svg",
-          "assets/ill/panel/070-2.svg",
-          "assets/ill/panel/070-3.svg",
-          "assets/ill/panel/070-4.svg"
+          "assets/art/panel_web/070-1.jpg",
+          "assets/art/panel_web/070-2.jpg",
+          "assets/art/panel_web/070-3.jpg",
+          "assets/art/panel_web/070-4.jpg"
         ]
       }
     },
@@ -362,12 +362,12 @@
       "safety": "物体无尖角，不比较易碎品。",
       "question": "总选大的？可能只是喜欢大的，换问“哪个小”，或把大的放他左手、小的放右手再问。",
       "art": {
-        "main": "assets/ill/071.svg",
+        "main": "assets/art/panel_web/071-1.jpg",
         "panels": [
-          "assets/ill/panel/071-1.svg",
-          "assets/ill/panel/071-2.svg",
-          "assets/ill/panel/071-3.svg",
-          "assets/ill/panel/071-4.svg"
+          "assets/art/panel_web/071-1.jpg",
+          "assets/art/panel_web/071-2.jpg",
+          "assets/art/panel_web/071-3.jpg",
+          "assets/art/panel_web/071-4.jpg"
         ]
       }
     },
@@ -401,12 +401,12 @@
       "safety": "鞋底防滑，不穿系带鞋，坐稳再穿。",
       "question": "穿反了要纠正吗？反着穿也是成功，先表扬，再轻松地说“换一换会更舒服”。",
       "art": {
-        "main": "assets/ill/072.svg",
+        "main": "assets/art/panel_web/072-1.jpg",
         "panels": [
-          "assets/ill/panel/072-1.svg",
-          "assets/ill/panel/072-2.svg",
-          "assets/ill/panel/072-3.svg",
-          "assets/ill/panel/072-4.svg"
+          "assets/art/panel_web/072-1.jpg",
+          "assets/art/panel_web/072-2.jpg",
+          "assets/art/panel_web/072-3.jpg",
+          "assets/art/panel_web/072-4.jpg"
         ]
       }
     },
@@ -440,12 +440,12 @@
       "safety": "水温不超过40℃，地面防滑，不让他独自站在凳子上。",
       "question": "洗两秒就跑？用沙漏或数到10把时间可视化，比反复催有效。",
       "art": {
-        "main": "assets/ill/073.svg",
+        "main": "assets/art/panel_web/073-1.jpg",
         "panels": [
-          "assets/ill/panel/073-1.svg",
-          "assets/ill/panel/073-2.svg",
-          "assets/ill/panel/073-3.svg",
-          "assets/ill/panel/073-4.svg"
+          "assets/art/panel_web/073-1.jpg",
+          "assets/art/panel_web/073-2.jpg",
+          "assets/art/panel_web/073-3.jpg",
+          "assets/art/panel_web/073-4.jpg"
         ]
       }
     },
@@ -479,12 +479,12 @@
       "safety": "不在情绪爆发高峰讲道理，先安抚再命名。",
       "question": "命名情绪有用吗？有，把感受说出来能降低强度，但要在他平静一点时说。",
       "art": {
-        "main": "assets/ill/074.svg",
+        "main": "assets/art/panel_web/074-1.jpg",
         "panels": [
-          "assets/ill/panel/074-1.svg",
-          "assets/ill/panel/074-2.svg",
-          "assets/ill/panel/074-3.svg",
-          "assets/ill/panel/074-4.svg"
+          "assets/art/panel_web/074-1.jpg",
+          "assets/art/panel_web/074-2.jpg",
+          "assets/art/panel_web/074-3.jpg",
+          "assets/art/panel_web/074-4.jpg"
         ]
       }
     },
@@ -518,12 +518,12 @@
       "safety": "在软垫上玩，不做奔跑版，避免撞到家具。",
       "question": "根本停不住？说明等待时间太长，从1秒开始，成功就夸，逐步加时。",
       "art": {
-        "main": "assets/ill/075.svg",
+        "main": "assets/art/panel_web/075-1.jpg",
         "panels": [
-          "assets/ill/panel/075-1.svg",
-          "assets/ill/panel/075-2.svg",
-          "assets/ill/panel/075-3.svg",
-          "assets/ill/panel/075-4.svg"
+          "assets/art/panel_web/075-1.jpg",
+          "assets/art/panel_web/075-2.jpg",
+          "assets/art/panel_web/075-3.jpg",
+          "assets/art/panel_web/075-4.jpg"
         ]
       }
     },
@@ -557,12 +557,12 @@
       "safety": "无需特别防护，注意不在跑跳时唱。",
       "question": "只接最后一个字算会说话吗？算，这是语音意识和记忆的表现，是语言发展的正常阶段。",
       "art": {
-        "main": "assets/ill/076.svg",
+        "main": "assets/art/panel_web/076-1.jpg",
         "panels": [
-          "assets/ill/panel/076-1.svg",
-          "assets/ill/panel/076-2.svg",
-          "assets/ill/panel/076-3.svg",
-          "assets/ill/panel/076-4.svg"
+          "assets/art/panel_web/076-1.jpg",
+          "assets/art/panel_web/076-2.jpg",
+          "assets/art/panel_web/076-3.jpg",
+          "assets/art/panel_web/076-4.jpg"
         ]
       }
     }

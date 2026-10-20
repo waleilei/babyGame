@@ -50,12 +50,12 @@
       "safety": "道具无尖锐物，不用真药瓶，玩后洗手。",
       "question": "演得不符合现实要纠正吗？不用，假装游戏的逻辑由孩子定，你配合就好。",
       "art": {
-        "main": "assets/ill/077.svg",
+        "main": "assets/art/panel_web/077-1.jpg",
         "panels": [
-          "assets/ill/panel/077-1.svg",
-          "assets/ill/panel/077-2.svg",
-          "assets/ill/panel/077-3.svg",
-          "assets/ill/panel/077-4.svg"
+          "assets/art/panel_web/077-1.jpg",
+          "assets/art/panel_web/077-2.jpg",
+          "assets/art/panel_web/077-3.jpg",
+          "assets/art/panel_web/077-4.jpg"
         ]
       }
     },
@@ -89,12 +89,12 @@
       "safety": "积木无尖角，不在高处搭，避免砸脚。",
       "question": "总搭不高就急？先练“搭门”这个单一结构，成功感比高度重要。",
       "art": {
-        "main": "assets/ill/078.svg",
+        "main": "assets/art/panel_web/078-1.jpg",
         "panels": [
-          "assets/ill/panel/078-1.svg",
-          "assets/ill/panel/078-2.svg",
-          "assets/ill/panel/078-3.svg",
-          "assets/ill/panel/078-4.svg"
+          "assets/art/panel_web/078-1.jpg",
+          "assets/art/panel_web/078-2.jpg",
+          "assets/art/panel_web/078-3.jpg",
+          "assets/art/panel_web/078-4.jpg"
         ]
       }
     },
@@ -128,12 +128,12 @@
       "safety": "全程贴身看护，坐姿使用，刀口朝外，用完立即收进高处。",
       "question": "多大可以用剪刀？2岁半左右在成人全程看护下可以用安全剪刀，早于这个月龄不建议。",
       "art": {
-        "main": "assets/ill/079.svg",
+        "main": "assets/art/panel_web/079-1.jpg",
         "panels": [
-          "assets/ill/panel/079-1.svg",
-          "assets/ill/panel/079-2.svg",
-          "assets/ill/panel/079-3.svg",
-          "assets/ill/panel/079-4.svg"
+          "assets/art/panel_web/079-1.jpg",
+          "assets/art/panel_web/079-2.jpg",
+          "assets/art/panel_web/079-3.jpg",
+          "assets/art/panel_web/079-4.jpg"
         ]
       }
     },
@@ -167,12 +167,12 @@
       "safety": "选无毒可食用配方，全程看护不入口，玩后洗手，过敏体质先小面积试。",
       "question": "混色了怎么办？混色也是探索，给他两块深色专门混，其余分开放。",
       "art": {
-        "main": "assets/ill/080.svg",
+        "main": "assets/art/panel_web/080-1.jpg",
         "panels": [
-          "assets/ill/panel/080-1.svg",
-          "assets/ill/panel/080-2.svg",
-          "assets/ill/panel/080-3.svg",
-          "assets/ill/panel/080-4.svg"
+          "assets/art/panel_web/080-1.jpg",
+          "assets/art/panel_web/080-2.jpg",
+          "assets/art/panel_web/080-3.jpg",
+          "assets/art/panel_web/080-4.jpg"
         ]
       }
     },
@@ -206,12 +206,12 @@
       "safety": "无需特别防护，数楼梯时牵手。",
       "question": "会背到10但不识数？背诵和数数是两回事，重点是“手点一个、嘴里数一个”的一一对应。",
       "art": {
-        "main": "assets/ill/081.svg",
+        "main": "assets/art/panel_web/081-1.jpg",
         "panels": [
-          "assets/ill/panel/081-1.svg",
-          "assets/ill/panel/081-2.svg",
-          "assets/ill/panel/081-3.svg",
-          "assets/ill/panel/081-4.svg"
+          "assets/art/panel_web/081-1.jpg",
+          "assets/art/panel_web/081-2.jpg",
+          "assets/art/panel_web/081-3.jpg",
+          "assets/art/panel_web/081-4.jpg"
         ]
       }
     },
@@ -245,12 +245,12 @@
       "safety": "手电筒不直射眼睛，不在黑暗处奔跑。",
       "question": "怕黑怕影子怎么办？先开小夜灯玩，把影子变成“朋友”，不强行关灯。",
       "art": {
-        "main": "assets/ill/082.svg",
+        "main": "assets/art/panel_web/082-1.jpg",
         "panels": [
-          "assets/ill/panel/082-1.svg",
-          "assets/ill/panel/082-2.svg",
-          "assets/ill/panel/082-3.svg",
-          "assets/ill/panel/082-4.svg"
+          "assets/art/panel_web/082-1.jpg",
+          "assets/art/panel_web/082-2.jpg",
+          "assets/art/panel_web/082-3.jpg",
+          "assets/art/panel_web/082-4.jpg"
         ]
       }
     },
@@ -284,12 +284,12 @@
       "safety": "袜子无松紧勒痕，不套在手上奔跑。",
       "question": "配错要不要纠正？先让他说理由，再一起看花纹，比直接说“错了”更能保留兴趣。",
       "art": {
-        "main": "assets/ill/083.svg",
+        "main": "assets/art/panel_web/083-1.jpg",
         "panels": [
-          "assets/ill/panel/083-1.svg",
-          "assets/ill/panel/083-2.svg",
-          "assets/ill/panel/083-3.svg",
-          "assets/ill/panel/083-4.svg"
+          "assets/art/panel_web/083-1.jpg",
+          "assets/art/panel_web/083-2.jpg",
+          "assets/art/panel_web/083-3.jpg",
+          "assets/art/panel_web/083-4.jpg"
         ]
       }
     },
@@ -323,12 +323,12 @@
       "safety": "杯口光滑，不叠高过头顶。",
       "question": "总是乱排？先玩两两比较“哪个大”，排序是更高级的能力，需要先有比较经验。",
       "art": {
-        "main": "assets/ill/084.svg",
+        "main": "assets/art/panel_web/084-1.jpg",
         "panels": [
-          "assets/ill/panel/084-1.svg",
-          "assets/ill/panel/084-2.svg",
-          "assets/ill/panel/084-3.svg",
-          "assets/ill/panel/084-4.svg"
+          "assets/art/panel_web/084-1.jpg",
+          "assets/art/panel_web/084-2.jpg",
+          "assets/art/panel_web/084-3.jpg",
+          "assets/art/panel_web/084-4.jpg"
         ]
       }
     },
@@ -362,12 +362,12 @@
       "safety": "纸箱不遮挡视线，重量不超过孩子能承受的范围，路线清空。",
       "question": "总想自己搬？让他先试一次搬不动，再自然引入“合作”。",
       "art": {
-        "main": "assets/ill/085.svg",
+        "main": "assets/art/panel_web/085-1.jpg",
         "panels": [
-          "assets/ill/panel/085-1.svg",
-          "assets/ill/panel/085-2.svg",
-          "assets/ill/panel/085-3.svg",
-          "assets/ill/panel/085-4.svg"
+          "assets/art/panel_web/085-1.jpg",
+          "assets/art/panel_web/085-2.jpg",
+          "assets/art/panel_web/085-3.jpg",
+          "assets/art/panel_web/085-4.jpg"
         ]
       }
     },
@@ -401,12 +401,12 @@
       "safety": "棋子大于3厘米，不用玻璃材质。",
       "question": "等不了就哭？先从两人、每轮3秒开始，把等待时间控制在能忍受的范围内。",
       "art": {
-        "main": "assets/ill/086.svg",
+        "main": "assets/art/panel_web/086-1.jpg",
         "panels": [
-          "assets/ill/panel/086-1.svg",
-          "assets/ill/panel/086-2.svg",
-          "assets/ill/panel/086-3.svg",
-          "assets/ill/panel/086-4.svg"
+          "assets/art/panel_web/086-1.jpg",
+          "assets/art/panel_web/086-2.jpg",
+          "assets/art/panel_web/086-3.jpg",
+          "assets/art/panel_web/086-4.jpg"
         ]
       }
     },
@@ -440,12 +440,12 @@
       "safety": "玩沙后洗手，沙池加盖防猫狗，水不倒满，全程看护。",
       "question": "吃沙怎么办？1岁前口欲强不建议玩沙，2岁后仍吃沙可改用米或豆类替代。",
       "art": {
-        "main": "assets/ill/087.svg",
+        "main": "assets/art/panel_web/087-1.jpg",
         "panels": [
-          "assets/ill/panel/087-1.svg",
-          "assets/ill/panel/087-2.svg",
-          "assets/ill/panel/087-3.svg",
-          "assets/ill/panel/087-4.svg"
+          "assets/art/panel_web/087-1.jpg",
+          "assets/art/panel_web/087-2.jpg",
+          "assets/art/panel_web/087-3.jpg",
+          "assets/art/panel_web/087-4.jpg"
         ]
       }
     },
@@ -479,12 +479,12 @@
       "safety": "无需特别防护，睡前故事控制兴奋度。",
       "question": "编得离题要不要拉回？不用，离题正是想象力在工作，你负责把故事接圆。",
       "art": {
-        "main": "assets/ill/088.svg",
+        "main": "assets/art/panel_web/088-1.jpg",
         "panels": [
-          "assets/ill/panel/088-1.svg",
-          "assets/ill/panel/088-2.svg",
-          "assets/ill/panel/088-3.svg",
-          "assets/ill/panel/088-4.svg"
+          "assets/art/panel_web/088-1.jpg",
+          "assets/art/panel_web/088-2.jpg",
+          "assets/art/panel_web/088-3.jpg",
+          "assets/art/panel_web/088-4.jpg"
         ]
       }
     }

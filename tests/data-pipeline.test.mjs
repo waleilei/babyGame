@@ -64,9 +64,12 @@ test('每条游戏 8 个模块齐全、步骤 4 条、观察 2-3 条', { skip: !
     assert.equal(game.steps.length, 4, `${label} 步骤不是 4 条`);
     assert.ok(game.observe.length >= 2 && game.observe.length <= 3, `${label} 观察条数异常`);
     assert.ok(game.ageRange.min < game.ageRange.max, `${label} 月龄区间异常`);
-    assert.match(game.art.main, /^assets\/ill\/\d{3}\.svg$/);
+    assert.match(game.art.main, /^assets\/art\/panel_web\/\d{3}-1\.jpg$/);
     assert.equal(game.art.panels.length, 4, `${label} 步骤图不是 4 张`);
-    assert.ok(existsSync(join(SOURCE_DIR, game.art.main)), `${label} 缺主图`);
+    assert.deepEqual(
+      game.art.panels,
+      [1, 2, 3, 4].map((n) => game.art.main.replace(/-1\.jpg$/, `-${n}.jpg`)),
+    );
     for (const panel of game.art.panels) {
       assert.ok(existsSync(join(SOURCE_DIR, panel)), `${label} 缺步骤图 ${panel}`);
     }
