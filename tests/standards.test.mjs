@@ -16,22 +16,24 @@ function walk(dir) {
   });
 }
 
-function offendersIn(files, pattern, describe) {
+function offendersIn(files, pattern) {
   const found = [];
   for (const file of files) {
     readFileSync(file, 'utf8').split('\n').forEach((line, index) => {
-      if (pattern.test(line)) found.push(`${relative(ROOT, file)}:${index + 1} ${describe(line.trim())}`);
+      if (pattern.test(line)) found.push(`${relative(ROOT, file)}:${index + 1} ${line.trim()}`);
     });
   }
   return found;
 }
 
-test('写死颜色只允许出现在 styles/tokens.css', () => {
+// 只管十六进制：品牌色与静态调色板必须走令牌。rgba() 的透明遮罩是覆盖层的 alpha 组合，
+// 不是可复用的调色板色，令牌化只会造出 --white-a06 这类噪音，因此不在本条范围内。
+test('十六进制颜色只允许出现在 styles/tokens.css', () => {
   const stylesheets = readdirSync(join(ROOT, 'styles'))
     .filter((name) => name.endsWith('.css') && name !== 'tokens.css')
     .map((name) => join(ROOT, 'styles', name));
 
-  const found = offendersIn(stylesheets, /#[0-9a-fA-F]{3,8}\b/, (line) => line);
+  const found = offendersIn(stylesheets, /#[0-9a-fA-F]{3,8}\b/);
   assert.deepEqual(found, [], `颜色改用 var(--token)，并在 tokens.css 里定义：\n${found.join('\n')}`);
 });
 

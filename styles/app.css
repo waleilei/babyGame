@@ -827,7 +827,7 @@
   overscroll-behavior: contain;
 }
 
-.media-zoom {
+.media--zoom {
   position: relative;
   display: block;
   width: 100%;
@@ -838,12 +838,12 @@
   cursor: zoom-in;
 }
 
-.media-zoom:focus-visible {
+.media--zoom:focus-visible {
   outline: 3px solid var(--green);
   outline-offset: -3px;
 }
 
-.media-zoom::after {
+.media--zoom::after {
   position: absolute;
   right: 10px;
   bottom: 10px;
@@ -863,8 +863,8 @@
   pointer-events: none;
 }
 
-.media-zoom:hover::after,
-.media-zoom:focus-visible::after {
+.media--zoom:hover::after,
+.media--zoom:focus-visible::after {
   opacity: 1;
 }
 

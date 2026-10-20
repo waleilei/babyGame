@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { buildHash, parseHash, normalizeGameId } from '../src/core/router.js';
 import { resolveRoute } from '../src/domain/route.js';
 import { groupChaptersByPart, searchGames, selectNeighbors } from '../src/domain/catalog.js';
-import { chapterHeading, resultCountLabel } from '../src/domain/format.js';
+import { artAlt, chapterHeading, resultCountLabel, zoomButtonLabel } from '../src/domain/format.js';
 import { selectChapterView, selectTocView } from '../src/state/selectors.js';
 
 const chapterRecord = (no, title, shortTitle, age) => ({
@@ -227,4 +227,13 @@ test('格式化：标题与搜索结果数量', () => {
   assert.equal(resultCountLabel(3), '找到 3 个游戏');
   assert.equal(chapterHeading(TOC.chapters[0]), '第5章 0-3个月｜躺着的世界');
   assert.equal(chapterHeading(TOC.chapters.find((chapter) => chapter.no === 13)), '第13章 洗澡、换尿布、穿衣');
+});
+
+test('图片可访问名称：主图与步骤图各自一套，放大按钮复用其一', () => {
+  const game = { name: '躲猫猫' };
+  assert.equal(artAlt(game), '躲猫猫主图');
+  assert.equal(artAlt(game, 0), '躲猫猫步骤图 1');
+  assert.equal(artAlt(game, 3), '躲猫猫步骤图 4');
+  assert.equal(zoomButtonLabel(game), '放大躲猫猫主图');
+  assert.equal(zoomButtonLabel(game, 1), '放大躲猫猫步骤图 2');
 });

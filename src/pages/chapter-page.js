@@ -1,5 +1,5 @@
 import { el } from '../core/dom.js';
-import { chapterButtonLabel } from '../domain/format.js';
+import { artAlt, chapterButtonLabel } from '../domain/format.js';
 import { createErrorBlock, createSkeleton } from '../ui/states.js';
 import { createGameDialog } from '../ui/game-dialog.js';
 import { createGameGrid } from '../ui/game-grid.js';
@@ -54,7 +54,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
   function openLightbox(game, index, trigger) {
     lightbox.open({
       title: game.name,
-      images: game.art.panels.map((src, i) => ({ src, alt: `${game.name}步骤图 ${i + 1}` })),
+      images: game.art.panels.map((src, index) => ({ src, alt: artAlt(game, index) })),
       index,
       trigger,
     });
@@ -69,7 +69,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
       restoreFocus(trigger);
       onCloseGame();
     },
-    onZoomImage: (game, index, trigger) => openLightbox(game, index, trigger),
+    onZoomImage: openLightbox,
   });
 
   const root = el('div', { class: 'chapter-page' }, [toolbar.el, content, dialog.el, lightbox.el]);
@@ -85,7 +85,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
         lastTrigger = trigger;
         onOpenGame(game.id);
       },
-      onZoom: (game, trigger) => openLightbox(game, 0, trigger),
+      onZoom: openLightbox,
     });
     gridTitle = grid.title;
     gridHost.replaceChildren(grid.el);

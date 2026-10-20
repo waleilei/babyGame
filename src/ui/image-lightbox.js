@@ -1,5 +1,16 @@
+import { bindDialogClose } from '../core/dialog.js';
 import { el } from '../core/dom.js';
-import { clampOffset, clampScale, zoomAround } from '../domain/zoom.js';
+import {
+  MAX_SCALE,
+  MIN_SCALE,
+  WHEEL_ZOOM_RATE,
+  ZOOM_DOUBLE_CLICK,
+  ZOOM_STEP,
+  clampOffset,
+  clampScale,
+  isZoomed,
+  zoomAround,
+} from '../domain/zoom.js';
 
 /**
  * 图片大图查看器：原生 dialog 叠层，支持滚轮/双指缩放、拖拽平移、键盘切换。
@@ -9,7 +20,6 @@ export function createImageLightbox() {
   let index = 0;
   let trigger = null;
   let transform = { scale: 1, x: 0, y: 0 };
-  let suppressClose = false;
   const pointers = new Map();
   let drag = null;
   let pinch = null;
@@ -50,7 +60,7 @@ export function createImageLightbox() {
     type: 'button',
     class: 'image-lightbox__button',
     'aria-label': '缩小',
-    onclick: () => zoomTo(transform.scale / 1.3),
+    onclick: () => zoomTo(transform.scale / ZOOM_STEP),
   }, ['−']);
 
   const resetButton = el('button', {
@@ -64,7 +74,7 @@ export function createImageLightbox() {
     type: 'button',
     class: 'image-lightbox__button',
     'aria-label': '放大',
-    onclick: () => zoomTo(transform.scale * 1.3),
+    onclick: () => zoomTo(transform.scale * ZOOM_STEP),
   }, ['+']);
 
   const dialog = el('dialog', { class: 'image-lightbox', 'aria-labelledby': 'image-lightbox-title' }, [
@@ -84,10 +94,10 @@ export function createImageLightbox() {
 
   function apply() {
     image.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`;
-    stage.classList.toggle('is-zoomed', transform.scale > 1.01);
-    zoomOutButton.disabled = transform.scale <= 1.01;
-    zoomInButton.disabled = transform.scale >= 6;
-    resetButton.disabled = transform.scale <= 1.01 && transform.x === 0 && transform.y === 0;
+    stage.classList.toggle('is-zoomed', isZoomed(transform.scale));
+    zoomOutButton.disabled = !isZoomed(transform.scale);
+    zoomInButton.disabled = transform.scale >= MAX_SCALE;
+    resetButton.disabled = !isZoomed(transform.scale) && transform.x === 0 && transform.y === 0;
     prevButton.disabled = index <= 0;
     nextButton.disabled = index >= images.length - 1;
   }
@@ -102,7 +112,7 @@ export function createImageLightbox() {
   }
 
   function reset() {
-    setTransform({ scale: 1, x: 0, y: 0 });
+    setTransform({ scale: MIN_SCALE, x: 0, y: 0 });
   }
 
   function pointFromClient(clientX, clientY) {
@@ -151,7 +161,7 @@ export function createImageLightbox() {
 
   function onWheel(event) {
     event.preventDefault();
-    zoomTo(transform.scale * Math.exp(-event.deltaY * 0.0015), pointFromClient(event.clientX, event.clientY));
+    zoomTo(transform.scale * Math.exp(-event.deltaY * WHEEL_ZOOM_RATE), pointFromClient(event.clientX, event.clientY));
   }
 
   function onPointerDown(event) {
@@ -161,7 +171,7 @@ export function createImageLightbox() {
     } catch {}
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
 
-    if (pointers.size === 1 && transform.scale > 1.01) {
+    if (pointers.size === 1 && isZoomed(transform.scale)) {
       drag = { x: event.clientX, y: event.clientY, originX: transform.x, originY: transform.y };
       stage.classList.add('is-dragging');
     } else if (pointers.size === 2) {
@@ -200,7 +210,7 @@ export function createImageLightbox() {
     } catch {}
     if (pointers.size < 2) pinch = null;
 
-    if (pointers.size === 1 && transform.scale > 1.01) {
+    if (pointers.size === 1 && isZoomed(transform.scale)) {
       const [point] = [...pointers.values()];
       drag = { x: point.x, y: point.y, originX: transform.x, originY: transform.y };
     } else if (pointers.size === 0) {
@@ -215,14 +225,15 @@ export function createImageLightbox() {
   stage.addEventListener('pointerup', onPointerEnd);
   stage.addEventListener('pointercancel', onPointerEnd);
   stage.addEventListener('dblclick', (event) => {
-    if (transform.scale > 1.01) reset();
-    else zoomTo(2.5, pointFromClient(event.clientX, event.clientY));
+    if (isZoomed(transform.scale)) reset();
+    else zoomTo(ZOOM_DOUBLE_CLICK, pointFromClient(event.clientX, event.clientY));
   });
+
+  const closeDialog = bindDialogClose(dialog, () => close());
 
   function close({ restoreFocus = true } = {}) {
     if (!dialog.open) return;
-    suppressClose = true;
-    dialog.close();
+    closeDialog();
     pointers.clear();
     drag = null;
     pinch = null;
@@ -244,19 +255,6 @@ export function createImageLightbox() {
 
   document.addEventListener('keydown', onDocumentEscape, true);
 
-  dialog.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    close();
-  });
-
-  dialog.addEventListener('close', () => {
-    if (suppressClose) {
-      suppressClose = false;
-      return;
-    }
-    close();
-  });
-
   dialog.addEventListener('keydown', (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key === 'ArrowLeft') {
@@ -267,10 +265,10 @@ export function createImageLightbox() {
       show(index + 1);
     } else if (event.key === '+' || event.key === '=') {
       event.preventDefault();
-      zoomTo(transform.scale * 1.3);
+      zoomTo(transform.scale * ZOOM_STEP);
     } else if (event.key === '-') {
       event.preventDefault();
-      zoomTo(transform.scale / 1.3);
+      zoomTo(transform.scale / ZOOM_STEP);
     } else if (event.key === '0') {
       event.preventDefault();
       reset();

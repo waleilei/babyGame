@@ -11,6 +11,24 @@ export function chapterButtonLabel(chapter) {
   return `第${chapter.no}章 ${chapter.shortTitle}`;
 }
 
+/**
+ * 主图与步骤图的可访问名称。index 为 null 表示主图。
+ * @param {{ name: string }} game
+ * @param {number | null} [index]
+ */
+export function artAlt(game, index = null) {
+  return index === null ? `${game.name}主图` : `${game.name}步骤图 ${index + 1}`;
+}
+
+/**
+ * 打开大图按钮的可访问名称。
+ * @param {{ name: string }} game
+ * @param {number | null} [index]
+ */
+export function zoomButtonLabel(game, index = null) {
+  return `放大${artAlt(game, index)}`;
+}
+
 export function errorMessage(error) {
   switch (error?.code) {
     case 'NETWORK':

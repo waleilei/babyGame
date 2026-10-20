@@ -127,6 +127,7 @@ babyGame/
 │   ├── app.js                    # 组合根
 │   ├── core/
 │   │   ├── dom.js                # el() / clear()
+│   │   ├── dialog.js             # bindDialogClose() 两个弹层共享的关闭纪律
 │   │   ├── toast.js              # 全局提示
 │   │   ├── store.js              # createStore()
 │   │   ├── router.js             # parseHash / buildHash / createRouter
@@ -161,12 +162,18 @@ babyGame/
 │   └── chapters/ch05.json … ch18.json
 ├── assets/art/panel_web/**       # 520 张水彩步骤图（每游戏 4 张，首张兼作主图）
 ├── tools/
+│   ├── budgets.mjs               # 体积预算与容量阈值的唯一来源
 │   ├── extract-games.mjs
 │   └── check-games.mjs
 ├── tests/
-│   ├── router.test.mjs
-│   ├── selectors.test.mjs
-│   └── repository.test.mjs
+│   ├── data-pipeline.test.mjs
+│   ├── domain.test.mjs
+│   ├── repository.test.mjs
+│   ├── release.test.mjs          # 体积预算、相对路径、innerHTML
+│   ├── standards.test.mjs        # 十六进制颜色、img decoding
+│   └── zoom.test.mjs
+├── .githooks/pre-commit          # 只读门禁
+├── .github/workflows/verify.yml  # 同一条门禁
 └── docs/
     ├── architecture.md           # 本文
     └── design.md                 # v0.1，已归档
@@ -200,6 +207,10 @@ export function createRouter({ onRoute }) : {
   start(): void,
   navigate(route: Route, opts?: { replace?: boolean }): void
 }
+
+// core/dialog.js：两个弹层共享的关闭纪律
+export function bindDialogClose(dialog: HTMLDialogElement, onUserClose: () => void) : () => void
+// 返回的是程序化关闭函数，不回触发 onUserClose；用户关闭（Esc、遮罩）走 onUserClose
 
 // data/repository.js
 export function createCatalogRepository({ baseUrl, fetchImpl } = {}) : CatalogRepository
@@ -380,7 +391,7 @@ createX({ ...props, onAction }) => HTMLElement
 - 交互通过回调向上传递；组件不修改传入对象。
 - 需要局部状态时（如弹层开合），由页面对象持有，组件只暴露 `open(game)` / `close()`。
 - 所有文本用 `textContent`/`el()` 写入，**禁止把数据拼进 `innerHTML`**；唯一例外是 `intro` 的粗体解析，先按 `**` 切段再逐段建节点。
-- 图片统一 `loading="lazy" decoding="async"`，容器用 `aspect-ratio` 预留高度，避免 CLS。
+- 列表与卡片里的图片统一 `loading="lazy" decoding="async"`，容器用 `aspect-ratio` 预留高度，避免 CLS。唯一例外是大图查看器：它展示的正是用户此刻要看的图，故不 lazy；舞台是缩放平移视口而非图片盒，尺寸由固定高度的面板决定，故不设 `aspect-ratio`。
 - 卡片内的图片与详情各用一个 `<button type="button">`，不嵌套；不拿 `div` 当按钮。
 
 ### 7.2 DOM 构造原语
@@ -470,7 +481,7 @@ export function el(tag, props = {}, children = []) {
 }
 ```
 
-`npm run data && npm run check && npm test` 作为提交前的最小验证。
+提交门禁是只读的 `npm run check && npm test`，由 `.githooks/pre-commit` 与 `.github/workflows/verify.yml` 执行。`npm run data` 会重写 `data/` 与 `assets/`，属于改稿流程，不进提交门禁。
 
 ### 8.3 资源与缓存
 
@@ -719,11 +730,13 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 
 | 检查 | 方式 |
 |---|---|
-| 数据完整性 | `node tools/check-games.mjs`：130 条、字段、枚举、资源存在 |
+| 数据完整性 | `node tools/check-games.mjs`：130 条、字段、枚举、资源存在、体积预算 |
 | 路由解析 | `node --test`：合法/非法/补零/越界 |
 | selector | 搜索大小写、空白、无结果、相邻章边界（5/18/12→13） |
-| zoom | 比例边界、指针锚点缩放、连续缩放、平移范围限制 |
+| zoom | 比例边界、指针锚点缩放、连续缩放、平移范围限制、1 倍判定容差 |
 | repository | 假 fetch：成功、404、坏 JSON、并发去重、失败不缓存 |
+| 发布预算 | `tests/release.test.mjs`：三处体积、相对路径、`innerHTML` |
+| 编码规范 | `tests/standards.test.mjs`：十六进制颜色只在 `tokens.css`、每个 `<img>` 声明 `decoding` |
 
 ### 13.2 手动验收
 

@@ -1,9 +1,10 @@
 import { el } from '../core/dom.js';
+import { zoomButtonLabel } from '../domain/format.js';
 
 /**
  * 卡片拆成两个按钮：图片查看大图，文字查看玩法详情。
  * @param {any} game
- * @param {{ onOpen: (game: any, trigger: HTMLButtonElement) => void, onZoom: (game: any, trigger: HTMLButtonElement, index: number) => void }} options
+ * @param {{ onOpen: (game: any, trigger: HTMLButtonElement) => void, onZoom: (game: any, index: number, trigger: HTMLButtonElement) => void }} options
  */
 export function createGameCard(game, { onOpen, onZoom }) {
   const art = el('span', { class: 'card__art' });
@@ -28,8 +29,8 @@ export function createGameCard(game, { onOpen, onZoom }) {
   zoomButton = el('button', {
     type: 'button',
     class: 'card__art-button',
-    'aria-label': `查看《${game.name}》主图大图`,
-    onclick: () => onZoom?.(game, zoomButton, 0),
+    'aria-label': zoomButtonLabel(game),
+    onclick: () => onZoom(game, 0, zoomButton),
   }, [
     art,
     el('span', { class: 'card__zoom-hint', 'aria-hidden': 'true', text: '查看大图' }),

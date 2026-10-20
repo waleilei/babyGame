@@ -1,9 +1,13 @@
+import { bindDialogClose } from '../core/dialog.js';
 import { clear, el } from '../core/dom.js';
+import { artAlt, zoomButtonLabel } from '../domain/format.js';
 
-function media(src, alt, { class: className = 'media', fallback = '插图暂缺', lazy = false, onZoom = null, zoomLabel = '' } = {}) {
-  const wrap = el(onZoom ? 'button' : 'div', {
-    class: onZoom ? `${className} media-zoom` : className,
-    ...(onZoom ? { type: 'button', 'aria-label': zoomLabel, onclick: () => onZoom(wrap) } : {}),
+function media(src, alt, { class: className, lazy = false, onZoom, zoomLabel, fallback = '插图暂缺' }) {
+  const wrap = el('button', {
+    type: 'button',
+    class: `${className} media--zoom`,
+    'aria-label': zoomLabel,
+    onclick: () => onZoom(wrap),
   });
   const image = el('img', { src, alt, decoding: 'async', loading: lazy ? 'lazy' : null });
   image.addEventListener('error', () => {
@@ -31,7 +35,6 @@ const fact = (label, value) => el('div', { class: 'fact' }, [
 ]);
 
 export function createGameDialog({ onRequestClose, onZoomImage }) {
-  let suppressClose = false;
   let currentGame = null;
 
   const closeButton = el('button', {
@@ -69,11 +72,11 @@ export function createGameDialog({ onRequestClose, onZoomImage }) {
 
     const panels = el('div', { class: 'panels' });
     game.art.panels.forEach((src, index) => {
-      panels.append(media(src, `${game.name}步骤图 ${index + 1}`, {
+      panels.append(media(src, artAlt(game, index), {
         class: 'panel',
         lazy: true,
-        onZoom: onZoomImage ? (button) => onZoomImage(currentGame, index, button) : null,
-        zoomLabel: `放大${game.name}步骤图 ${index + 1}`,
+        onZoom: (button) => onZoomImage(game, index, button),
+        zoomLabel: zoomButtonLabel(game, index),
       }));
     });
 
@@ -81,10 +84,10 @@ export function createGameDialog({ onRequestClose, onZoomImage }) {
     game.observe.forEach((item) => observe.append(el('li', { text: item })));
 
     body.append(
-      media(game.art.main, `${game.name}示意图`, {
+      media(game.art.main, artAlt(game), {
         class: 'game-dialog__hero',
-        onZoom: onZoomImage ? (button) => onZoomImage(currentGame, 0, button) : null,
-        zoomLabel: `放大${game.name}主图`,
+        onZoom: (button) => onZoomImage(game, 0, button),
+        zoomLabel: zoomButtonLabel(game),
       }),
       el('dl', { class: 'facts' }, [
         fact('场地', game.place),
@@ -104,30 +107,12 @@ export function createGameDialog({ onRequestClose, onZoomImage }) {
     );
   }
 
-  function close() {
-    if (!dialog.open) return;
-    suppressClose = true;
-    dialog.close();
-  }
+  const close = bindDialogClose(dialog, () => requestClose());
 
   function requestClose() {
-    if (!dialog.open) return;
     close();
     onRequestClose?.();
   }
-
-  dialog.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    requestClose();
-  });
-
-  dialog.addEventListener('close', () => {
-    if (suppressClose) {
-      suppressClose = false;
-      return;
-    }
-    onRequestClose?.();
-  });
 
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) requestClose();
