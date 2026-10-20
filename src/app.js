@@ -12,6 +12,9 @@ import { selectDocView, selectTocView } from './state/selectors.js';
 import { createInitialState } from './state/store.js';
 
 const viewRoot = document.getElementById('view');
+// 滚动全部显式管理：列表 ⇄ 详情的滚动记录/恢复、切页回顶部都由页面驱动，
+// 不让浏览器在 hash 导航后异步恢复 push 时刻的滚动位置。
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 const store = createStore(createInitialState(parseHash(location.hash) ?? { name: 'toc' }));
 const repository = createCatalogRepository({ baseUrl: './data' });
 const prefetchEnabled = new URLSearchParams(location.search).get('prefetch') !== 'off';
@@ -22,6 +25,9 @@ let focusedKey = '';
 let navToken = 0;
 let tocRequest = null;
 let cancelPrefetch = null;
+// 详情页返回语义：从列表进入时用浏览器后退（可回列表）；
+// 深链直接进入（无列表历史）时返回按钮替换当前历史项去列表。刷新后重置为深链语义。
+let enteredGameFromList = false;
 
 const setDoc = (docId, entry) => store.setState((state) => ({
   docs: { ...state.docs, [docId]: entry },
@@ -137,8 +143,20 @@ function createPage(route) {
     onHome: () => router.navigate({ name: 'toc' }),
     onPrev: (id) => router.navigate({ name: 'doc', docId: id, gameId: null }),
     onNext: (id) => router.navigate({ name: 'doc', docId: id, gameId: null }),
-    onOpenGame: (id) => router.navigate({ name: 'doc', docId, gameId: id }),
-    onCloseGame: () => router.navigate({ name: 'doc', docId, gameId: null }, { replace: true }),
+    onOpenGame: (id) => {
+      enteredGameFromList = true;
+      router.navigate({ name: 'doc', docId, gameId: id });
+    },
+    onBackGame: () => {
+      if (enteredGameFromList) {
+        enteredGameFromList = false;
+        window.history.back();
+        return;
+      }
+      router.navigate({ name: 'doc', docId, gameId: null }, { replace: true });
+    },
+    // 详情内切游戏替换当前历史项：浏览器后退一次就回到列表，不逐游戏入栈。
+    onSwitchGame: (id) => router.navigate({ name: 'doc', docId, gameId: id }, { replace: true }),
     onRetry: () => retryDoc(docId),
   });
 }
@@ -155,7 +173,7 @@ function render() {
     viewRoot.replaceChildren(currentPage.el);
     currentPageKey = pageKey;
     focusedKey = '';
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }
 
   if (route.name === 'toc') {
@@ -174,7 +192,7 @@ function render() {
   const view = selectDocView(state, route.docId);
   currentPage.update(view);
   document.title = view.doc && view.entry
-    ? `${docLabel(view.entry)} · ${view.toc?.book?.title ?? 'babyGame'}`
+    ? `${view.game ? `${view.game.name} · ` : ''}${docLabel(view.entry)} · ${view.toc?.book?.title ?? 'babyGame'}`
     : '正在加载文档 · babyGame';
 
   if (view.status === 'ready' && focusedKey !== pageKey) {

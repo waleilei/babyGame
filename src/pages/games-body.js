@@ -5,9 +5,9 @@ import { createIntro } from '../ui/intro.js';
 
 /**
  * 游戏章正文：页头、章首导语、游戏卡片网格。
- * 工具栏、页脚、弹层与大图的全部权归文档页外壳。
+ * 工具栏、页脚、详情视图与大图的全部权归文档页外壳。
  */
-export function createGamesBody({ onOpenGame, onZoom }) {
+export function createGamesBody({ onOpenGame }) {
   const title = el('h1', { class: 'chapter__title', tabindex: '-1' });
   const meta = el('p', { class: 'chapter__meta' });
   const introHost = el('div', { class: 'chapter__intro-host' });
@@ -30,7 +30,7 @@ export function createGamesBody({ onOpenGame, onZoom }) {
       if (doc.intro.length > 0) introHost.replaceChildren(createIntro(doc.intro));
       else introHost.replaceChildren();
 
-      const grid = createGameGrid(doc.games, { onOpen: onOpenGame, onZoom });
+      const grid = createGameGrid(doc.games, { onOpen: onOpenGame });
       gridTitle = grid.title;
       gridHost.replaceChildren(grid.el);
     },

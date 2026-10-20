@@ -1,4 +1,3 @@
-import { bindDialogClose } from '../core/dialog.js';
 import { clear, el } from '../core/dom.js';
 import { artAlt, zoomButtonLabel } from '../domain/format.js';
 
@@ -19,12 +18,12 @@ function media(src, alt, { class: className, lazy = false, zoomLabel, fallback =
 }
 
 const section = (label, content) => el('section', { class: 'detail-section' }, [
-  el('h3', { class: 'detail-section__label', text: label }),
+  el('h2', { class: 'detail-section__label', text: label }),
   content,
 ]);
 
 const card = (label, text) => el('div', { class: 'detail-card' }, [
-  el('h4', { class: 'detail-card__title', text: label }),
+  el('h3', { class: 'detail-card__title', text: label }),
   el('p', { text }),
 ]);
 
@@ -33,37 +32,48 @@ const fact = (label, value) => el('div', { class: 'fact' }, [
   el('dd', { class: 'fact__value', text: value }),
 ]);
 
-export function createGameDialog({ onRequestClose, onZoomImage }) {
-  let currentGame = null;
+const pad = (value) => String(value).padStart(2, '0');
 
-  const closeButton = el('button', {
+/**
+ * 游戏详情页：全屏文档流视图。
+ * 头部（返回 + 标题 + 位置）、8 模块正文与步骤图、底部上/下一个游戏。
+ */
+export function createGameDetail({ onBack, onSwitchGame, onZoomImage }) {
+  let currentGameId = null;
+  let prevTarget = null;
+  let nextTarget = null;
+
+  const backButton = el('button', {
     type: 'button',
-    class: 'game-dialog__close',
-    'aria-label': '关闭游戏详情',
-    onclick: () => requestClose(),
-  }, ['×']);
-
-  const title = el('h2', { class: 'game-dialog__title', id: 'game-dialog-title' });
-  const meta = el('p', { class: 'game-dialog__meta' });
-  const body = el('div', { class: 'game-dialog__body' });
-  const dialog = el('dialog', { class: 'game-dialog', 'aria-labelledby': 'game-dialog-title' }, [
-    el('div', { class: 'game-dialog__panel' }, [
-      el('header', { class: 'game-dialog__bar' }, [
-        el('div', { class: 'game-dialog__heading' }, [
-          el('p', { class: 'game-dialog__eyebrow', text: '游戏详情' }),
-          title,
-          meta,
-        ]),
-        closeButton,
-      ]),
-      body,
-    ]),
+    class: 'game-detail__back',
+    onclick: () => onBack(),
+  }, [
+    el('span', { 'aria-hidden': 'true', text: '←' }),
+    el('span', { text: '返回列表' }),
   ]);
 
-  function render(game) {
-    currentGame = game;
-    title.textContent = game.name;
-    meta.textContent = `${game.id} · ${game.age} · ${game.ability} · ${game.duration}`;
+  const eyebrow = el('p', { class: 'game-detail__eyebrow', text: '游戏详情' });
+  const title = el('h1', { class: 'game-detail__title', tabindex: '-1' });
+  const location = el('p', { class: 'game-detail__location' });
+  const meta = el('p', { class: 'game-detail__meta' });
+  const body = el('div', { class: 'game-detail__body' });
+
+  const prevButton = el('button', {
+    type: 'button',
+    class: 'game-detail__pager-button',
+    onclick: () => {
+      if (prevTarget) onSwitchGame(prevTarget.id);
+    },
+  }, ['← 上一个']);
+  const nextButton = el('button', {
+    type: 'button',
+    class: 'game-detail__pager-button',
+    onclick: () => {
+      if (nextTarget) onSwitchGame(nextTarget.id);
+    },
+  }, ['下一个 →']);
+
+  function renderBody(game) {
     clear(body);
 
     const steps = el('ol', { class: 'steps' });
@@ -81,7 +91,7 @@ export function createGameDialog({ onRequestClose, onZoomImage }) {
     });
 
     const hero = media(game.art.main, artAlt(game), {
-      class: 'game-dialog__hero',
+      class: 'game-detail__hero',
       zoomLabel: zoomButtonLabel(game),
     });
     hero.addEventListener('click', () => onZoomImage(game, 0, hero));
@@ -109,31 +119,37 @@ export function createGameDialog({ onRequestClose, onZoomImage }) {
     );
   }
 
-  const close = bindDialogClose(dialog, () => requestClose());
-
-  function requestClose() {
-    close();
-    onRequestClose?.();
-  }
-
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) requestClose();
-  });
+  const root = el('section', { class: 'game-detail' }, [
+    el('header', { class: 'game-detail__bar' }, [
+      backButton,
+      el('div', { class: 'game-detail__heading' }, [eyebrow, title, location, meta]),
+    ]),
+    body,
+    el('footer', { class: 'game-detail__pager' }, [prevButton, nextButton]),
+  ]);
 
   return {
-    el: dialog,
+    el: root,
 
-    open(game) {
-      render(game);
-      if (!dialog.open) {
-        dialog.showModal();
-        body.scrollTop = 0;
-        closeButton.focus();
+    update({ game, gameIndex, gameCount, chapterLabel, prev, next }) {
+      if (game.id !== currentGameId) {
+        currentGameId = game.id;
+        renderBody(game);
       }
+      prevTarget = prev;
+      nextTarget = next;
+
+      title.textContent = game.name;
+      location.textContent = `${chapterLabel} · ${pad(gameIndex)}/${pad(gameCount)}`;
+      meta.textContent = `${game.age} · ${game.ability} · ${game.duration}`;
+
+      prevButton.disabled = !prev;
+      nextButton.disabled = !next;
+      prevButton.setAttribute('aria-label', prev ? `上一个游戏：${prev.name}` : '已经是本章第一个游戏');
+      nextButton.setAttribute('aria-label', next ? `下一个游戏：${next.name}` : '已经是本章最后一个游戏');
     },
 
-    close,
-    destroy: close,
-    isOpen: () => dialog.open,
+    focusTitle: () => title.focus({ preventScroll: true }),
+    destroy() {},
   };
 }

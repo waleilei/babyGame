@@ -35,6 +35,13 @@ export function docHeading(doc) {
   return `第${doc.no}章 ${doc.title}`;
 }
 
+/** 目录行的图文徽标：游戏章「图文」，文字章/前置/附录「纯文字」，未知文档为空。 */
+export function tocBadge(doc) {
+  if (doc?.kind === 'games') return '图文';
+  if (doc?.kind === 'prose') return '纯文字';
+  return '';
+}
+
 /** 上一页 / 下一页按钮的文案，工具栏与页脚共用。 */
 export function pagerText(doc, direction) {
   const isPrev = direction === 'prev';

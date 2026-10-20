@@ -40,9 +40,9 @@ export function selectDocView(state, docId) {
   const routeGameId = route?.name === 'doc' && route.docId === docId ? route.gameId : null;
   const tocEntry = (toc?.docs ?? []).find((doc) => doc.id === docId) ?? null;
   const kind = tocEntry?.kind ?? entry.data?.kind ?? null;
-  const game = routeGameId && kind === 'games'
-    ? (entry.data?.games ?? []).find((item) => item.id === routeGameId) ?? null
-    : null;
+  const games = kind === 'games' ? (entry.data?.games ?? []) : [];
+  const found = routeGameId ? games.findIndex((item) => item.id === routeGameId) : -1;
+  const game = found >= 0 ? games[found] : null;
 
   return {
     status: entry.status,
@@ -55,5 +55,10 @@ export function selectDocView(state, docId) {
     next,
     gameId: routeGameId,
     game,
+    // 详情视图派生：章内 1 起的序号与上/下一个游戏；详情未打开或游戏不存在时为 null。
+    gameIndex: found >= 0 ? found + 1 : null,
+    gameCount: kind === 'games' ? games.length : null,
+    prevGame: found > 0 ? games[found - 1] : null,
+    nextGame: found >= 0 && found < games.length - 1 ? games[found + 1] : null,
   };
 }

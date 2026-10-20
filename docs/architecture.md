@@ -1,8 +1,8 @@
-# babyGame v0.3 前端架构方案
+# babyGame v0.4 前端架构方案
 
-> 状态：已实现（v0.2 全书章节补齐） ｜ 版本：0.3 ｜ 日期：2026-10-20
-> 依据需求：全书 28 个文档连续阅读；一次只加载一个文档；目录、文档、相邻页之间快速跳转
-> 前序文档：`docs/design.md`（v0.1，已归档）、`docs/adr/0001-doc-model-and-routes.md`
+> 状态：已实现（v0.4 游戏详情全屏化与目录图文徽标） ｜ 版本：0.4 ｜ 日期：2026-10-20
+> 依据需求：全书 28 个文档连续阅读；一次只加载一个文档；目录、文档、相邻页之间快速跳转；游戏详情全屏化；目录区分图文/纯文字
+> 前序文档：`docs/design.md`（v0.1，已归档）、`docs/adr/0001-doc-model-and-routes.md`、`docs/adr/0002-game-detail-fullscreen.md`
 
 ---
 
@@ -17,7 +17,7 @@
 | 加载 | 首屏只加载 `toc.json`；进入文档只加载该文档 JSON；空闲时预取前后各一个文档 |
 | 状态 | 单一 store + 纯函数 selector + 单向数据流；URL 是导航状态的唯一来源 |
 | 文字章 | 块契约（段落/标题/列表/表格/引用/清单）+ 块渲染器 + 小节导航 + 本地清单状态 |
-| 详情 | 游戏章页内的原生 `<dialog>`，深链可直达；文字章没有弹层 |
+| 详情 | 游戏章页内的全屏详情视图（非弹层），深链可直达；文字章没有详情视图 |
 | 部署 | 任意静态托管，相对路径 + hash，无需服务器重写 |
 | 后端 | 无后端；静态 JSON 通过 `CatalogRepository` 接口提供，未来可替换为 REST |
 
@@ -29,12 +29,12 @@
 
 | 编号 | 需求 | 验收口径 |
 |---|---|---|
-| R1 | PC 与手机自适应 | 360px 无横向滚动；≥1024px 三列卡片、正文 + 侧边小节导航；弹层手机全屏 |
+| R1 | PC 与手机自适应 | 360px 无横向滚动；≥1024px 三列卡片、正文 + 侧边小节导航；详情页天然全屏 |
 | R2 | 一次只加载一个文档 | 首屏只请求 `toc.json`；文档页只请求该文档 JSON；渲染树中只有一个文档 |
 | R3 | 目录 ↔ 文档 | 目录 28 行按 6 组分组；文档内“目录”一次点击返回；深链可直达 |
 | R4 | 相邻页 | 上一页/下一页按全书顺序推进；4→5、12→13、18→19、21→附录A 连续；首尾禁用 |
 | R5 | 目录搜索 | 130 个游戏名 + 28 个文档标题；结果区分游戏/章节/附录/前置，点击直达 |
-| R6 | 游戏详情 | 8 个模块完整；4 张步骤图；关闭后回到原卡片位置 |
+| R6 | 游戏详情 | 8 个模块完整；4 张步骤图；返回后回到原卡片位置与滚动位置；详情内可切上/下一个游戏 |
 | R7 | 文字章阅读 | 标题、表格、清单、引用、跨块编号与稿件一致；宽表横向滚动且首列可见 |
 | R8 | 清单勾选 | 附录 B 37 项可勾选；刷新后保留；支持重置本页勾选 |
 
@@ -46,14 +46,14 @@
 | D2 | SPA + hash 路由 | 不需要 SEO；静态托管零配置；切换无整页刷新 |
 | D3 | 目录独立成页 | `#/` 为目录；文档页顶部固定“目录 / 上一页 / 下一页” |
 | D4 | 搜索覆盖游戏与文档 | 索引内嵌 `toc.json`；排序为完全匹配 → 前缀 → 包含 |
-| D5 | 详情用 `<dialog>` | 保留章节滚动位置；深链 `#/ch/5/game/01` |
+| D5 | 详情用全屏视图 | 同页双视图，零重建；滚动/焦点显式管理；深链 `#/ch/5/game/01`；见 ADR-0002 |
 | D6 | 相邻页线性、跨篇、不循环 | `front → ch01 … ch21 → apx-a … apx-f` |
 | D7 | 空闲预取相邻文档 | 文档渲染后 1s 预取前后文档，只暖缓存、不渲染 |
-| D8 | 切页回顶部并对焦标题 | 弹层关闭恢复卡片焦点；目录回顶部 |
+| D8 | 切页回顶部并对焦标题 | 详情返回恢复滚动位置与卡片焦点；目录回顶部 |
 | D9 | 游戏章显示章首导语 | 构建期把“发展地图/场景说明”解析为 `intro` 块 |
-| D10 | 目录不显示配图 | 每行显示编号/标题/meta（月龄或“阅读”）与游戏数；首屏保持轻量 |
+| D10 | 目录不显示配图 | 每行显示编号/标题/meta 与「图文/纯文字」徽标（按 kind 派生）；首屏保持零图片请求 |
 | D11 | 本地 + GitHub Pages 可用 | 全相对路径 + hash；未来接 CloudBase 不改代码 |
-| D12 | 三档断点、桌面方向键 | `<640` / `640-1023` / `≥1024`；`←/→` 切页、`Esc` 关弹层；不做滑动手势 |
+| D12 | 三档断点、桌面方向键 | `<640` / `640-1023` / `≥1024`；列表视图 `←/→` 切页；详情视图 `←/→` 切游戏、`Esc` 返回列表；不做滑动手势 |
 | D13 | 游戏章与文字章并列渲染 | 共用文档页外壳（工具栏/骨架/相邻页/页脚），正文各一套渲染器 |
 | D14 | 小节导航用按钮 | 不吃 hash；`scrollIntoView` + `scroll-margin-top`；桌面侧栏、移动端 `<details>` |
 | D15 | 清单状态存本地 | `babyGame:checklist:{docId}`；只存已勾选项；不可用时静默降级 |
@@ -114,9 +114,9 @@
 | 页面数 | 2 类（目录、文档），文档页有两种正文渲染器 |
 | 状态数 | 1 个 store，5 类动作 |
 | 数据量 | 28 个文档、130 条游戏，单文档最大约 18 KB |
-| 交互 | 路由切换、搜索过滤、弹层开关、预取、清单勾选 |
+| 交互 | 路由切换、搜索过滤、详情/大图切换、预取、清单勾选 |
 
-React/Vue 的主要收益（组件复用、响应式更新、生态）在这个规模下不足以抵消构建链、依赖与心智负担。原生 DOM 的代价是“显式更新”，但本项目只有两处需要增量更新（搜索结果、弹层），用页面对象的 `update()` 方法即可控制。
+React/Vue 的主要收益（组件复用、响应式更新、生态）在这个规模下不足以抵消构建链、依赖与心智负担。原生 DOM 的代价是“显式更新”，但本项目只有两处需要增量更新（搜索结果、详情视图），用页面对象的 `update()` 方法即可控制。
 
 **重估触发条件**：模块数 > 50、需要 SSR/SEO、需要账号与多端同步、或团队多人并行开发。
 
@@ -137,7 +137,7 @@ babyGame/
 │   ├── app.js                    # 组合根
 │   ├── core/
 │   │   ├── dom.js                # el() / clear()
-│   │   ├── dialog.js             # bindDialogClose() 两个弹层共享的关闭纪律
+│   │   ├── dialog.js             # bindDialogClose() 大图查看器的关闭纪律
 │   │   ├── toast.js              # 全局提示
 │   │   ├── store.js              # createStore()
 │   │   ├── router.js             # parseHash / buildHash / createRouter
@@ -163,15 +163,15 @@ babyGame/
 │   │   ├── search-results.js
 │   │   ├── blocks.js             # 文字章块渲染（表格/清单/引用）
 │   │   ├── section-nav.js        # 桌面侧栏 + 移动端 details
-│   │   ├── game-card.js          # 图片放大 + 详情双按钮
+│   │   ├── game-card.js          # 整卡单入口，进入详情
 │   │   ├── game-grid.js
-│   │   ├── game-dialog.js
-│   │   ├── image-lightbox.js     # 大图缩放/平移/切换
+│   │   ├── game-detail.js        # 全屏详情视图：头部/8 模块/游戏间导航
+│   │   ├── image-lightbox.js     # 大图缩放/平移/切换（仅详情页内打开）
 │   │   ├── intro.js              # 章首导语块渲染
 │   │   └── states.js             # skeleton / empty / error
 │   └── pages/
 │       ├── toc-page.js
-│       ├── doc-page.js           # 文档页外壳：工具栏、页脚、弹层、方向键
+│       ├── doc-page.js           # 文档页外壳：工具栏、页脚、详情视图、方向键
 │       ├── games-body.js         # 游戏章正文：导语 + 卡片网格
 │       └── prose-body.js         # 文字章正文：页头 + 小节导航 + 块
 ├── data/
@@ -241,7 +241,7 @@ export function createRouter({ onRoute }) : {
   navigate(route: Route, opts?: { replace?: boolean }): void
 }
 
-// core/dialog.js：两个弹层共享的关闭纪律
+// core/dialog.js：大图查看器的关闭纪律
 export function bindDialogClose(dialog: HTMLDialogElement, onUserClose: () => void) : () => void
 // 返回的是程序化关闭函数，不回触发 onUserClose；用户关闭（Esc、遮罩）走 onUserClose
 
@@ -273,6 +273,9 @@ export function selectDocView(state, docId): DocView
 // pages/*.js
 export function createTocPage(props): { el, update(view), focusTitle(), destroy() }
 export function createDocPage(props): { el, update(view), focusTitle(), destroy() }
+// createDocPage props: onHome, onPrev, onNext, onOpenGame, onBackGame, onSwitchGame, onRetry
+// ui/game-detail.js
+export function createGameDetail({ onBack, onSwitchGame, onZoomImage }): { el, update(view), focusTitle(), destroy() }
 ```
 
 JSDoc 类型就近写在模块里，配合 `jsconfig.json` 获得编辑器校验，不引入 TypeScript 构建。
@@ -281,15 +284,15 @@ JSDoc 类型就近写在模块里，配合 `jsconfig.json` 获得编辑器校验
 
 | 模块 | 关键职责 | 明确不做 |
 |---|---|---|
-| `app.js` | 初始化 store/router；处理路由；调度 toc/doc 加载；挂载页面；设置标题；预取 | 不实现卡片、弹层、块排版细节 |
+| `app.js` | 初始化 store/router；处理路由；调度 toc/doc 加载；挂载页面；设置标题；预取；详情返回的历史语义 | 不实现卡片、详情排版、块排版细节 |
 | `pages/toc-page.js` | 目录布局、搜索框、结果区、分组列表；维护输入焦点 | 不发请求、不改 URL |
-| `pages/doc-page.js` | 文档页外壳：工具栏、骨架/错误、页脚、弹层/大图生命周期、方向键 | 不渲染正文块 |
+| `pages/doc-page.js` | 文档页外壳：工具栏、骨架/错误、页脚、列表 ⇄ 详情双视图、大图生命周期、方向键 | 不渲染正文块 |
 | `pages/games-body.js` | 游戏章页头、导语、卡片网格 | 不计算相邻页（用 selector） |
 | `pages/prose-body.js` | 文字章页头、小节导航、块渲染、清单状态 | 不发请求 |
 | `ui/blocks.js` | 块 → 语义 DOM；表格滚动区域、清单复选框 | 不判断加载状态 |
 | `ui/section-nav.js` | 小节导航按钮与响应式两套容器 | 不改 URL |
-| `ui/game-card.js` | 单卡结构与点击回调 | 不判断筛选 |
-| `ui/game-dialog.js` | `<dialog>` 生命周期、8 模块排版、焦点管理 | 不加载数据 |
+| `ui/game-card.js` | 单卡结构与进入详情回调 | 不判断筛选 |
+| `ui/game-detail.js` | 全屏详情视图：头部、8 模块排版、游戏间导航 | 不加载数据 |
 | `domain/catalog.js` | 搜索匹配与排序、相邻页、分组、计数 | 不读写 DOM |
 | `domain/checklist.js` | 清单键、编码解码、越界键过滤 | 不碰 localStorage |
 | `src/data/repository.js` | 请求、缓存、并发去重、DTO 校验、错误归一 | 不感知路由 |
@@ -320,7 +323,7 @@ JSDoc 类型就近写在模块里，配合 `jsconfig.json` 获得编辑器校验
 
 设计要点：
 
-- **路由状态只存一份**：`route` 是导航的唯一来源，弹层开关由 `route.gameId` 派生，不另设 `isDialogOpen`。
+- **路由状态只存一份**：`route` 是导航的唯一来源，详情视图由 `route.gameId` 派生，不另设 `isDetailOpen`。
 - **文档数据按 id 缓存**：`docs` 是普通对象，不用 `Map`，便于浅合并与调试。
 - **搜索词不进 URL**：刷新后清空，避免与路由参数耦合。
 - **不做全局 loading**：每个资源独立 `status`，目录与文档可分别显示骨架屏。
@@ -371,7 +374,7 @@ JSDoc 类型就近写在模块里，配合 `jsconfig.json` 获得编辑器校验
 | `#/` 或空 | 目录 | `toc.json` |
 | `#/front` | 前置 | `toc.json`（若未加载）+ `data/docs/front.json` |
 | `#/ch/5` | 文档 | `toc.json`（若未加载）+ `data/chapters/ch05.json` |
-| `#/ch/5/game/01` | 游戏章 + 弹层 | 同上，加载完成后打开弹层 |
+| `#/ch/5/game/01` | 游戏章 + 全屏详情 | 同上，加载完成后切到详情视图 |
 | `#/appendix/a` | 附录 | `toc.json` + `data/docs/apx-a.json` |
 
 规则：
@@ -381,8 +384,9 @@ JSDoc 类型就近写在模块里，配合 `jsconfig.json` 获得编辑器校验
 - 游戏 id 保留两位字符串（`01`），与数据契约一致。
 - 非法 hash（空段、非数字）：`history.replaceState` 回 `#/`，并显示 toast「页面地址无效」。
 - 越界章号、不存在的附录：回到目录并提示；游戏 id 不属于该文档：回到该文档并提示。
-- 打开弹层用 `push`（可后退关闭）；关闭弹层用 `replace`（不产生额外历史项）。
-- 关闭弹层后焦点回到触发卡片；深链进入时焦点落到网格标题。
+- 列表→详情用 `push`（浏览器后退可回列表）；详情内切上/下一个游戏用 `replace`（后退一次回列表，不逐游戏入栈）。
+- 详情返回按钮 = 浏览器后退；深链直接进入（无列表历史）时返回按钮 `replace` 到列表。
+- 返回列表后焦点回到触发卡片（`preventScroll`）；深链进入时焦点落到详情标题、返回后落到网格标题。
 
 ### 6.2 页面结构
 
@@ -400,7 +404,7 @@ index.html
 <section class="search">         搜索框 + 结果区
 <nav class="toc">                6 个分组
   <section class="toc__part">    前置 / 第一篇 … / 附录
-    <a class="toc-row">          编号 / 标题 / meta（月龄或“阅读”）/ 游戏数
+    <a class="toc-row">          编号 / 标题 / meta（月龄或“阅读”）/ 徽标（图文·纯文字）/ 游戏数
 ```
 
 **文档页外壳**
@@ -410,8 +414,8 @@ index.html
 <div class="doc-body">           游戏章正文或文字章正文
 <div class="doc-state">          骨架 / 错误
 <footer class="chapter-footer">  上一页 / 下一页
-<dialog class="game-dialog">     游戏详情（仅游戏章）
-<dialog class="image-lightbox">  大图（仅游戏章）
+<div class="game-detail-host">   全屏游戏详情视图（仅游戏章，hidden 切换）
+<dialog class="image-lightbox">  大图（仅详情页内打开）
 ```
 
 **游戏章正文**
@@ -439,10 +443,11 @@ index.html
 |---|---|
 | 进入目录 | 若无 toc 则加载；渲染；滚动到顶部；标题 `0-3岁亲子游戏图鉴 · 130个游戏` |
 | 进入文档 | 确保 toc；加载文档；渲染骨架；成功后 `scrollTo(0,0)` 并把焦点放到 `h1` |
-| 章内打开弹层 | 不重新加载文档；`showModal()`；焦点进入关闭按钮 |
-| 关闭弹层 | `close()`；`replace` 回 `#/ch/5`；焦点回卡片 |
+| 进入详情 | 不重新加载文档；切换到详情视图；`instant` 回顶；焦点进详情标题；记录列表滚动位置 |
+| 详情内切游戏 | `replace` 更新 gameId；详情内容重建；回顶并对焦标题 |
+| 返回列表 | 恢复记录的滚动位置（`instant`）；焦点回触发卡片（`preventScroll`）；深链进入则去列表并聚焦网格标题 |
 | 上一/下一页 | `push` 新 hash；命中缓存则立即渲染，否则骨架 |
-| 浏览器后退 | 交给 hashchange；弹层状态由 route 派生，不额外处理 |
+| 浏览器后退 | 交给 hashchange；详情视图由 route 派生，不额外处理 |
 | 勾选清单 | 只更新 DOM 与 localStorage，不进 store、不重建页面 |
 
 页面对象暴露 `destroy()`，在替换页面前调用，移除 `window`/`document` 级监听（元素级监听随节点移除自动释放）。
@@ -460,9 +465,9 @@ createX({ ...props, onAction }) => HTMLElement
 - 一个组件一个文件，一个默认导出；文件名用 kebab-case，导出名用 `createXxx`。
 - 组件是**纯展示函数**：相同 props 产出相同 DOM；不读 store、不发请求、不写 `location`。
 - 交互通过回调向上传递；组件不修改传入对象。
-- 需要局部状态时（如弹层开合），由页面对象持有，组件只暴露 `open(game)` / `close()`。
+- 需要局部状态时（如详情/大图开合），由页面对象持有，组件只暴露 `update(view)` / `focusTitle()`。
 - 所有文本用 `textContent`/`el()` 写入，**禁止把数据拼进 `innerHTML`**；行内粗体由 `ui/blocks.js` 的 `inline()` 先按 `**` 切段再逐段建节点。
-- 列表与卡片里的图片统一 `loading="lazy" decoding="async"`，容器用 `aspect-ratio` 预留高度，避免 CLS。唯一例外是大图查看器：它展示的正是用户此刻要看的图，故不 lazy；舞台是缩放平移视口而非图片盒，尺寸由固定高度的面板决定，故不设 `aspect-ratio`。
+- 列表与卡片里的图片统一 `loading="lazy" decoding="async"`，容器用 `aspect-ratio` 预留高度，避免 CLS。例外：大图查看器（展示的正是用户此刻要看的图，故不 lazy；舞台是缩放平移视口而非图片盒，不设 `aspect-ratio`）与游戏详情页主图（详情首屏第一张，进页即看，不 lazy）。
 - 卡片内的图片与详情各用一个 `<button type="button">`，不嵌套；不拿 `div` 当按钮。
 
 ### 7.2 DOM 构造原语
@@ -492,9 +497,9 @@ export function el(tag, props = {}, children = []) {
 | `doc-footer` | — | ✓ | ✓ | 页脚上一页 / 下一页，与工具栏同源 |
 | `search-box` + `search-results` | ✓ | — | — | 目录专用，结果含游戏与文档 |
 | `toc-list` | ✓ | — | — | 6 个分组、28 行 |
-| `game-card` / `game-grid` | — | ✓ | — | 卡片拆为图片放大按钮与详情按钮 |
-| `game-dialog` | — | ✓ | — | 懒创建；页面销毁时一并销毁 |
-| `image-lightbox` | — | ✓ | — | 懒创建；卡片/弹层图片共用 |
+| `game-card` / `game-grid` | — | ✓ | — | 整卡单入口进入详情 |
+| `game-detail` | — | ✓ | — | 懒创建；与列表视图同页切换 |
+| `image-lightbox` | — | ✓ | — | 懒创建；仅详情页图片打开 |
 | `intro` | — | ✓ | — | 只在游戏章导语使用 |
 | `blocks` | — | — | ✓ | 段落/标题/列表/表格/引用/清单 |
 | `section-nav` | — | — | ✓ | 桌面侧栏 + 移动端 `<details>` |
@@ -505,7 +510,7 @@ export function el(tag, props = {}, children = []) {
 - 令牌集中在 `styles/tokens.css`，组件不得写死颜色。
 - 类名 BEM：`.card`、`.card__title`、`.card--skeleton`；状态类用 `is-*`（`.is-active`）。
 - 布局用 Grid/Flex；断点只在 `app.css` 定义三档，组件内不写 media query。
-- 动效仅 hover 与弹层，`prefers-reduced-motion` 下关闭。
+- 动效仅 hover 与大图查看器，`prefers-reduced-motion` 下关闭。
 - 文字章正文用衬线字体、约 38em 行宽；段落不缩进，用段间距分隔。
 - 表格容器 `overflow-x:auto`、`role="region"`、`tabindex="0"`，首列 `position:sticky`；表头不吸顶。
 - 清单用原生 `<input type="checkbox">` + `<label>`；清单块带 `aria-label`。
@@ -661,7 +666,7 @@ export function el(tag, props = {}, children = []) {
       "safety": "……",
       "question": "……",
       "art": { "main": "assets/art/panel_web/001-1.jpg", "panels": ["assets/art/panel_web/001-1.jpg", "…-2.jpg", "…-3.jpg", "…-4.jpg"] }
-      // main 与 panels[0] 相同：首张水彩图兼作卡片主图，4 张图供弹层与大图切换。
+      // main 与 panels[0] 相同：首张水彩图兼作卡片主图，4 张图供详情与大图切换。
     }
   ]
 }
@@ -790,15 +795,18 @@ navigate(#/ch/5) → hashchange → routeChanged
   → 空闲 1s：prefetchDoc('ch04'), prefetchDoc('ch06')
 ```
 
-### 10.4 打开/关闭弹层
+### 10.4 进入/返回游戏详情
 
 ```
-点击卡片 → onOpenGame('01')
+点击卡片 → onOpenGame('01')  // 记录列表滚动位置与触发卡片
   → router.navigate({ name:'doc', docId:'ch05', gameId:'01' })  // push
-  → 文档已就绪 → selectDocView.game
-  → dialog.open(game) → showModal() → 焦点到关闭按钮
-关闭 → dialog.close() → router.navigate({ ..., gameId:null }, { replace:true })
-  → 焦点回原卡片（记录触发元素）；深链进入则焦点回网格标题
+  → 文档已就绪 → selectDocView.game / gameIndex / prevGame / nextGame
+  → 切到详情视图 → instant 回顶 → 焦点到详情标题
+详情内「上一个/下一个」或 ←/→ → onSwitchGame(id)
+  → router.navigate({ ..., gameId:id }, { replace:true })  // 后退一次回列表
+返回按钮或 Esc → onBackGame
+  → 有列表历史：history.back()；深链进入：replace 到 #/ch/5
+  → 恢复滚动位置（instant）→ 焦点回触发卡片（preventScroll）；深链进入则聚焦网格标题
 ```
 
 ### 10.5 上一页 / 下一页
@@ -828,23 +836,24 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 
 | 断点 | 目录 | 游戏章 | 文字章 |
 |---|---|---|---|
-| `<640px` | 单列，搜索框全宽 | 单列卡片，工具栏三按钮等分，弹层全屏 | 单列正文，小节导航折叠为 `<details>`，宽表横向滚动 |
-| `640-1023px` | 单列，最大宽 720px | 双列，弹层 90vw / 90vh | 正文单列，上限 38em |
-| `≥1024px` | 单列，最大宽 820px | 三列，最大宽 1120px，弹层 720px | 正文 + 260px 吸顶小节导航 |
+| `<640px` | 单列，搜索框全宽 | 单列卡片，工具栏三按钮等分，详情全屏 | 单列正文，小节导航折叠为 `<details>`，宽表横向滚动 |
+| `640-1023px` | 单列，最大宽 720px | 双列 | 正文单列，上限 38em |
+| `≥1024px` | 单列，最大宽 820px | 三列，最大宽 1120px；详情正文限宽 760px | 正文 + 260px 吸顶小节导航 |
 
 可访问性：
 
 - 语义结构：`header` / `main` / `nav` / `h1`，skip link 首元素。
 - 路由切换后焦点移动到新页 `h1`（`tabindex="-1"`），并更新 `document.title`。
-- 弹层用原生 `<dialog>`，自带焦点圈定与 Esc；关闭后焦点回到触发元素。
+- 详情是文档流全屏视图：焦点随 Tab 自然流动；返回后焦点回到触发卡片（`preventScroll`）。
+- 大图用原生 `<dialog>`，自带焦点圈定与 Esc；关闭后焦点回到被点击图片。
 - 搜索输入 `type="search"` + `aria-label`；结果计数用 `aria-live="polite"`；结果类型标签同时出现在可访问名称里。
-- 卡片拆为图片按钮与详情按钮，均可 Enter/Space；图片 `alt`：卡片内为空（按钮名称已含游戏名），弹层为“{游戏名}主图 / 步骤图 N”。
-- 图片大图用第二个原生 `<dialog>` 叠层，支持滚轮/双指缩放、拖拽平移、`+/-/0` 与左右键；Esc 只关闭顶层，焦点回到被点击图片。
+- 卡片是整卡单按钮，可 Enter/Space；图片 `alt` 为空（按钮名称已含游戏名），详情页为“{游戏名}主图 / 步骤图 N”。
+- 图片大图用原生 `<dialog>` 叠层，支持滚轮/双指缩放、拖拽平移、`+/-/0` 与左右键；Esc 只关闭大图，焦点回到被点击图片。
 - 小节导航是 `<nav aria-label="本页目录">`，项为按钮；移动端 `<details>` 的 summary 可键盘展开。
 - 表格容器 `role="region"` + `tabindex="0"` + 最近标题作为 `aria-label`；表头 `th scope="col"`；首列 `position:sticky`。
 - 清单为原生复选框，`<label>` 包裹文本；清单块带项数说明。
 - 对比度 ≥ 4.5:1；焦点环不可移除；`prefers-reduced-motion` 关闭过渡与平滑滚动。
-- 键盘：目录页 `Tab` 顺序自然；文档页 `←/→` 切页（输入框、下拉、复选框内不拦截），`Esc` 关弹层。
+- 键盘：目录页 `Tab` 顺序自然；文档页列表视图 `←/→` 切页；详情视图 `←/→` 切上/下一个游戏、`Esc` 返回列表（输入框、下拉、复选框内不拦截；大图打开时按键归大图）。
 
 ---
 
@@ -873,7 +882,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | 分层依赖 | `node tools/check-imports.mjs`：按 §15 矩阵扫描全部模块，禁止越界依赖、深层 `../` 与非相对导入 |
 | 文档漂移 | `node tools/check-docs.mjs`：文档里的仓库路径必须存在，已移除的旧符号不得残留 |
 | 内容基线 | `npm run baseline`：实现前输出表数、清单数、伪标题数、跨块编号，与 spec 的验收数字对照 |
-| 端到端冒烟 | `npm run smoke`：headless Chrome 检查目录、搜索、清单（含键盘）、翻页、深链、大图、360/768/1440、表格、断网重试、图片 404、首屏/预取请求与子目录部署 |
+| 端到端冒烟 | `npm run smoke`：headless Chrome 检查目录（含徽标）、搜索、清单（含键盘）、翻页、深链详情、详情导航与滚动恢复、大图、360/768/1440、表格、断网重试、图片 404、首屏/预取请求与子目录部署 |
 | 性能 | `npm run smoke -- --perf`（本地）或 `--perf --slow`（4G 模拟）：FCP、目录可交互、缓存命中切页、CLS |
 | 数据完整性 | `node tools/check-games.mjs`：28 个文档、130 条游戏、块结构、分组覆盖、资源存在、孤儿文件、体积预算 |
 | 提示词目录 | `node tools/check-prompts.mjs`：520 条与图片双向一致、字典引用、禁画项、月龄对齐、reviewed/draft 统计 |
@@ -889,19 +898,21 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 
 ### 13.2 手动验收
 
-`npm run smoke` 已自动覆盖目录、搜索、清单（含键盘）、翻页、深链、大图、360/768/1440、表格、断网重试、图片 404、首屏/预取请求与子目录部署；以下条目保留为发布前复核。
+`npm run smoke` 已自动覆盖目录（含徽标）、搜索、清单（含键盘）、翻页、深链详情、详情导航与滚动恢复、大图、360/768/1440、表格、断网重试、图片 404、首屏/预取请求与子目录部署；以下条目保留为发布前复核。
 
 - [ ] 目录 → 文档 → 目录，两次点击内完成
 - [ ] 第 4 章“下一页”进入第 5 章；第 12 章进入第 13 章；第 18 章进入第 19 章；第 21 章进入附录 A
 - [ ] 前置“上一页”禁用；附录 F“下一页”禁用
-- [ ] 搜索“躲猫猫”命中游戏并直达弹层；“里程碑”命中附录 A；无结果有清除按钮
-- [ ] 深链 `#/ch/10/game/76` 刷新后仍打开正确弹层
-- [ ] 后退关闭弹层，再后退回到上一文档
-- [ ] 关闭弹层后焦点回到原卡片
+- [ ] 目录游戏章行有「图文」徽标、文字章行有「纯文字」徽标，两色可辨
+- [ ] 搜索“躲猫猫”命中游戏并直达全屏详情；“里程碑”命中附录 A；无结果有清除按钮
+- [ ] 深链 `#/ch/10/game/76` 刷新后仍打开正确详情页
+- [ ] 浏览器后退从详情回列表；翻看多个游戏后后退一次仍回列表
+- [ ] 返回列表后滚动位置与焦点回到触发卡片
+- [ ] 详情页头部位置行正确（第N章 · 序号/总数）；章首“上一个”禁用、章末“下一个”禁用
 - [ ] 文字章标题、表格、清单、引用与稿件一致；附录 B 37 项可勾选
 - [ ] 勾选后刷新仍保留；“重置本页勾选”清空并取消全部勾选
-- [ ] 点击卡片主图、弹层主图或步骤图打开大图；滚轮/双指缩放、拖拽平移、左右切换
-- [ ] 大图关闭后焦点回到被点击图片；从弹层打开时只关闭大图，游戏详情保留
+- [ ] 详情页内点击主图或步骤图打开大图；滚轮/双指缩放、拖拽平移、左右切换
+- [ ] 大图关闭后焦点回到被点击图片；Esc 只关大图时详情保留
 
 ---
 
@@ -915,7 +926,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | 目录内嵌游戏名索引 | 独立 `search.json`、全量加载 | 少一次请求；约 19 KB | TOC 随内容增长 | 索引 > 100 KB |
 | 统一“文档”模型 | 保留 chapters/parts | 前置与附录没有章号，统一后分组和相邻页只有一套顺序 | 目录数据要维护 28 条 | 文档模型需要树形层级 |
 | 文字章块契约 | 浏览器内解析 Markdown | 运行期零依赖；块结构可校验；表格/清单可控 | 改稿需重跑脚本 | 需要在线编辑内容 |
-| 详情用 `<dialog>` | 独立详情页 | 保留滚动与上下文；少一次数据加载 | 分享仍是深链，可接受 | 需要独立 SEO 页 |
+| 详情用全屏双视图 | `<dialog>` 弹层、独立详情页 | 家长连续浏览路径短；整卡单入口可预期；切换零请求零重建 | 滚动/焦点需要显式管理 | 需要独立 SEO 页或跨章详情 |
 | DOM 函数组件 | 模板字符串、Web Components | `textContent` 天然防注入；组合直观 | 无响应式绑定 | 组件状态变复杂 |
 | Repository 接口 | 页面直接 fetch | 后端可替换；可注入假 fetch 测试 | 多一层约 30 行 | 接口形态稳定后可简化 |
 | 空闲预取相邻页 | 严格按需 | 翻页接近即时 | 每次多看 1-2 个请求 | 流量敏感场景可关闭 |
@@ -973,7 +984,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 
 ## 18. 当前状态与后续
 
-v0.2 已完成：28 个文档、130 个游戏、前置与附录、文字章块渲染、宽表、清单、小节导航、搜索扩展、相邻页与预取。
+v0.4 已完成：游戏详情从弹层改为全屏双视图（详见 ADR-0002）、卡片整卡单入口、大图仅详情页内打开、目录图文/纯文字徽标、详情内游戏间导航与滚动/焦点恢复。v0.2/v0.3 的全书文档、文字章、清单、搜索与相邻页能力保持不变。
 
 后续候选（不在 v0.2 范围）：
 

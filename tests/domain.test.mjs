@@ -23,6 +23,7 @@ import {
   searchEmptyTitle,
   searchHitMeta,
   searchHitTypeLabel,
+  tocBadge,
   zoomButtonLabel,
 } from '../src/domain/format.js';
 import { selectDocView, selectTocView } from '../src/state/selectors.js';
@@ -320,6 +321,63 @@ test('文档视图模型派生类型、相邻页与当前游戏', () => {
   assert.equal(missingGame.game, null);
 });
 
+test('详情视图派生：章内序号、上/下一个游戏与首尾边界', () => {
+  const gamesDoc = {
+    ...GAMES_DOC,
+    id: 'ch06',
+    no: 6,
+    games: [
+      { ...GAME_01, id: '15', name: '手帕躲猫猫' },
+      { ...GAME_01, id: '16', name: '翻身与抓握' },
+      { ...GAME_01, id: '20', name: '第三个游戏' },
+    ],
+  };
+  const state = (gameId) => ({
+    route: { name: 'doc', docId: 'ch06', gameId },
+    toc: { status: 'ready', data: TOC, error: null },
+    docs: { ch06: docState(gamesDoc) },
+    query: '',
+  });
+
+  const middle = selectDocView(state('16'), 'ch06');
+  assert.equal(middle.game.name, '翻身与抓握');
+  assert.equal(middle.gameIndex, 2);
+  assert.equal(middle.gameCount, 3);
+  assert.equal(middle.prevGame.id, '15');
+  assert.equal(middle.nextGame.id, '20');
+
+  const first = selectDocView(state('15'), 'ch06');
+  assert.equal(first.gameIndex, 1);
+  assert.equal(first.prevGame, null);
+  assert.equal(first.nextGame.id, '16');
+
+  const last = selectDocView(state('20'), 'ch06');
+  assert.equal(last.gameIndex, 3);
+  assert.equal(last.nextGame, null);
+
+  const closed = selectDocView({ ...state(null), route: { name: 'doc', docId: 'ch06', gameId: null } }, 'ch06');
+  assert.equal(closed.game, null);
+  assert.equal(closed.gameIndex, null);
+  assert.equal(closed.gameCount, 3);
+  assert.equal(closed.prevGame, null);
+  assert.equal(closed.nextGame, null);
+
+  const missing = selectDocView(state('99'), 'ch06');
+  assert.equal(missing.game, null);
+  assert.equal(missing.gameIndex, null);
+  assert.equal(missing.prevGame, null);
+  assert.equal(missing.nextGame, null);
+
+  const prose = selectDocView({
+    route: { name: 'doc', docId: 'ch01', gameId: null },
+    toc: { status: 'ready', data: TOC, error: null },
+    docs: { ch01: docState(PROSE_DOC) },
+    query: '',
+  }, 'ch01');
+  assert.equal(prose.gameIndex, null);
+  assert.equal(prose.gameCount, null);
+});
+
 test('文档视图模型透传加载与错误状态', () => {
   const loading = selectDocView({
     route: { name: 'doc', docId: 'ch05', gameId: null },
@@ -373,6 +431,17 @@ test('翻页文案：工具栏与页脚同源', () => {
   assert.equal(pagerText(chapter, 'next').dir, '下一页 →');
   assert.equal(pagerText(null, 'prev').label, '已是第一页');
   assert.equal(pagerText(null, 'next').aria, '已经是最后一页');
+});
+
+test('目录徽标：游戏章图文、文字章纯文字、未知为空', () => {
+  const byId = (id) => DOCS.find((doc) => doc.id === id);
+  assert.equal(tocBadge(byId('ch05')), '图文');
+  assert.equal(tocBadge(byId('ch13')), '图文');
+  assert.equal(tocBadge(byId('ch01')), '纯文字');
+  assert.equal(tocBadge(byId('front')), '纯文字');
+  assert.equal(tocBadge(byId('apx-b')), '纯文字');
+  assert.equal(tocBadge(null), '');
+  assert.equal(tocBadge({ id: 'x' }), '');
 });
 
 test('格式化：结果计数、空态与图片可访问名称', () => {
