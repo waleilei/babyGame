@@ -126,29 +126,31 @@ babyGame/
 ├── src/
 │   ├── app.js                    # 组合根
 │   ├── core/
-│   │   ├── dom.js                # el() / frag() / clear() / text()
+│   │   ├── dom.js                # el() / clear()
+│   │   ├── toast.js              # 全局提示
 │   │   ├── store.js              # createStore()
 │   │   ├── router.js             # parseHash / buildHash / createRouter
-│   │   ├── focus.js              # focusHeading / restoreFocus
 │   │   └── idle.js               # requestIdle 兼容封装
 │   ├── domain/
-│   │   ├── route.js              # Route 类型与校验
+│   │   ├── route.js              # resolveRoute 路由校验
 │   │   ├── catalog.js            # 搜索、相邻章、分组
+│   │   ├── zoom.js               # 缩放比例、锚点缩放、平移边界
 │   │   └── format.js             # 计数、月龄、标题拼接
 │   ├── data/
 │   │   ├── http.js               # getJSON + 错误归一
 │   │   └── repository.js         # CatalogRepository + 缓存 + 预取暖缓存
 │   ├── state/
-│   │   ├── store.js              # 初始 state + actions
+│   │   ├── store.js              # 初始 state
 │   │   └── selectors.js          # 纯函数视图模型
 │   ├── ui/
 │   │   ├── toolbar.js            # 目录 / 上一章 / 下一章
 │   │   ├── toc-list.js           # 按篇分组的章节列表
 │   │   ├── search-box.js
 │   │   ├── search-results.js
-│   │   ├── game-card.js
+│   │   ├── game-card.js          # 图片放大 + 详情双按钮
 │   │   ├── game-grid.js
 │   │   ├── game-dialog.js
+│   │   ├── image-lightbox.js     # 大图缩放/平移/切换
 │   │   ├── intro.js              # 章首导语块渲染
 │   │   └── states.js             # skeleton / empty / error
 │   └── pages/
@@ -170,7 +172,7 @@ babyGame/
     └── design.md                 # v0.1，已归档
 ```
 
-估算代码量：运行期约 700-900 行（不含 CSS），构建期约 250 行。
+估算代码量：运行期约 1,500-1,700 行（不含 CSS），构建期约 250 行。
 
 ---
 
@@ -379,7 +381,7 @@ createX({ ...props, onAction }) => HTMLElement
 - 需要局部状态时（如弹层开合），由页面对象持有，组件只暴露 `open(game)` / `close()`。
 - 所有文本用 `textContent`/`el()` 写入，**禁止把数据拼进 `innerHTML`**；唯一例外是 `intro` 的粗体解析，先按 `**` 切段再逐段建节点。
 - 图片统一 `loading="lazy" decoding="async"`，容器用 `aspect-ratio` 预留高度，避免 CLS。
-- 卡片必须用 `<button type="button">`，不拿 `div` 当按钮。
+- 卡片内的图片与详情各用一个 `<button type="button">`，不嵌套；不拿 `div` 当按钮。
 
 ### 7.2 DOM 构造原语
 
@@ -407,8 +409,9 @@ export function el(tag, props = {}, children = []) {
 | `toolbar` | — | ✓ | 固定三段：目录 / 上一章 / 下一章 |
 | `search-box` + `search-results` | ✓ | — | 目录专用 |
 | `toc-list` | ✓ | — | 按篇分组 |
-| `game-card` / `game-grid` | — | ✓ | 卡片仅章节页使用 |
+| `game-card` / `game-grid` | — | ✓ | 卡片拆为图片放大按钮与详情按钮 |
 | `game-dialog` | — | ✓ | 单例，页面创建时挂载 |
+| `image-lightbox` | — | ✓ | 单例，卡片/弹层图片共用，原生 dialog 叠层 |
 | `intro` | — | ✓ | v0.2 文字章复用同一块渲染器 |
 | `states`（骨架/空/错误） | ✓ | ✓ | 三处复用，文案由参数传入 |
 
@@ -553,6 +556,7 @@ export function el(tag, props = {}, children = []) {
       "safety": "……",
       "question": "……",
       "art": { "main": "assets/art/panel_web/001-1.jpg", "panels": ["assets/art/panel_web/001-1.jpg", "…-2.jpg", "…-3.jpg", "…-4.jpg"] }
+      // main 与 panels[0] 相同：首张水彩图兼作卡片主图，4 张图供弹层与大图切换。
     }
   ]
 }
@@ -687,7 +691,8 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 - 路由切换后焦点移动到新页 `h1`（`tabindex="-1"`），并更新 `document.title`。
 - 弹层用原生 `<dialog>`，自带焦点圈定与 Esc；关闭后焦点回到触发元素。
 - 搜索输入 `type="search"` + `aria-label`；结果计数用 `aria-live="polite"`。
-- 卡片是 `<button>`，可 Enter/Space；图片 `alt`：卡片内为空（文本已含名称），弹层为“{游戏名}示意图”。
+- 卡片拆为图片按钮与详情按钮，均可 Enter/Space；图片 `alt`：卡片内为空（按钮名称已含游戏名），弹层为“{游戏名}示意图”。
+- 图片大图用第二个原生 `<dialog>` 叠层，支持滚轮/双指缩放、拖拽平移、`+/-/0` 与左右键；Esc 只关闭顶层，焦点回到被点击图片。
 - 对比度 ≥ 4.5:1；焦点环不可移除；`prefers-reduced-motion` 关闭过渡。
 - 键盘：目录页 `Tab` 顺序自然；章节页 `←/→` 切章（输入框内不拦截）、`Esc` 关弹层。
 
@@ -699,7 +704,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 |---|---|
 | `toc.json` | < 20 KB |
 | 单章 JSON | < 45 KB |
-| 运行期 JS（未压缩） | < 40 KB |
+| 运行期 JS（未压缩） | < 56 KB（v0.1 原 40 KB，图片大图功能增加约 12 KB） |
 | 首屏请求数 | 1 HTML + 1 CSS + 1 JS 入口（模块并行）+ 1 toc.json |
 | 首屏可交互 | 本地 < 1s；4G < 2.5s |
 | 切章（缓存命中） | < 50ms |
@@ -719,6 +724,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | 数据完整性 | `node tools/check-games.mjs`：130 条、字段、枚举、资源存在 |
 | 路由解析 | `node --test`：合法/非法/补零/越界 |
 | selector | 搜索大小写、空白、无结果、相邻章边界（5/18/12→13） |
+| zoom | 比例边界、指针锚点缩放、连续缩放、平移范围限制 |
 | repository | 假 fetch：成功、404、坏 JSON、并发去重、失败不缓存 |
 
 ### 13.2 手动验收

@@ -25,9 +25,9 @@ test('数据体积满足预算：目录 < 20KB，单章 < 45KB', () => {
   }
 });
 
-test('运行期 JS 未压缩小于 40KB', () => {
+test('运行期 JS 未压缩小于 56KB', () => {
   const total = runtimeFiles.reduce((sum, file) => sum + statSync(file).size, 0);
-  assert.ok(total < 40 * 1024, `运行期 JS ${(total / 1024).toFixed(1)}KB`);
+  assert.ok(total < 56 * 1024, `运行期 JS ${(total / 1024).toFixed(1)}KB`);
 });
 
 test('所有资源与模块使用相对路径，支持子目录部署', () => {

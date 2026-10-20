@@ -1,7 +1,10 @@
 import { clear, el } from '../core/dom.js';
 
-function media(src, alt, { class: className = 'media', fallback = '插图暂缺', lazy = false } = {}) {
-  const wrap = el('div', { class: className });
+function media(src, alt, { class: className = 'media', fallback = '插图暂缺', lazy = false, onZoom = null, zoomLabel = '' } = {}) {
+  const wrap = el(onZoom ? 'button' : 'div', {
+    class: onZoom ? `${className} media-zoom` : className,
+    ...(onZoom ? { type: 'button', 'aria-label': zoomLabel, onclick: () => onZoom(wrap) } : {}),
+  });
   const image = el('img', { src, alt, decoding: 'async', loading: lazy ? 'lazy' : null });
   image.addEventListener('error', () => {
     image.remove();
@@ -27,8 +30,9 @@ const fact = (label, value) => el('div', { class: 'fact' }, [
   el('dd', { class: 'fact__value', text: value }),
 ]);
 
-export function createGameDialog({ onRequestClose }) {
+export function createGameDialog({ onRequestClose, onZoomImage, isBlocked }) {
   let suppressClose = false;
+  let currentGame = null;
 
   const closeButton = el('button', {
     type: 'button',
@@ -55,6 +59,7 @@ export function createGameDialog({ onRequestClose }) {
   ]);
 
   function render(game) {
+    currentGame = game;
     title.textContent = game.name;
     meta.textContent = `${game.id} · ${game.age} · ${game.ability} · ${game.duration}`;
     clear(body);
@@ -64,14 +69,23 @@ export function createGameDialog({ onRequestClose }) {
 
     const panels = el('div', { class: 'panels' });
     game.art.panels.forEach((src, index) => {
-      panels.append(media(src, `${game.name}步骤图 ${index + 1}`, { class: 'panel', lazy: true }));
+      panels.append(media(src, `${game.name}步骤图 ${index + 1}`, {
+        class: 'panel',
+        lazy: true,
+        onZoom: onZoomImage ? (button) => onZoomImage(currentGame, index, button) : null,
+        zoomLabel: `放大${game.name}步骤图 ${index + 1}`,
+      }));
     });
 
     const observe = el('ul', { class: 'observations' });
     game.observe.forEach((item) => observe.append(el('li', { text: item })));
 
     body.append(
-      media(game.art.main, `${game.name}示意图`, { class: 'game-dialog__hero' }),
+      media(game.art.main, `${game.name}示意图`, {
+        class: 'game-dialog__hero',
+        onZoom: onZoomImage ? (button) => onZoomImage(currentGame, 0, button) : null,
+        zoomLabel: `放大${game.name}主图`,
+      }),
       el('dl', { class: 'facts' }, [
         fact('场地', game.place),
         fact('材料', game.materials),
@@ -104,6 +118,7 @@ export function createGameDialog({ onRequestClose }) {
 
   dialog.addEventListener('cancel', (event) => {
     event.preventDefault();
+    if (isBlocked?.()) return;
     requestClose();
   });
 

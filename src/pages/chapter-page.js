@@ -3,6 +3,7 @@ import { chapterButtonLabel } from '../domain/format.js';
 import { createErrorBlock, createSkeleton } from '../ui/states.js';
 import { createGameDialog } from '../ui/game-dialog.js';
 import { createGameGrid } from '../ui/game-grid.js';
+import { createImageLightbox } from '../ui/image-lightbox.js';
 import { createIntro } from '../ui/intro.js';
 import { createToolbar } from '../ui/toolbar.js';
 
@@ -48,6 +49,17 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
     else title.focus({ preventScroll: true });
   }
 
+  const lightbox = createImageLightbox();
+
+  function openLightbox(game, index, trigger) {
+    lightbox.open({
+      title: game.name,
+      images: game.art.panels.map((src, i) => ({ src, alt: `${game.name}步骤图 ${i + 1}` })),
+      index,
+      trigger,
+    });
+  }
+
   const dialog = createGameDialog({
     onRequestClose: () => {
       const trigger = lastTrigger;
@@ -57,9 +69,11 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
       restoreFocus(trigger);
       onCloseGame();
     },
+    onZoomImage: (game, index, trigger) => openLightbox(game, index, trigger),
+    isBlocked: () => lightbox.isOpen() || lightbox.escapedRecently(),
   });
 
-  const root = el('div', { class: 'chapter-page' }, [toolbar.el, content, dialog.el]);
+  const root = el('div', { class: 'chapter-page' }, [toolbar.el, content, dialog.el, lightbox.el]);
 
   function renderChapter(view) {
     const chapter = view.chapter;
@@ -72,6 +86,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
         lastTrigger = trigger;
         onOpenGame(game.id);
       },
+      onZoom: (game, trigger) => openLightbox(game, 0, trigger),
     });
     gridTitle = grid.title;
     gridHost.replaceChildren(grid.el);
@@ -100,6 +115,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
           lastGameId = view.game.id;
         }
       } else if (wasGameOpen) {
+        lightbox.close({ restoreFocus: false });
         dialog.close();
         wasGameOpen = false;
         lastGameId = null;
@@ -112,6 +128,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
 
     renderedNo = null;
     if (wasGameOpen) {
+      lightbox.close({ restoreFocus: false });
       dialog.close();
       wasGameOpen = false;
       lastGameId = null;
@@ -126,7 +143,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
   }
 
   function onKeydown(event) {
-    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || dialog.isOpen()) return;
+    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || dialog.isOpen() || lightbox.isOpen()) return;
     const target = event.target;
     if (target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))) return;
 
@@ -148,6 +165,7 @@ export function createChapterPage({ onHome, onPrev, onNext, onOpenGame, onCloseG
     focusTitle: () => title.focus({ preventScroll: true }),
     destroy() {
       window.removeEventListener('keydown', onKeydown);
+      lightbox.destroy();
       dialog.destroy();
     },
   };
