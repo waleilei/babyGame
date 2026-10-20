@@ -266,6 +266,33 @@ test('校验：复合场地内的场景覆盖不报警，超出集合才报警',
   assert.ok(outside.warnings.some((warning) => warning.includes('允许的集合')));
 });
 
+test('校验：四格至少两项不同', () => {
+  const panels = ['1', '2', '3', '4'].map((panel) => ({
+    ...fixture({ 动作: `动作${panel}` }),
+    key: `006-${panel}`,
+  }));
+
+  const onlyAction = validatePrompts({
+    entries: panels,
+    presets: PRESETS,
+    games: GAMES,
+    assetKeys: new Set(panels.map((entry) => entry.key)),
+  });
+  assert.ok(onlyAction.warnings.some((warning) => /至少两项/.test(warning)));
+
+  const varied = panels.map((entry, index) => ({
+    ...entry,
+    fields: { ...entry.fields, 镜头: index % 2 ? '特写' : '平视中景' },
+  }));
+  const ok = validatePrompts({
+    entries: varied,
+    presets: PRESETS,
+    games: GAMES,
+    assetKeys: new Set(varied.map((entry) => entry.key)),
+  });
+  assert.equal(ok.warnings.filter((warning) => /至少两项/.test(warning)).length, 0);
+});
+
 test('真实目录：520 条、键与图片一致、零错误零警告', () => {
   const { presets, entries, errors } = loadPromptDir(ROOT);
   assert.deepEqual(errors, []);
@@ -281,6 +308,6 @@ test('真实目录：520 条、键与图片一致、零错误零警告', () => {
   assert.deepEqual(result.errors, []);
   assert.deepEqual(result.warnings, []);
   assert.equal(result.status.total, 520);
-  assert.equal(result.status.reviewed + result.status.draft, 520);
-  assert.ok(result.status.reviewed >= 40, '第 5 章应保持已复核');
+  assert.equal(result.status.reviewed, 520, '520 条应全部为已复核');
+  assert.equal(result.status.draft, 0, '不应残留待复核');
 });

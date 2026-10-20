@@ -21,6 +21,9 @@ export const MULTI_PERSON = /爸爸|爷爷|奶奶|姥姥|姥爷|大宝|小宝|�
 /** 材料字段里不算道具的取值。 */
 export const NON_PROP_MATERIALS = new Set(['无', '无。', '阳光']);
 
+/** 同一游戏四格之间应当出现差异的维度；至少两项不同才算「四格不同图」。 */
+export const PANEL_DIMENSIONS = ['镜头', '场景', '道具', '动作'];
+
 export const MAX_PROMPT_LENGTH = 380;
 
 const HEADING = /^### (\d{3})-(\d)　(.+)｜步骤图 (\d)$/;
@@ -342,6 +345,12 @@ const hasDuplicateActions = (entries) => {
   return actions.some((action, index) => actions.indexOf(action) !== index);
 };
 
+/** 四格里出现过变化的维度。 */
+const variedDimensions = (entries) =>
+  PANEL_DIMENSIONS.filter(
+    (key) => new Set(entries.map((entry) => entry.fields[key] ?? '')).size > 1,
+  );
+
 /**
  * 校验整份目录。
  * @param {{ entries: any[], presets: any, games: Map<string, any>, assetKeys: Set<string> }} input
@@ -363,7 +372,7 @@ export function validatePrompts({ entries, presets, games, assetKeys }) {
       if (!fields[key]) errors.push(`${id}：缺少「${key}」`);
     }
     if (fields['状态'] && !STATUSES.includes(fields['状态'])) {
-      errors.push(`${id}：状态「${fields['状态']}」只能是 draft 或 reviewed`);
+      errors.push(`${id}：状态「${fields['状态']}」只能是「${STATUSES.join('」或「')}」`);
     }
     if (fields['镜头'] && !presets.cameras.has(fields['镜头'])) {
       errors.push(`${id}：镜头「${fields['镜头']}」不在词表内`);
@@ -420,6 +429,14 @@ export function validatePrompts({ entries, presets, games, assetKeys }) {
     }
     if (group.length > 1 && hasDuplicateActions(group)) {
       warnings.push(`${gameId}：有重复的动作描述`);
+    }
+    if (group.length > 1) {
+      const varied = variedDimensions(group);
+      if (varied.length < 2) {
+        warnings.push(
+          `${gameId}：四格只有「${varied.join('、') || '无'}」不同，镜头、场景、道具、动作里至少两项要不同`,
+        );
+      }
     }
   }
 
