@@ -8,6 +8,7 @@ import {
   loadAssetKeys,
   loadGameIndex,
   loadPromptDir,
+  normalizeCamera,
   parsePromptFile,
   sceneForPlace,
   sceneOptions,
@@ -194,6 +195,65 @@ test('校验：统计 reviewed 与 draft', () => {
   assert.deepEqual(status, { total: 2, reviewed: 1, draft: 1 });
 });
 
+test('镜头归一：名称与别名都映射到 id，未登记写法报错', () => {
+  const presets = {
+    cameras: new Map([['close-up', { id: 'close-up', name: '特写', aliases: ['手部特写'] }]]),
+  };
+  assert.equal(normalizeCamera('特写', presets), 'close-up');
+  assert.equal(normalizeCamera('手部特写', presets), 'close-up');
+  assert.throws(() => normalizeCamera('显微镜', presets), /没有登记/);
+});
+
+test('校验：道具可省略', () => {
+  const entry = { ...ENTRY, fields: { ...ENTRY.fields } };
+  delete entry.fields['道具'];
+  const { errors } = validatePrompts({
+    entries: [entry],
+    presets: PRESETS,
+    games: GAMES,
+    assetKeys: new Set(['006-1']),
+  });
+  assert.equal(errors.filter((error) => error.includes('道具')).length, 0);
+});
+
+test('校验：重复编号与动作结尾标点', () => {
+  const { errors } = validatePrompts({
+    entries: [fixture(), fixture({ 动作: '宝宝笑。' })],
+    presets: PRESETS,
+    games: GAMES,
+    assetKeys: new Set(['006-1']),
+  });
+  assert.ok(errors.some((error) => error.includes('步骤图编号重复')));
+  assert.ok(errors.some((error) => error.includes('动作结尾不要标点')));
+});
+
+test('校验：复合场地内的场景覆盖不报警，超出集合才报警', () => {
+  const games = new Map([['006', { id: '006', age: '0-3月', place: '床/地垫', docId: 'ch05' }]]);
+  const presets = {
+    ...PRESETS,
+    scenes: new Map([
+      ['living-room', { id: 'living-room', name: '客厅', places: ['地垫'], full: '客厅', brief: '客厅一角' }],
+      ['bedroom', { id: 'bedroom', name: '卧室', places: ['床'], full: '卧室', brief: '卧室一角' }],
+    ]),
+  };
+
+  const allowed = validatePrompts({
+    entries: [fixture({ 场景: 'living-room' })],
+    presets,
+    games,
+    assetKeys: new Set(['006-1']),
+  });
+  assert.equal(allowed.warnings.filter((warning) => warning.includes('允许的集合')).length, 0);
+
+  const outside = validatePrompts({
+    entries: [fixture({ 场景: 'kitchen' })],
+    presets,
+    games,
+    assetKeys: new Set(['006-1']),
+  });
+  assert.ok(outside.warnings.some((warning) => warning.includes('允许的集合')));
+});
+
 test('真实目录：520 条、键与图片一致、零错误零警告', () => {
   const { presets, entries, errors } = loadPromptDir(ROOT);
   assert.deepEqual(errors, []);
@@ -209,5 +269,6 @@ test('真实目录：520 条、键与图片一致、零错误零警告', () => {
   assert.deepEqual(result.errors, []);
   assert.deepEqual(result.warnings, []);
   assert.equal(result.status.total, 520);
-  assert.equal(result.status.reviewed, 40);
+  assert.equal(result.status.reviewed + result.status.draft, 520);
+  assert.ok(result.status.reviewed >= 40, '第 5 章应保持已复核');
 });

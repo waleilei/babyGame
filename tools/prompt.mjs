@@ -35,9 +35,9 @@ if (!targets.length) {
 for (const entry of targets) {
   const camera = presets.cameras.get(entry.fields['镜头']);
   const scene = presets.scenes.get(entry.fields['场景']);
-  console.log(`\n${entry.key}　${entry.gameName}｜步骤图 ${entry.panel}（${entry.fields['状态']}）`);
+  console.log(`\n${entry.key}　${entry.gameName}｜步骤图 ${entry.panel}`);
   console.log(composePrompt(entry, presets));
   console.log(
-    `镜头 ${camera?.name ?? '?'} · 场景 ${scene?.name ?? '?'} · 月龄 ${entry.fields['月龄']} · 道具 ${entry.fields['道具']}`,
+    `镜头 ${camera?.name ?? '?'} · 场景 ${scene?.name ?? '?'} · 月龄 ${entry.fields['月龄']} · 道具 ${entry.fields['道具'] ?? '无'} · 状态 ${entry.fields['状态']}`,
   );
 }

@@ -14,7 +14,7 @@ npm run data && npm run check && npm test
 ```
 
 - `npm run data`：从 `../books/0-3-game-book/manuscript/` 的 8 份稿件提取全书，写出 `data/toc.json`、`data/chapters/ch01…ch21.json` 与 `data/docs/front.json、apx-a…apx-f.json`，并把 520 张水彩步骤图复制到本项目。任一硬校验失败时不写出文件；不再被目录引用的旧 JSON 会被清理。
-- `npm run check`：先按 `docs/architecture.md §15` 扫描分层依赖（越界依赖、深层 `../`、非相对导入），再检查文档里的仓库路径与已移除符号，最后独立读取产物，复检 28 个文档、130 条游戏、分组覆盖、块结构（表格列宽、清单项、有序列表 `start`、小节与标题一致）、插画存在、目录索引逐条一致、体积预算与孤儿文件。
+- `npm run check`：先按 `docs/architecture.md §15` 扫描分层依赖（越界依赖、深层 `../`、非相对导入），再检查文档里的仓库路径与已移除符号，最后独立读取产物，复检 28 个文档、130 条游戏、分组覆盖、块结构（表格列宽、清单项、有序列表 `start`、小节与标题一致）、插画存在、目录索引逐条一致、体积预算与孤儿文件；并校验 520 条步骤图提示词与图片双向一致、字典引用、禁画项与月龄对齐。
 - `npm test`：`node --test` 覆盖数据管线、仓储、领域纯函数、清单编码、路由、发布预算与编码规范。条数以命令输出为准，不在此处硬写。
 
 提交与推送跑的是同一条只读门禁 `npm run check && npm test`：本地见 `.githooks/pre-commit`，远端见 `.github/workflows/verify.yml`；CI 另跑 `npm run smoke`（无 Chrome 时自动跳过）。`verify` 多出的 `npm run data` 会重写 `data/` 与 `assets/`，只在改稿或更新数据时用。新克隆启用本地钩子：

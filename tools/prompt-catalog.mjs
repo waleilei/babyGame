@@ -4,6 +4,9 @@ import { basename, join } from 'node:path';
 /** 格层字段，顺序即文档里的书写顺序。 */
 export const FIELD_KEYS = ['镜头', '场景', '月龄', '动作', '道具', '状态'];
 
+/** 必填字段。道具可省略，也可写「无」。 */
+export const REQUIRED_KEYS = ['镜头', '场景', '月龄', '动作', '状态'];
+
 export const STATUSES = ['draft', 'reviewed'];
 
 /** 内容层禁画项。负面层本身含有这些词，所以只在「避免：」之前检查。 */
@@ -15,7 +18,7 @@ export const BRIEF_CAMERAS = new Set(['close-up']);
 export const MAX_PROMPT_LENGTH = 380;
 
 const HEADING = /^### (\d{3})-(\d)　(.+)｜步骤图 (\d)$/;
-const FIELD = /^- \*\*(镜头|场景|月龄|动作|道具|状态)\*\*：(.+)$/;
+const FIELD = new RegExp(`^- \\*\\*(${FIELD_KEYS.join('|')})\\*\\*：(.+)$`);
 const DASH = /^- \*\*(.+?)\*\*：(.+)$/;
 
 const chapterOf = (file) => basename(file, '.md');
@@ -86,13 +89,17 @@ export function parsePromptFile(text, { file = '' } = {}) {
   return { entries, errors };
 }
 
-function fieldMap(text) {
-  const map = {};
+function fieldPairs(text) {
+  const pairs = [];
   for (const line of String(text).split(/\r?\n/)) {
     const match = DASH.exec(line.trim());
-    if (match) map[match[1].trim()] = match[2].trim();
+    if (match) pairs.push({ key: match[1].trim(), value: match[2].trim() });
   }
-  return map;
+  return pairs;
+}
+
+function fieldMap(text) {
+  return Object.fromEntries(fieldPairs(text).map((pair) => [pair.key, pair.value]));
 }
 
 function sections(text, pattern) {
@@ -126,6 +133,19 @@ export function parseCameraPreset(text) {
   return cameras;
 }
 
+/**
+ * 把插画脚本里的自由写法归一到镜头 id。未登记的写法直接报错。
+ * @param {string} view
+ * @param {ReturnType<typeof readPresets>['presets']} presets
+ */
+export function normalizeCamera(view, presets) {
+  const name = String(view ?? '').trim();
+  for (const camera of presets.cameras.values()) {
+    if (camera.name === name || camera.aliases.includes(name)) return camera.id;
+  }
+  throw new Error(`镜头写法「${name}」没有登记到 presets/camera.md`);
+}
+
 export function parseScenePreset(text) {
   const scenes = new Map();
   for (const { id, fields } of sections(text, /^## ([a-z-]+)$/)) {
@@ -145,12 +165,7 @@ export function parseScenePreset(text) {
 }
 
 export function parseNegativePreset(text) {
-  const items = [];
-  for (const line of String(text).split(/\r?\n/)) {
-    const match = DASH.exec(line.trim());
-    if (match) items.push({ key: match[1].trim(), value: match[2].trim() });
-  }
-  return items;
+  return fieldPairs(text);
 }
 
 export function parseStylePreset(text) {
@@ -178,6 +193,17 @@ export function readPresets(root) {
   if (!presets.negative.length) errors.push('presets/negative.md 没有任何一类');
   if (!presets.cameras.size) errors.push('presets/camera.md 没有任何镜头');
   if (!presets.scenes.size) errors.push('presets/scene.md 没有任何场景');
+
+  const aliasOwner = new Map();
+  for (const camera of presets.cameras.values()) {
+    for (const alias of [camera.name, ...camera.aliases]) {
+      const owner = aliasOwner.get(alias);
+      if (owner && owner !== camera.id) {
+        errors.push(`镜头写法「${alias}」同时属于 ${owner} 与 ${camera.id}`);
+      }
+      aliasOwner.set(alias, camera.id);
+    }
+  }
   return { presets, errors };
 }
 
@@ -247,12 +273,17 @@ export function loadAssetKeys(root) {
  * @param {string} place
  * @param {{ scenes: Map<string, { places: string[] }> }} presets
  */
+function sceneIdsForToken(token, presets) {
+  const ids = [];
+  for (const scene of presets.scenes.values()) {
+    if (scene.places.includes(token)) ids.push(scene.id);
+  }
+  return ids;
+}
+
 export function sceneForPlace(place, presets) {
   const first = String(place ?? '').split('/')[0].trim();
-  for (const scene of presets.scenes.values()) {
-    if (scene.places.includes(first)) return scene.id;
-  }
-  return 'indoor';
+  return sceneIdsForToken(first, presets)[0] ?? 'indoor';
 }
 
 /**
@@ -269,9 +300,7 @@ export function sceneOptions(place, presets) {
   if (parts.includes('任意')) return null;
   const allowed = new Set();
   for (const part of parts) {
-    for (const scene of presets.scenes.values()) {
-      if (scene.places.includes(part)) allowed.add(scene.id);
-    }
+    for (const id of sceneIdsForToken(part, presets)) allowed.add(id);
   }
   return allowed;
 }
@@ -288,14 +317,14 @@ export function composePrompt(entry, presets) {
   const cameraName = camera ? camera.name : fields['镜头'];
   const sceneText = scene ? (BRIEF_CAMERAS.has(fields['镜头']) ? scene.brief : scene.full) : fields['场景'];
   const character = presets.character.replaceAll('{age}', fields['月龄'] ?? '');
-  const action = String(fields['动作'] ?? '').replace(/[。；;]\s*$/, '');
+  const action = String(fields['动作'] ?? '').trim();
   const props = fields['道具'];
   const negative = presets.negative.map((item) => item.value).join('、');
   const propText = props && props !== '无' ? `道具：${props}。` : '';
   return `${presets.style}${character}${cameraName}，${sceneText}。${action}。${propText}避免：${negative}。`;
 }
 
-const sameActions = (entries) => {
+const hasDuplicateActions = (entries) => {
   const actions = entries.map((entry) => entry.fields['动作']);
   return actions.some((action, index) => actions.indexOf(action) !== index);
 };
@@ -317,7 +346,7 @@ export function validatePrompts({ entries, presets, games, assetKeys }) {
     if (seen.has(id)) errors.push(`${id}：步骤图编号重复`);
     seen.set(id, entry);
 
-    for (const key of FIELD_KEYS) {
+    for (const key of REQUIRED_KEYS) {
       if (!fields[key]) errors.push(`${id}：缺少「${key}」`);
     }
     if (fields['状态'] && !STATUSES.includes(fields['状态'])) {
@@ -344,10 +373,13 @@ export function validatePrompts({ entries, presets, games, assetKeys }) {
       if (fields['月龄'] && fields['月龄'] !== game.age) {
         errors.push(`${id}：月龄「${fields['月龄']}」与游戏数据「${game.age}」不一致`);
       }
+      if ((!fields['道具'] || fields['道具'] === '无') && game.materials && game.materials !== '无') {
+        warnings.push(`${id}：游戏材料是「${game.materials}」，提示词道具却为空`);
+      }
       const allowed = fields['场景'] ? sceneOptions(game.place, presets) : null;
       if (allowed && !allowed.has(fields['场景'])) {
         warnings.push(
-          `${id}：场景「${fields['场景']}」与场地「${game.place}」允许的场景不一致`,
+          `${id}：场景「${fields['场景']}」不在场地「${game.place}」允许的集合内（默认「${sceneForPlace(game.place, presets)}」）`,
         );
       }
     }
@@ -372,7 +404,7 @@ export function validatePrompts({ entries, presets, games, assetKeys }) {
     if (group.length !== 4) {
       warnings.push(`${gameId}：应有 4 张步骤图，实际 ${group.length} 张`);
     }
-    if (group.length > 1 && sameActions(group)) {
+    if (group.length > 1 && hasDuplicateActions(group)) {
       warnings.push(`${gameId}：有重复的动作描述`);
     }
   }
