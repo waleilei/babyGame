@@ -1,7 +1,11 @@
 const CN_NUMBERS = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六' };
 
-export function isAppendixDoc(doc) {
-  return /^apx-[a-f]$/.test(String(doc?.id ?? doc?.docId ?? ''));
+/** 文档家族：前置 / 编号章 / 附录。目录条目与搜索命中都只有 id 或 docId。 */
+export function docFamily(doc) {
+  const id = String(doc?.id ?? doc?.docId ?? '');
+  if (id === 'front') return 'front';
+  if (/^apx-[a-f]$/.test(id)) return 'appendix';
+  return 'chapter';
 }
 
 export function resultCountLabel(count) {
@@ -16,16 +20,18 @@ export function groupLabel(group) {
 /** 导航按钮与页脚使用的文档标签。 */
 export function docLabel(doc) {
   if (!doc) return '';
-  if (doc.id === 'front') return '前置：序、使用说明、发展地图';
-  if (isAppendixDoc(doc)) return `附录${doc.id.slice(-1).toUpperCase()} ${doc.shortTitle}`;
+  const family = docFamily(doc);
+  if (family === 'front') return `前置：${doc.shortTitle}`;
+  if (family === 'appendix') {
+    return `附录${String(doc.id ?? doc.docId).slice(-1).toUpperCase()} ${doc.shortTitle}`;
+  }
   return `第${doc.no}章 ${doc.shortTitle}`;
 }
 
 /** 文档页 h1 与浏览器标题使用的完整标题。 */
 export function docHeading(doc) {
   if (!doc) return '';
-  if (doc.id === 'front') return '前置｜序、使用说明、发展地图';
-  if (isAppendixDoc(doc)) return doc.title;
+  if (docFamily(doc) !== 'chapter') return doc.title;
   return `第${doc.no}章 ${doc.title}`;
 }
 
@@ -51,16 +57,14 @@ export function docPartLabel(doc, groups) {
 
 export function searchHitTypeLabel(hit) {
   if (hit?.kind === 'game') return '游戏';
-  if (hit?.docId === 'front') return '前置';
-  if (isAppendixDoc(hit)) return '附录';
-  return '章节';
+  const family = docFamily(hit);
+  return family === 'front' ? '前置' : family === 'appendix' ? '附录' : '章节';
 }
 
 export function searchHitMeta(hit) {
   if (hit?.kind === 'game') return `${hit.age} · ${hit.ability}`;
-  if (hit?.docId === 'front') return '前置';
-  if (isAppendixDoc(hit)) return '附录';
-  return `第${hit?.docNo}章`;
+  const family = docFamily(hit);
+  return family === 'front' ? '前置' : family === 'appendix' ? '附录' : `第${hit?.docNo}章`;
 }
 
 export function searchEmptyTitle(query) {

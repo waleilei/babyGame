@@ -11,7 +11,7 @@ export function createSkeleton(kind = 'toc') {
     'aria-busy': 'true',
   }, [el('span', {
     class: 'visually-hidden',
-    text: kind === 'toc' ? '正在加载目录' : kind === 'prose' ? '正在加载文档' : '正在加载章节',
+    text: kind === 'toc' ? '正在加载目录' : '正在加载文档',
   })]);
 
   if (kind === 'toc') {

@@ -1,16 +1,16 @@
 import { buildHash } from '../core/router.js';
 import { el } from '../core/dom.js';
-import { docLabel, groupLabel, isAppendixDoc } from '../domain/format.js';
+import { docFamily, docLabel, groupLabel } from '../domain/format.js';
 
 function rowNo(doc) {
-  if (doc.id === 'front') return '序';
-  if (isAppendixDoc(doc)) return doc.id.slice(-1).toUpperCase();
+  const family = docFamily(doc);
+  if (family === 'front') return '序';
+  if (family === 'appendix') return doc.id.slice(-1).toUpperCase();
   return String(doc.no).padStart(2, '0');
 }
 
 function rowTitle(doc) {
-  if (doc.id === 'front' || isAppendixDoc(doc)) return doc.shortTitle;
-  return doc.title;
+  return docFamily(doc) === 'chapter' ? doc.title : doc.shortTitle;
 }
 
 function rowMeta(doc) {

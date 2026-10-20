@@ -95,7 +95,7 @@ export function createDocPage({ onHome, onPrev, onNext, onOpenGame, onCloseGame,
     bodyHost.hidden = false;
     stateHost.replaceChildren();
     footer.el.hidden = false;
-    body.update({ doc: view.doc, toc: view.toc, entry: view.entry });
+    body.update({ doc: view.doc, toc: view.toc });
 
     if (kind !== 'games') return;
 

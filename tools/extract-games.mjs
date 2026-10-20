@@ -500,7 +500,7 @@ function loadProseSource({ fullPath, file, mode, partNo: fallbackPartNo, errors 
     }
 
     if (text.startsWith('# ')) {
-      finish();
+      // 分篇标题只用于分组；其后若还有内容，继续归入当前文档。
       continue;
     }
 
@@ -547,8 +547,8 @@ function loadProseSource({ fullPath, file, mode, partNo: fallbackPartNo, errors 
 
   finish();
 
-  if (prelude.some((line) => line.text.trim() && line.text.trim() !== '---' && !line.text.trim().startsWith('>'))) {
-    errors.push(`${file} 末尾内容未归入任何文档`);
+  if (docs.length === 0 && prelude.some((line) => line.text.trim() && line.text.trim() !== '---')) {
+    errors.push(`${file} 未解析出任何文档`);
   }
 
   return { docs, partNo };
@@ -682,7 +682,6 @@ export function expectedDocIds() {
 function docShortTitle(doc) {
   if (doc.id === FRONT_ID) return FRONT_SHORT_TITLE;
   if (doc.partId === 'appendix') return doc.title.replace(/^附录[A-F]\s*/, '').trim();
-  if (doc.kind === 'games') return chapterShortTitle(doc.title);
   return chapterShortTitle(doc.title);
 }
 
@@ -690,13 +689,8 @@ function docFile(doc) {
   return doc.no === null || doc.no === undefined ? unnumberedFile(doc.id) : chapterFile(doc.no);
 }
 
-function groupDocIds(docIds, id) {
-  return docIds.filter((docId) => docId === id);
-}
-
 function tocGroupDocIds(docs, group) {
-  if (group.id === 'front') return groupDocIds(docs.map((doc) => doc.id), FRONT_ID);
-  if (group.id === 'appendix') return docs.filter((doc) => doc.partId === 'appendix').map((doc) => doc.id);
+  if (group.id === 'front') return docs.filter((doc) => doc.id === FRONT_ID).map((doc) => doc.id);
   return docs.filter((doc) => doc.partId === group.id).map((doc) => doc.id);
 }
 

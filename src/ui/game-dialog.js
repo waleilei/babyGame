@@ -2,12 +2,11 @@ import { bindDialogClose } from '../core/dialog.js';
 import { clear, el } from '../core/dom.js';
 import { artAlt, zoomButtonLabel } from '../domain/format.js';
 
-function media(src, alt, { class: className, lazy = false, onZoom, zoomLabel, fallback = '插图暂缺' }) {
+function media(src, alt, { class: className, lazy = false, zoomLabel, fallback = '插图暂缺' }) {
   const wrap = el('button', {
     type: 'button',
     class: `${className} media--zoom`,
     'aria-label': zoomLabel,
-    onclick: () => onZoom(wrap),
   });
   const image = el('img', { src, alt, decoding: 'async', loading: lazy ? 'lazy' : null });
   image.addEventListener('error', () => {
@@ -72,23 +71,26 @@ export function createGameDialog({ onRequestClose, onZoomImage }) {
 
     const panels = el('div', { class: 'panels' });
     game.art.panels.forEach((src, index) => {
-      panels.append(media(src, artAlt(game, index), {
+      const button = media(src, artAlt(game, index), {
         class: 'panel',
         lazy: true,
-        onZoom: (button) => onZoomImage(game, index, button),
         zoomLabel: zoomButtonLabel(game, index),
-      }));
+      });
+      button.addEventListener('click', () => onZoomImage(game, index, button));
+      panels.append(button);
     });
+
+    const hero = media(game.art.main, artAlt(game), {
+      class: 'game-dialog__hero',
+      zoomLabel: zoomButtonLabel(game),
+    });
+    hero.addEventListener('click', () => onZoomImage(game, 0, hero));
 
     const observe = el('ul', { class: 'observations' });
     game.observe.forEach((item) => observe.append(el('li', { text: item })));
 
     body.append(
-      media(game.art.main, artAlt(game), {
-        class: 'game-dialog__hero',
-        onZoom: (button) => onZoomImage(game, 0, button),
-        zoomLabel: zoomButtonLabel(game),
-      }),
+      hero,
       el('dl', { class: 'facts' }, [
         fact('场地', game.place),
         fact('材料', game.materials),

@@ -54,7 +54,7 @@ function createChecklist(block, blockIndex, { checkedKeys, onToggle }) {
     const box = el('input', {
       type: 'checkbox',
       class: 'checklist__box',
-      checked: checkedKeys.has(key) || Boolean(item.checked),
+      checked: checkedKeys.has(key),
       onchange: (event) => onToggle?.(key, event.target.checked),
     });
     list.append(el('li', { class: 'checklist__item' }, [
@@ -96,15 +96,12 @@ export function createBlocks(blocks, { sections = [], checkedKeys = new Set(), o
         break;
       }
 
-      case 'ul': {
-        const list = el('ul', { class: 'prose__ul' });
-        for (const item of block.items) list.append(el('li', {}, [inline(item)]));
-        fragment.append(list);
-        break;
-      }
-
+      case 'ul':
       case 'ol': {
-        const list = el('ol', { class: 'prose__ol', start: block.start });
+        const list = el(block.type, {
+          class: `prose__${block.type}`,
+          ...(block.type === 'ol' ? { start: block.start } : {}),
+        });
         for (const item of block.items) list.append(el('li', {}, [inline(item)]));
         fragment.append(list);
         break;

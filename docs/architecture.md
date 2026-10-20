@@ -99,7 +99,7 @@
 |---|---|---|---|---|
 | 组合根 | `src/app.js` | 启动、订阅路由、调度加载、组装页面 | 全部 | 写具体 UI 细节 |
 | 页面层 | `src/pages/` | 页面级布局、组合组件、绑定页面事件；`doc-page` 负责文档页外壳，`games-body` / `prose-body` 各渲染一种正文 | core、domain、ui | 直接 fetch、直接改 store 内部 |
-| 展示层 | `src/ui/` | 无状态组件与可复用视觉单元 | core、domain/format | 读取全局状态、发请求 |
+| 展示层 | `src/ui/` | 无状态组件与可复用视觉单元 | core、domain（纯函数） | 读取全局状态、发请求 |
 | 领域层 | `src/domain/` | 路由解析、搜索、相邻章、视图模型 | 无（纯函数） | 触碰 DOM、fetch、window |
 | 数据层 | `src/data/` | 加载、缓存、DTO → 领域对象、错误归一 | core/http | 触碰 DOM、读取页面状态 |
 | 基础设施 | `src/core/` | DOM 构造、store、router、focus、idle | 无（router 接触 location） | 含业务规则 |
@@ -688,6 +688,7 @@ export function el(tag, props = {}, children = []) {
 约定：
 
 - 行内只允许 `**粗体**`；链接、图片、代码、斜体、原始 HTML 一律构建失败，不静默丢弃。
+- 连续非空行按同一段落处理，段内换行渲染为 `<br>`；空行分段。这是为了保留附录 E 童谣的行结构（对应验收点「童谣段落保留换行」）。
 - 图片路径相对 `index.html`（浏览器按文档地址解析 `<img src>`，不按 JSON 文件地址），由构建期生成，页面不得自行拼接。
 - `sections` 由标题块按顺序派生，`id` 为 `s1…sn`，供页内导航使用；不产生 URL 深链。
 - 全文按 8 份稿件提取；第一个章标题之前、最后一个章标题之后的内容归入相邻文档，`# 第X篇` 标题只用于确定分组。
@@ -818,7 +819,7 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 - 路由切换后焦点移动到新页 `h1`（`tabindex="-1"`），并更新 `document.title`。
 - 弹层用原生 `<dialog>`，自带焦点圈定与 Esc；关闭后焦点回到触发元素。
 - 搜索输入 `type="search"` + `aria-label`；结果计数用 `aria-live="polite"`；结果类型标签同时出现在可访问名称里。
-- 卡片拆为图片按钮与详情按钮，均可 Enter/Space；图片 `alt`：卡片内为空（按钮名称已含游戏名），弹层为“{游戏名}示意图”。
+- 卡片拆为图片按钮与详情按钮，均可 Enter/Space；图片 `alt`：卡片内为空（按钮名称已含游戏名），弹层为“{游戏名}主图 / 步骤图 N”。
 - 图片大图用第二个原生 `<dialog>` 叠层，支持滚轮/双指缩放、拖拽平移、`+/-/0` 与左右键；Esc 只关闭顶层，焦点回到被点击图片。
 - 小节导航是 `<nav aria-label="本页目录">`，项为按钮；移动端 `<details>` 的 summary 可键盘展开。
 - 表格容器 `role="region"` + `tabindex="0"` + 最近标题作为 `aria-label`；表头 `th scope="col"`；首列 `position:sticky`。
