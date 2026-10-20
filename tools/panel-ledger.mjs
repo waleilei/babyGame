@@ -1,6 +1,5 @@
 import { createHash } from 'node:crypto';
 import {
-  copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -40,6 +39,11 @@ const KEY_PATTERN = /^\d{3}-\d$/;
 const SHA_PATTERN = /^[0-9a-f]{64}$/;
 const CHAPTER_FILE = /^(ch\d{2})\.csv$/;
 
+/** copyFileSync 的读+写替身：沙箱对 node 的 copyfile 系统调用报 EPERM，读写不受影响。 */
+function copyByWrite(from, to) {
+  writeFileSync(to, readFileSync(from));
+}
+
 /** 文本指纹：清单里存前 16 位，足够发现「提示词变了」。 */
 export function hashText(text) {
   return createHash('sha256').update(String(text), 'utf8').digest('hex').slice(0, 16);
@@ -68,7 +72,7 @@ export function backupPanel(root, key) {
   const oldSha = hashFile(source);
   const backup = backupPath(root, key, oldSha);
   mkdirSync(join(root, BACKUP_DIR), { recursive: true });
-  if (!existsSync(backup)) copyFileSync(source, backup);
+  if (!existsSync(backup)) copyByWrite(source, backup);
   return { oldSha, backup };
 }
 
@@ -76,7 +80,7 @@ export function backupPanel(root, key) {
 export function restorePanel(root, key, oldSha) {
   const backup = backupPath(root, key, oldSha);
   if (!existsSync(backup)) throw new Error(`${key}：备份区没有 ${oldSha.slice(0, 12)}，无法回滚`);
-  copyFileSync(backup, panelPath(root, key));
+  copyByWrite(backup, panelPath(root, key));
   return backup;
 }
 
