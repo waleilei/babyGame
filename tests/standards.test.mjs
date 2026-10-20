@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -75,4 +76,18 @@ test('运行期 scrollTo 必须显式 behavior: instant', () => {
     [],
     `scrollTo 需要 { behavior: 'instant' }（smooth CSS 会把 auto 变成动画滚动）：\n${found.join('\n')}`,
   );
+});
+
+// 提交门禁的权威文件在 .githooks/，但 git 只认 core.hooksPath。克隆后若没执行
+// git config core.hooksPath .githooks，git 会静默用不到任何钩子（或旧拷贝），
+// 文档声称的本地门禁就不存在了。这里把「接没接上」变成一票可判的事实。
+test('pre-commit 钩子已通过 core.hooksPath 接到 .githooks', () => {
+  let hooksPath = '';
+  try {
+    hooksPath = execFileSync('git', ['config', 'core.hooksPath'], { cwd: ROOT, encoding: 'utf8' }).trim();
+  } catch {
+    // git config 未设置时以非零退出，hooksPath 保持空串。
+  }
+
+  assert.equal(hooksPath, '.githooks', '克隆后执行：git config core.hooksPath .githooks');
 });
