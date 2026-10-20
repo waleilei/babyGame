@@ -4,6 +4,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { docFamily, docHeading, docLabel } from '../src/domain/format.js';
 import { buildDataset, loadSource, validateBlocks } from '../tools/extract-games.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -71,6 +72,29 @@ test('章节类型：第 5-18 章是游戏章，其余是文字章', { skip: !ha
   assert.equal(dataset.toc.docs.find((doc) => doc.id === 'ch01').file, 'chapters/ch01.json');
   assert.equal(dataset.toc.docs.find((doc) => doc.id === 'front').file, 'docs/front.json');
   assert.equal(dataset.toc.docs.find((doc) => doc.id === 'apx-a').file, 'docs/apx-a.json');
+});
+
+test('目录条目字段固定，真实条目可直接生成标签', { skip: !hasSource }, () => {
+  const dataset = buildDataset({ sourceDir: SOURCE_DIR });
+  const expectedKeys = ['id', 'no', 'kind', 'title', 'shortTitle', 'meta', 'count', 'file'].sort();
+
+  for (const entry of dataset.toc.docs) {
+    assert.deepEqual(Object.keys(entry).sort(), expectedKeys, `${entry.id} 字段集合漂移`);
+    const label = docLabel(entry);
+    const heading = docHeading(entry);
+    assert.ok(label && !/null|undefined/.test(label), `${entry.id} label=${label}`);
+    assert.ok(heading && !/null|undefined/.test(heading), `${entry.id} heading=${heading}`);
+  }
+
+  const byId = (id) => dataset.toc.docs.find((entry) => entry.id === id);
+  assert.equal(docFamily(byId('front')), 'front');
+  assert.equal(docFamily(byId('ch05')), 'chapter');
+  assert.equal(docFamily(byId('apx-a')), 'appendix');
+  assert.equal(docLabel(byId('front')), '前置：序、使用说明、发展地图');
+  assert.equal(docHeading(byId('front')), '前置｜序、使用说明、发展地图');
+  assert.equal(docLabel(byId('ch05')), '第5章 躺着的世界');
+  assert.equal(docHeading(byId('ch05')), '第5章 0-3个月｜躺着的世界');
+  assert.equal(docLabel(byId('apx-a')), '附录A 0-36个月发育里程碑与警示信号');
 });
 
 test('每条游戏 8 个模块齐全、步骤 4 条、观察 2-3 条', { skip: !hasSource }, () => {

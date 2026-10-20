@@ -15,3 +15,7 @@ Issue 与 spec 以本地 markdown 文件存放在 `.scratch/` 下。详见 `docs
 ### Domain docs
 
 单上下文：仓库根 `GLOSSARY.md` + `docs/adr/`。详见 `docs/agents/domain.md`。
+
+### Review
+
+两轴评审纪律见 `docs/agents/review.md`。

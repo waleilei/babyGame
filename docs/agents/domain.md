@@ -18,10 +18,11 @@
 /
 ├── GLOSSARY.md
 ├── docs/adr/
-│   ├── 0001-event-sourced-orders.md
-│   └── 0002-postgres-for-write-model.md
+│   └── 0001-doc-model-and-routes.md
 └── src/
 ```
+
+实际文件名以 `docs/adr/` 目录为准；上面的文件名只是当前仓库的示例。
 
 若将来出现 `GLOSSARY-MAP.md`，则转为多上下文：根 `docs/adr/` 放系统级决策，`src/<context>/GLOSSARY.md` 与 `src/<context>/docs/adr/` 放上下文级决策。
 

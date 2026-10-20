@@ -87,7 +87,7 @@
 │    │     ├─ pages/prose-body.js    │                                 │
 │    │     └─ ui/*                   │                                 │
 │    ├─ domain/*（纯函数）           │ 领域层                           │
-│    ├─ data/repository.js           │ 数据层                           │
+│    ├─ src/data/repository.js       │ 数据层                           │
 │    └─ state/store.js               │ 应用状态                         │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
@@ -184,9 +184,12 @@ babyGame/
 │   ├── extract-games.mjs
 │   ├── check-games.mjs
 │   ├── check-imports.mjs         # §15 分层依赖矩阵的静态扫描
+│   ├── check-docs.mjs            # 文档路径存在、旧符号不残留
+│   ├── baseline.mjs              # 稿件内容基线与 spec 对照
 │   └── smoke.mjs                 # headless Chrome 冒烟与性能
 ├── tests/
 │   ├── data-pipeline.test.mjs
+│   ├── docs.test.mjs             # 文档路径与旧符号提取
 │   ├── domain.test.mjs
 │   ├── imports.test.mjs          # 分层规则与导入提取
 │   ├── repository.test.mjs
@@ -233,7 +236,7 @@ export function createRouter({ onRoute }) : {
 export function bindDialogClose(dialog: HTMLDialogElement, onUserClose: () => void) : () => void
 // 返回的是程序化关闭函数，不回触发 onUserClose；用户关闭（Esc、遮罩）走 onUserClose
 
-// data/repository.js
+// src/data/repository.js
 export function createCatalogRepository({ baseUrl, fetchImpl } = {}) : CatalogRepository
 
 // CatalogRepository
@@ -280,7 +283,7 @@ JSDoc 类型就近写在模块里，配合 `jsconfig.json` 获得编辑器校验
 | `ui/game-dialog.js` | `<dialog>` 生命周期、8 模块排版、焦点管理 | 不加载数据 |
 | `domain/catalog.js` | 搜索匹配与排序、相邻页、分组、计数 | 不读写 DOM |
 | `domain/checklist.js` | 清单键、编码解码、越界键过滤 | 不碰 localStorage |
-| `data/repository.js` | 请求、缓存、并发去重、DTO 校验、错误归一 | 不感知路由 |
+| `src/data/repository.js` | 请求、缓存、并发去重、DTO 校验、错误归一 | 不感知路由 |
 | `core/local-store.js` | 读写本地字符串、失败静默降级 | 不定义键格式与编码 |
 | `state/store.js` | 初始状态与状态动作 | 不渲染 |
 | `state/selectors.js` | 由 state 派生视图模型 | 无副作用 |
@@ -357,10 +360,10 @@ JSDoc 类型就近写在模块里，配合 `jsconfig.json` 获得编辑器校验
 | hash | 页面 | 加载内容 |
 |---|---|---|
 | `#/` 或空 | 目录 | `toc.json` |
-| `#/front` | 前置 | `toc.json`（若未加载）+ `docs/front.json` |
-| `#/ch/5` | 文档 | `toc.json`（若未加载）+ `chapters/ch05.json` |
+| `#/front` | 前置 | `toc.json`（若未加载）+ `data/docs/front.json` |
+| `#/ch/5` | 文档 | `toc.json`（若未加载）+ `data/chapters/ch05.json` |
 | `#/ch/5/game/01` | 游戏章 + 弹层 | 同上，加载完成后打开弹层 |
-| `#/appendix/a` | 附录 | `toc.json` + `docs/apx-a.json` |
+| `#/appendix/a` | 附录 | `toc.json` + `data/docs/apx-a.json` |
 
 规则：
 
@@ -540,7 +543,8 @@ export function el(tag, props = {}, children = []) {
   "type": "module",
   "scripts": {
     "data": "node tools/extract-games.mjs",
-    "check": "node tools/check-imports.mjs && node tools/check-games.mjs",
+    "baseline": "node tools/baseline.mjs",
+    "check": "node tools/check-imports.mjs && node tools/check-docs.mjs && node tools/check-games.mjs",
     "test": "node --test tests/*.test.mjs",
     "verify": "npm run data && npm run check && npm test",
     "smoke": "node tools/smoke.mjs",
@@ -857,6 +861,8 @@ toc 失败 → 目录页错误块 + 重试；不渲染空目录
 | 检查 | 方式 |
 |---|---|
 | 分层依赖 | `node tools/check-imports.mjs`：按 §15 矩阵扫描全部模块，禁止越界依赖、深层 `../` 与非相对导入 |
+| 文档漂移 | `node tools/check-docs.mjs`：文档里的仓库路径必须存在，已移除的旧符号不得残留 |
+| 内容基线 | `npm run baseline`：实现前输出表数、清单数、伪标题数、跨块编号，与 spec 的验收数字对照 |
 | 端到端冒烟 | `npm run smoke`：headless Chrome 检查目录、搜索、清单、翻页、深链、360px、表格与图片大图 |
 | 性能 | `npm run smoke -- --perf`（本地）或 `--perf --slow`（4G 模拟）：FCP、目录可交互、缓存命中切页、CLS |
 | 数据完整性 | `node tools/check-games.mjs`：28 个文档、130 条游戏、块结构、分组覆盖、资源存在、孤儿文件、体积预算 |

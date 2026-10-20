@@ -47,6 +47,7 @@ const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_SOURCE_DIR = resolve(REPO_ROOT, '../books/0-3-game-book');
 const CN_NUMBERS = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 };
 const MAX_PSEUDO_HEADING = 40;
+const DOC_FIELDS = ['id', 'no', 'kind', 'title', 'shortTitle', 'meta', 'count', 'file'];
 
 /**
  * @typedef {{ type: 'p' | 'h2' | 'h3' | 'h4' | 'ul' | 'ol' | 'table' | 'quote' | 'checklist' | 'hr',
@@ -903,7 +904,12 @@ export function validateDataset({ toc, docs, games, artworkExists = () => true }
     errors.push('分组顺序与 docs 顺序不一致，或未恰好覆盖每个文档一次');
   }
 
+  const expectedDocKeys = [...DOC_FIELDS].sort().join(',');
   for (const doc of toc.docs ?? []) {
+    const actualKeys = Object.keys(doc).sort().join(',');
+    if (actualKeys !== expectedDocKeys) {
+      errors.push(`${doc.id ?? '未知文档'}：目录字段应恰好为 ${DOC_FIELDS.join('/')}，实际 ${Object.keys(doc).join('/')}`);
+    }
     if (!doc.id || !doc.kind || !doc.title || !doc.shortTitle || !doc.meta || !doc.file) {
       errors.push(`${doc.id ?? '未知文档'}：目录字段不完整`);
     }

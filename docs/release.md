@@ -14,7 +14,7 @@ npm run data && npm run check && npm test
 ```
 
 - `npm run data`：从 `../books/0-3-game-book/manuscript/` 的 8 份稿件提取全书，写出 `data/toc.json`、`data/chapters/ch01…ch21.json` 与 `data/docs/front.json、apx-a…apx-f.json`，并把 520 张水彩步骤图复制到本项目。任一硬校验失败时不写出文件；不再被目录引用的旧 JSON 会被清理。
-- `npm run check`：先按 `docs/architecture.md §15` 扫描分层依赖（越界依赖、深层 `../`、非相对导入），再独立读取产物，复检 28 个文档、130 条游戏、分组覆盖、块结构（表格列宽、清单项、有序列表 `start`、小节与标题一致）、插画存在、目录索引逐条一致、体积预算与孤儿文件。
+- `npm run check`：先按 `docs/architecture.md §15` 扫描分层依赖（越界依赖、深层 `../`、非相对导入），再检查文档里的仓库路径与已移除符号，最后独立读取产物，复检 28 个文档、130 条游戏、分组覆盖、块结构（表格列宽、清单项、有序列表 `start`、小节与标题一致）、插画存在、目录索引逐条一致、体积预算与孤儿文件。
 - `npm test`：`node --test` 覆盖数据管线、仓储、领域纯函数、清单编码、路由、发布预算与编码规范。条数以命令输出为准，不在此处硬写。
 
 提交与推送跑的是同一条只读门禁 `npm run check && npm test`：本地见 `.githooks/pre-commit`，远端见 `.github/workflows/verify.yml`；CI 另跑 `npm run smoke`（无 Chrome 时自动跳过）。`verify` 多出的 `npm run data` 会重写 `data/` 与 `assets/`，只在改稿或更新数据时用。新克隆启用本地钩子：
@@ -154,11 +154,12 @@ assets/
 
 ## 6. 数据更新流程
 
-1. 修改 `../books/0-3-game-book/manuscript/` 下对应稿件（游戏章 `ch05-08.md`、`ch09-12.md`、`ch13-18.md`；文字章 `front-matter.md`、`part1-ch01-02.md`、`part1-ch03-04.md`、`part4-ch19-21.md`、`appendix.md`）。
-2. 运行 `npm run data`。
-3. 运行 `npm run check`，失败时按输出的文档 id、行号与块号修稿。
-4. 运行 `npm test`，确认目录索引、块结构与产物对账通过。
-5. 提交 `data/` 与 `assets/art/panel_web/` 的变更；页面代码无需改动。
+1. 先运行 `npm run baseline`，把输出与 spec 的验收数字对照；不一致时先确认以哪边为准。
+2. 修改 `../books/0-3-game-book/manuscript/` 下对应稿件（游戏章 `ch05-08.md`、`ch09-12.md`、`ch13-18.md`；文字章 `front-matter.md`、`part1-ch01-02.md`、`part1-ch03-04.md`、`part4-ch19-21.md`、`appendix.md`）。
+3. 运行 `npm run data`。
+4. 运行 `npm run check`，失败时按输出的文档 id、行号与块号修稿。
+5. 运行 `npm test`，确认目录索引、块结构与产物对账通过。
+6. 提交 `data/` 与 `assets/art/panel_web/` 的变更；页面代码无需改动。
 
 ## 7. 图片大图
 

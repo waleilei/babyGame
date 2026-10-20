@@ -2,7 +2,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { BUDGET, MAX_GAMES_PER_CHAPTER } from './budgets.mjs';
+import { BUDGET, MAX_GAMES_PER_CHAPTER, kb } from './budgets.mjs';
 import { validateDataset } from './extract-games.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -35,6 +35,13 @@ function checkSize(path, limitBytes, label) {
   if (size > limitBytes) fail(`${label} 超过预算：${(size / 1024).toFixed(1)} KB > ${limitBytes / 1024} KB`);
 }
 
+function walk(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    return entry.isDirectory() ? walk(path) : [path];
+  });
+}
+
 function main() {
   const toc = readJSON(TOC_PATH, 'data/toc.json');
   if (!toc) {
@@ -52,6 +59,7 @@ function main() {
 
   const docs = [];
   const referenced = new Set();
+  let maxDocSize = 0;
   for (const entry of toc.docs) {
     if (!entry?.file) {
       fail(`目录条目 ${entry?.id ?? '??'} 缺少 file`);
@@ -62,6 +70,7 @@ function main() {
     const doc = readJSON(path, `${entry.id} 文档数据`);
     if (!doc) continue;
     checkSize(path, BUDGET.doc, `${entry.id} 文档数据`);
+    maxDocSize = Math.max(maxDocSize, statSync(path).size);
     if (doc.id !== entry.id) fail(`${entry.id}：文件内 id=${doc.id}`);
     if (doc.kind === 'games' && doc.games.length > MAX_GAMES_PER_CHAPTER) {
       fail(`${entry.id}：游戏数超过 ${MAX_GAMES_PER_CHAPTER}，需要重新评估分页`);
@@ -90,6 +99,10 @@ function main() {
     }
   }
 
+  const runtimeFiles = walk(join(ROOT, 'src')).filter((file) => file.endsWith('.js'));
+  const runtimeJs = runtimeFiles.reduce((sum, file) => sum + statSync(file).size, 0);
+  if (runtimeJs > BUDGET.runtimeJs) fail(`运行期 JS 超过预算：${kb(runtimeJs)} > ${kb(BUDGET.runtimeJs)}`);
+
   if (errors.length > 0) {
     for (const error of errors) console.error(`✗ ${error}`);
     console.error(`\n${errors.length} 个错误，发布门禁未通过`);
@@ -109,7 +122,13 @@ function main() {
   console.log(`✓ 文档  ${docs.length} 个文件 / ${games.length} 条游戏`);
   console.log(`✓ 正文  ${proseDocs.length} 个文字章 / ${blockCount} 块 / ${tableCount} 张表 / ${checklistItems} 项清单`);
   console.log('✓ 结构  分组覆盖、表格列宽、有序列表 start、清单项、小节与标题一致');
-  console.log(`✓ 体积  toc ${(statSync(TOC_PATH).size / 1024).toFixed(1)} KB / 单文档 ≤ ${BUDGET.doc / 1024} KB`);
+  const tocSize = statSync(TOC_PATH).size;
+  const remaining = BUDGET.runtimeJs - runtimeJs;
+  const pair = (value, limit) => `${(value / 1024).toFixed(1)} / ${(limit / 1024).toFixed(1)} KB`;
+  console.log(`✓ 体积  toc ${pair(tocSize, BUDGET.toc)} · 单文档 ${pair(maxDocSize, BUDGET.doc)} · 运行期 JS ${pair(runtimeJs, BUDGET.runtimeJs)}（余量 ${kb(remaining)}）`);
+  if (remaining < BUDGET.runtimeJs * 0.02) {
+    console.warn(`! 运行期 JS 余量不足 2%：${kb(remaining)}，加功能前先看预算`);
+  }
   console.log('✓ 索引  与文档内游戏逐条一致');
   console.log('✓ 清理  data/chapters 与 data/docs 无孤儿文件');
 }
