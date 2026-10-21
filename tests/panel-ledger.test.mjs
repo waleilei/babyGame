@@ -14,6 +14,7 @@ import {
   readLedger,
   restorePanel,
   validateLedgers,
+  writeLedger,
 } from '../tools/panel-ledger.mjs';
 
 const CHAPTER_KEYS = new Map([['ch05', new Set(['006-1', '006-2'])]]);
@@ -76,17 +77,48 @@ test('全绿账：pass 与已验证的 regen 都不报错', () => {
   rmSync(root, { recursive: true, force: true });
 });
 
-test('缺行、重复行与不属于本章的键都要报错', () => {
+test('只落部分格子可以通过，缺行只进覆盖统计', () => {
+  const root = fixture();
+  writeLedgerFile(root, [row()]);
+  const { errors, status } = validateLedgers({ root, chapterKeys: CHAPTER_KEYS, promptHashes: PROMPT_HASHES, assetKeys: ASSET_KEYS });
+  assert.deepEqual(errors, []);
+  assert.equal(status.covered, 1);
+  assert.equal(status.total, 2);
+  assert.deepEqual(status.coverage, [{ chapter: 'ch05', covered: 1, total: 2 }]);
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('部分章里重复行仍要报错', () => {
   const root = fixture();
   writeLedgerFile(root, [row(), row()]);
   const { errors } = validateLedgers({ root, chapterKeys: CHAPTER_KEYS, promptHashes: PROMPT_HASHES, assetKeys: ASSET_KEYS });
   assert.ok(errors.some((error) => error.includes('006-1：重复行')));
-  assert.ok(errors.some((error) => error.includes('006-2：缺少台账行')));
+  rmSync(root, { recursive: true, force: true });
+});
 
+test('不属于本章的键与磁盘缺图仍要报错', () => {
+  const root = fixture();
   writeLedgerFile(root, [row({ key: '099-9' }), row({ key: '006-2' })]);
-  const unknown = validateLedgers({ root, chapterKeys: CHAPTER_KEYS, promptHashes: PROMPT_HASHES, assetKeys: ASSET_KEYS });
-  assert.ok(unknown.errors.some((error) => error.includes('099-9：不属于本章的键')));
-  assert.ok(unknown.errors.some((error) => error.includes('099-9：磁盘上没有这张图')));
+  const { errors } = validateLedgers({ root, chapterKeys: CHAPTER_KEYS, promptHashes: PROMPT_HASHES, assetKeys: ASSET_KEYS });
+  assert.ok(errors.some((error) => error.includes('099-9：不属于本章的键')));
+  assert.ok(errors.some((error) => error.includes('099-9：磁盘上没有这张图')));
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('A7-style 是合法的 regen 理由，无 A7 的旧行不受影响', () => {
+  const root = fixture();
+  backupPanel(root, '006-2');
+  const oldSha = hashFile(panelPath(root, '006-2'));
+  writeFileSync(panelPath(root, '006-2'), 'regenerated-image');
+  const newSha = hashFile(panelPath(root, '006-2'));
+  writeLedgerFile(root, [
+    row(),
+    row({ key: '006-2', promptHash: PROMPT_HASHES.get('006-2'), decision: 'regen', reason: 'A7-style', oldSha, newSha, status: 'verified' }),
+  ]);
+  const { errors, status } = validateLedgers({ root, chapterKeys: CHAPTER_KEYS, promptHashes: PROMPT_HASHES, assetKeys: ASSET_KEYS });
+  assert.deepEqual(errors, []);
+  assert.equal(status.regen, 1);
+  assert.equal(status.covered, 2);
   rmSync(root, { recursive: true, force: true });
 });
 
@@ -160,6 +192,16 @@ test('备份与回滚：指纹可还原，找不到备份就报错', () => {
   assert.equal(hashFile(panelPath(root, '006-1')), before);
 
   assert.throws(() => restorePanel(root, '006-2', 'a'.repeat(64)), /无法回滚/);
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('readLedger 与 writeLedger 往返不丢列', () => {
+  const root = fixture();
+  const rows = [row({ newSha: 'a'.repeat(64) })];
+  writeLedger(root, 'ch05', rows);
+  const { rows: back, errors } = readLedger(root, 'ch05');
+  assert.deepEqual(errors, []);
+  assert.deepEqual(back, rows);
   rmSync(root, { recursive: true, force: true });
 });
 

@@ -24,7 +24,8 @@ export const NON_PROP_MATERIALS = new Set(['无', '无。', '阳光']);
 /** 同一游戏四格之间应当出现差异的维度；至少两项不同才算「四格不同图」。 */
 export const PANEL_DIMENSIONS = ['镜头', '场景', '道具', '动作'];
 
-export const MAX_PROMPT_LENGTH = 380;
+/** 拼接长度上限（警告阈值）。2026-10-21 共享层补三处否决型约束后最长 406，原 380 无法覆盖，改 420。 */
+export const MAX_PROMPT_LENGTH = 420;
 
 const HEADING = /^### (\d{3})-(\d)　(.+)｜步骤图 (\d)$/;
 const FIELD = new RegExp(`^- \\*\\*(${FIELD_KEYS.join('|')})\\*\\*：(.+)$`);

@@ -28,8 +28,8 @@ export const PANEL_DIR = 'assets/art/panel_web';
 export const DECISIONS = ['pass', 'regen'];
 /** pass 对应的唯一理由。 */
 export const PASS_REASONS = ['P0-pass'];
-/** regen 对应的理由码：场景 / 道具 / 动作 / 月龄 / 安全 / 禁画项。 */
-export const REGEN_REASONS = ['A1-scene', 'A2-prop', 'A3-action', 'A4-age', 'A5-safety', 'A6-forbidden'];
+/** regen 对应的理由码：场景 / 道具 / 动作 / 月龄 / 安全 / 禁画项 / 画风。 */
+export const REGEN_REASONS = ['A1-scene', 'A2-prop', 'A3-action', 'A4-age', 'A5-safety', 'A6-forbidden', 'A7-style'];
 /** 一格在台账里的生命周期。 */
 export const LEDGER_STATUSES = ['audited', 'regenerated', 'verified', 'needs-human', 'blocked'];
 
@@ -122,17 +122,35 @@ export function readLedger(root, chapter) {
   return { rows, errors };
 }
 
-/** 写出一章台账（表头 + 行），供批处理脚本使用。 */
+/** 写出一章台账（表头 + 行）。行用 readLedger 的字段名，读写可往返。 */
 export function writeLedger(root, chapter, rows) {
   mkdirSync(join(root, LEDGER_DIR), { recursive: true });
-  const body = rows.map((row) => LEDGER_COLUMNS.map((column) => row[column] ?? '').join(','));
+  const body = rows.map((row) =>
+    LEDGER_COLUMNS.map((column) => row[COLUMN_FIELD[column]] ?? row[column] ?? '').join(','),
+  );
   writeFileSync(join(root, LEDGER_DIR, `${chapter}.csv`), [LEDGER_HEADER, ...body].join('\n') + '\n');
 }
 
 const LEDGER_COLUMNS = LEDGER_HEADER.split(',');
+/** CSV 列名 → readLedger 返回的字段名。 */
+const COLUMN_FIELD = {
+  key: 'key',
+  prompt_hash: 'promptHash',
+  decision: 'decision',
+  reason: 'reason',
+  old_sha256: 'oldSha',
+  new_sha256: 'newSha',
+  batch: 'batch',
+  attempt: 'attempt',
+  status: 'status',
+  ts: 'ts',
+};
 
 /**
  * 校验台账与图片、提示词是否自洽。
+ *
+ * 覆盖口径：一章台账可以只落部分格子（逐游戏推进、跨章插队），未落账的格子视为未处理，
+ * 只进 status.covered / status.total，不报错。台账一旦写了行，就按硬规则从严。
  * @param {{
  *   root: string,
  *   chapterKeys: Map<string, Set<string>>,
@@ -143,7 +161,19 @@ const LEDGER_COLUMNS = LEDGER_HEADER.split(',');
 export function validateLedgers({ root, chapterKeys, promptHashes, assetKeys }) {
   const errors = [];
   const warnings = [];
-  const status = { chapters: 0, rows: 0, pass: 0, regen: 0, verified: 0, needsHuman: 0, blocked: 0 };
+  const status = {
+    chapters: 0,
+    rows: 0,
+    pass: 0,
+    regen: 0,
+    verified: 0,
+    needsHuman: 0,
+    blocked: 0,
+    covered: 0,
+    total: 0,
+    coverage: [],
+  };
+  const coveredByChapter = new Map();
 
   for (const chapter of ledgerChapters(root)) {
     status.chapters += 1;
@@ -152,6 +182,8 @@ export function validateLedgers({ root, chapterKeys, promptHashes, assetKeys }) 
       errors.push(`${chapter}.csv：本章没有对应的提示词章`);
       continue;
     }
+    const coveredKeys = new Set();
+    coveredByChapter.set(chapter, coveredKeys);
 
     const { rows, errors: parseErrors } = readLedger(root, chapter);
     errors.push(...parseErrors);
@@ -166,6 +198,7 @@ export function validateLedgers({ root, chapterKeys, promptHashes, assetKeys }) 
       if (seen.has(key)) errors.push(`${where}：重复行`);
       seen.add(key);
       if (keys && !keys.has(key)) errors.push(`${where}：不属于本章的键`);
+      if (keys?.has(key)) coveredKeys.add(key);
       if (assetKeys && !assetKeys.has(key)) errors.push(`${where}：磁盘上没有这张图`);
 
       if (!DECISIONS.includes(row.decision)) errors.push(`${where}：decision 只能是 ${DECISIONS.join('/')}`);
@@ -218,11 +251,15 @@ export function validateLedgers({ root, chapterKeys, promptHashes, assetKeys }) 
       if (row.decision === 'pass') status.pass += 1;
       if (row.decision === 'regen') status.regen += 1;
     }
-
-    for (const key of keys ?? []) {
-      if (!seen.has(key)) errors.push(`${chapter}.csv ${key}：缺少台账行`);
-    }
   }
+
+  status.coverage = [...chapterKeys.keys()].sort().map((chapter) => ({
+    chapter,
+    covered: coveredByChapter.get(chapter)?.size ?? 0,
+    total: chapterKeys.get(chapter).size,
+  }));
+  status.covered = status.coverage.reduce((sum, item) => sum + item.covered, 0);
+  status.total = status.coverage.reduce((sum, item) => sum + item.total, 0);
 
   return { errors, warnings, status };
 }

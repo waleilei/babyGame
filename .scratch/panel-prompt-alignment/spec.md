@@ -83,7 +83,7 @@ key,prompt_hash,decision,reason,old_sha256,new_sha256,batch,attempt,status,ts
 ```
 
 - `decision`：`pass` / `regen`。
-- `reason`：`P0-pass` / `A1-scene` / `A2-prop` / `A3-action` / `A4-age` / `A5-safety` / `A6-forbidden`。
+- `reason`：`P0-pass` / `A1-scene` / `A2-prop` / `A3-action` / `A4-age` / `A5-safety` / `A6-forbidden` / `A7-style`（2026-10-21 增补：画风跑偏归 A7，不再寄 A4）。
 - `prompt_hash`：对**拼接后的完整提示词**取哈希，而不是对格层字段。提示词一改，该行自动失效，必须重新比对。
 - `status`：`audited` / `regenerated` / `verified` / `needs-human` / `blocked`。
 - 一个 key 只允许一行；重画失败重试时更新 `attempt`，不新增行。
@@ -113,7 +113,7 @@ key,prompt_hash,decision,reason,old_sha256,new_sha256,batch,attempt,status,ts
 
 **最高接缝：沿用现有的统一校验入口。** 不新开一条命令链。在现有提示词校验里增加一段「清单校验」，与「键与图片双向一致」「字典引用」「月龄对齐」并列，这样一次校验就能回答「提示词、图片、清单是否自洽」。
 
-清单校验要覆盖：每个 key 恰好一行；`status` 在枚举内；`prompt_hash` 与当前拼接结果一致；`regen` 行必须有新旧两个指纹；`verified` 行的新图指纹必须等于磁盘上图片的指纹；备份区里必须存在对应的 `old_sha256`。
+清单校验要覆盖：每个 key 至多一行（缺行即未处理，只进覆盖统计，不报错——2026-10-21 放宽，支持逐游戏推进与跨章插队）；`status` 在枚举内；`prompt_hash` 与当前拼接结果一致；`regen` 行必须有新旧两个指纹；`verified` 行的新图指纹必须等于磁盘上图片的指纹；备份区里必须存在对应的 `old_sha256`。
 
 ### 生成失败策略
 
@@ -123,6 +123,7 @@ key,prompt_hash,decision,reason,old_sha256,new_sha256,batch,attempt,status,ts
 
 - 自动：上面的清单校验 + 现有的全量校验。
 - 人工/半自动：只对**改过的**图做第二轮盲审——复核者只看图与提示词，不看清单与旧图，按同一套理由码给结论；结论与清单不一致的，回到 `needs-human`。
+- 重画批次自 2026-10-21 起按 `.scratch/panel-anchoring-rollout/runbook.md` 的锚定规程执行：参考图选序、锚定 key 记入盲审记录首行、盲审例检「被参考图带偏」。
 
 ## Testing Decisions
 

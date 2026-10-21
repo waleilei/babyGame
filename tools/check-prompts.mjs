@@ -11,7 +11,7 @@ const games = loadGameIndex(ROOT);
 const assetKeys = loadAssetKeys(ROOT);
 const { errors, warnings, status } = validatePrompts({ entries, presets, games, assetKeys });
 
-/** 台账校验：只校验已登记的章；没登记的章不报错，登记了就按七类失败从严。 */
+/** 台账校验：只校验已登记的章；没登记的章不报错，部分章缺格算未处理，写下的行按硬规则从严。 */
 const chapterKeys = new Map();
 for (const entry of entries) {
   const set = chapterKeys.get(entry.chapter) ?? new Set();
@@ -37,6 +37,11 @@ if (ledger.status.chapters) {
   console.log(
     `台账：${ledger.status.chapters} 章 / ${ledger.status.rows} 行，pass ${ledger.status.pass}，regen ${ledger.status.regen}，verified ${ledger.status.verified}，needs-human ${ledger.status.needsHuman}，blocked ${ledger.status.blocked}`,
   );
+  const partial = ledger.status.coverage.filter((item) => item.covered > 0 && item.covered < item.total);
+  const tail = partial.length
+    ? `；未齐 ${partial.map((item) => `${item.chapter} ${item.covered}/${item.total}`).join('，')}`
+    : '；已登记的章齐账';
+  console.log(`台账覆盖：全书 ${ledger.status.covered}/${ledger.status.total} 格${tail}`);
 }
 
 if (allErrors.length) process.exit(1);
