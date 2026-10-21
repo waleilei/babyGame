@@ -8,6 +8,7 @@ set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 RUN_DIR="$ROOT/.run"
 PID_FILE="$RUN_DIR/server.pid"
+PORT_FILE="$RUN_DIR/server.port"
 LOG_FILE="$RUN_DIR/server.log"
 
 HOST="${HOST:-127.0.0.1}"
@@ -27,6 +28,7 @@ usage() {
       --rebuild       启动前重新生成数据（npm run data）
       --strict-port   端口被占用时直接退出，不自动顺延
       --stop          停止后台实例
+      --status        查看后台实例是否在运行
   -h, --help          显示本帮助
 
 示例：
@@ -49,6 +51,7 @@ while [[ $# -gt 0 ]]; do
     --rebuild)      REBUILD=1; shift ;;
     --strict-port)  STRICT_PORT=1; shift ;;
     --stop)         STOP=1; shift ;;
+    --status)       STATUS=1; shift ;;
     -h|--help)      usage; exit 0 ;;
     *)              fail "未知参数：$1（用 --help 查看用法）" ;;
   esac
@@ -83,13 +86,25 @@ stop_daemon() {
     sleep 0.1
   done
   alive "$pid" && kill -9 "$pid" 2>/dev/null || true
-  rm -f "$PID_FILE"
+  rm -f "$PID_FILE" "$PORT_FILE"
   log "已停止后台实例（pid $pid）"
 }
 
 if [[ "${STOP:-0}" -eq 1 ]]; then
   stop_daemon
   exit 0
+fi
+
+if [[ "${STATUS:-0}" -eq 1 ]]; then
+  pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+  if [[ -n "${pid:-}" ]] && alive "$pid"; then
+    running_port="$(cat "$PORT_FILE" 2>/dev/null || echo "$PORT")"
+    log "运行中  http://$probe_host:$running_port/  （pid $pid）"
+    exit 0
+  fi
+  rm -f "$PID_FILE" "$PORT_FILE"
+  log "未运行（没有 start.sh 起的后台实例）"
+  exit 1
 fi
 
 # 已在后台运行时直接复用。
@@ -157,6 +172,7 @@ on_signal() {
     wait "$SERVER_PID" 2>/dev/null || true
   fi
   remove_own_pid
+  printf '\n服务已停止，端口 %s 不再监听。\n' "$PORT"
   exit 130
 }
 
@@ -188,6 +204,7 @@ fi
 
 if [[ "$DAEMON" -eq 1 ]]; then
   printf '%s' "$SERVER_PID" >"$PID_FILE"
+  printf '%s' "$PORT" >"$PORT_FILE"
 fi
 
 log ""
@@ -207,4 +224,5 @@ if [[ "$DAEMON" -eq 1 ]]; then
   exit 0
 fi
 
-wait "$SERVER_PID"
+wait "$SERVER_PID" || true
+printf '\n服务已退出，端口 %s 不再监听。\n' "$PORT"
